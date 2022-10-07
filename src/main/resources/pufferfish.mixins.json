@@ -6,9 +6,10 @@
   "mixins": [
   ],
   "client": [
-    "MinecraftClientAccessor",
+    "InGameHudInvoker",
     "InGameHudMixin",
-    "InGameHudInvoker"
+    "MinecraftClientAccessor",
+    "MinecraftClientMixin"
   ],
   "injectors": {
     "defaultRequire": 1

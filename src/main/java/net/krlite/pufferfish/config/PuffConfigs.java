@@ -7,6 +7,9 @@ public class PuffConfigs {
     public static SimpleConfig CONFIG;
     private static PuffConfigProvider configs;
 
+    public static double lerpDelta;
+    public static double crosshairPuff;
+
     public static void registerConfigs() {
         configs = new PuffConfigProvider();
 
@@ -18,13 +21,13 @@ public class PuffConfigs {
     }
 
     private static void createConfigs() {
-        //configs.addKeyValuePair(new Pair<>("default", true), "true/false");
+        configs.addKeyValuePair(new Pair<>("lerp_delta", 25.0), "double(0.0=cancel)");
+        configs.addKeyValuePair(new Pair<>("crosshair_puff", 1.9), "double");
     }
 
     private static void assignConfigs() {
-        String splashMode;
-
-        //DEFAULT = CONFIG.getOrDefault("enable_splash_texts", true);
+        lerpDelta = CONFIG.getOrDefault("lerp_delta", 25.0);
+        crosshairPuff = CONFIG.getOrDefault("crosshair_puff", 1.9);
 
         SimpleConfig.LOGGER.info("All " + configs.getConfigsList().size() + " configs for " + PuffMod.LOGGER.getName() + " have been set properly.");
     }

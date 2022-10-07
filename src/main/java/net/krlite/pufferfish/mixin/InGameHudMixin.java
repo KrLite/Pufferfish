@@ -1,102 +1,99 @@
 package net.krlite.pufferfish.mixin;
 
-import com.mojang.blaze3d.platform.GlStateManager;
-import com.mojang.blaze3d.systems.RenderSystem;
-import net.minecraft.client.MinecraftClient;
+import net.krlite.pufferfish.config.PuffConfigs;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.hud.InGameHud;
-import net.minecraft.client.option.AttackIndicator;
-import net.minecraft.client.option.GameOptions;
-import net.minecraft.client.render.Camera;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.util.hit.HitResult;
-import net.minecraft.util.math.Vec3f;
-import net.minecraft.world.GameMode;
-import org.spongepowered.asm.mixin.Final;
+import net.minecraft.util.math.MathHelper;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.Slice;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import static net.krlite.pufferfish.PuffMod.LOGGER;
+import static net.krlite.pufferfish.PuffMod.crosshairScale;
 
 @Mixin(InGameHud.class)
-public class InGameHudMixin extends DrawableHelper implements InGameHudInvoker, MinecraftClientAccessor {
-    @Shadow @Final private MinecraftClient client;
-    @Shadow private int scaledWidth;
-    @Shadow private int scaledHeight;
+public class InGameHudMixin extends DrawableHelper{
+    @Shadow
+    private int scaledWidth;
+    @Shadow
+    private int scaledHeight;
 
-    @Inject(method = "renderCrosshair", at = @At("HEAD"), cancellable = true)
-    private void injected(MatrixStack matrices, CallbackInfo ci) {
-        int itemUseCooldown = ((MinecraftClientAccessor) client).getItemUseCooldown();
-        int attackCooldown = ((MinecraftClientAccessor) client).getAttackCooldown();
-        boolean shouldRenderSpectatorCrosshair = ((InGameHudInvoker) new InGameHud(client)).invokeShouldRenderSpectatorCrosshair(client.crosshairTarget);
+    private int crosshairWidth;
+    private int crosshairHeight;
 
-        GameOptions gameOptions = client.options;
-        if ( gameOptions.getPerspective().isFirstPerson() ) {
-            if ( client.interactionManager.getCurrentGameMode() != GameMode.SPECTATOR || shouldRenderSpectatorCrosshair ) {
-                if ( gameOptions.debugEnabled && !gameOptions.hudHidden && !this.client.player.hasReducedDebugInfo() && !gameOptions.reducedDebugInfo ) {
-                    Camera camera = client.gameRenderer.getCamera();
-                    MatrixStack matrixStack = RenderSystem.getModelViewStack();
-                    matrixStack.push();
-                    matrixStack.translate((double) (this.scaledWidth / 2), (double) (this.scaledHeight / 2), (double) this.getZOffset());
-                    matrixStack.multiply(Vec3f.NEGATIVE_X.getDegreesQuaternion(camera.getPitch()));
-                    matrixStack.multiply(Vec3f.POSITIVE_Y.getDegreesQuaternion(camera.getYaw()));
-                    matrixStack.scale(-1.0F, -1.0F, -1.0F);
-                    RenderSystem.applyModelViewMatrix();
-                    RenderSystem.renderCrosshair(7 + (int) (3 / this.client.player.getAttackCooldownProgress(0.0F)));
-                    matrixStack.pop();
-                    RenderSystem.applyModelViewMatrix();
-                }
-
-                else {
-                    RenderSystem.blendFuncSeparate(GlStateManager.SrcFactor.ONE_MINUS_DST_COLOR, GlStateManager.DstFactor.ONE_MINUS_SRC_COLOR, GlStateManager.SrcFactor.ONE, GlStateManager.DstFactor.ZERO);
-                    this.drawTexture(matrices, (this.scaledWidth - 15) / 2, (this.scaledHeight - 15) / 2, 0, 0, 15, 15);
-                    float f = this.client.player.getAttackCooldownProgress(0.0F);
-                    if ( f < 1.0F ) {
-                        this.drawTexture(matrices, (this.scaledWidth - 15) / 2 + (int) (Math.abs (f - 1) * 64.0F), (this.scaledHeight - 15) / 2 + 7, 0, 7, 15, 1);
-                        this.drawTexture(matrices, (this.scaledWidth - 15) / 2 - (int) (Math.abs (f - 1) * 64.0F), (this.scaledHeight - 15) / 2 + 7, 0, 7, 15, 1);
-                    }
-                    if ( this.client.options.attackIndicator == AttackIndicator.CROSSHAIR ) {
-                        boolean bl = false;
-                        if ( this.client.targetedEntity != null && this.client.targetedEntity instanceof LivingEntity && f >= 1.0F ) {
-                            bl = this.client.player.getAttackCooldownProgressPerTick() > 5.0F;
-                            bl &= this.client.targetedEntity.isAlive();
-                        }
-
-                        int j = this.scaledHeight / 2 - 7 + 16;
-                        int k = this.scaledWidth / 2 - 8;
-                        if ( bl ) {
-                            this.drawTexture(matrices, k, j, 68, 94, 16, 16);
-                        }
-
-                        else if ( f < 1.0F ) {
-                            int l = (int) (f * 17.0F);
-                            this.drawTexture(matrices, k, j, 36, 94, 16, 4);
-                            this.drawTexture(matrices, k, j, 52, 94, l, 4);
-                        }
-                    }
-                }
-
-            }
+    @Redirect(method = "renderCrosshair",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/client/gui/hud/InGameHud;drawTexture(Lnet/minecraft/client/util/math/MatrixStack;IIIIII)V"
+            ), slice = @Slice(
+            from = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/systems/RenderSystem;blendFuncSeparate(Lcom/mojang/blaze3d/platform/GlStateManager$SrcFactor;Lcom/mojang/blaze3d/platform/GlStateManager$DstFactor;Lcom/mojang/blaze3d/platform/GlStateManager$SrcFactor;Lcom/mojang/blaze3d/platform/GlStateManager$DstFactor;)V"),
+            to = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;getAttackCooldownProgress(F)F")
+            )
+    )
+    private void drawCrosshair(InGameHud instance, MatrixStack matrixStack, int x, int y, int u, int v, int width, int height) {
+        if ( PuffConfigs.lerpDelta == 0.0 ) {
+            drawTexture(matrixStack, x, y, u, v, width, height);
+            return;
         }
-        ci.cancel();
+
+        crosshairWidth = width;
+        crosshairHeight = height;
+        drawTexture(matrixStack, 0, 0, u, v, width, height);
     }
 
-    @Override
-    public int getItemUseCooldown() {
-        return 0;
+    @Redirect(method = "renderCrosshair",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/client/gui/hud/InGameHud;drawTexture(Lnet/minecraft/client/util/math/MatrixStack;IIIIII)V"
+            ), slice = @Slice(
+                    from = @At(value = "INVOKE", target = "Lnet/minecraft/entity/Entity;isAlive()Z")
+            )
+    )
+    private void drawCrosshairAttackIndicator(InGameHud instance, MatrixStack matrixStack, int x, int y, int u, int v, int width, int height) {
+        if ( PuffConfigs.lerpDelta == 0.0 ) {
+            drawTexture(matrixStack, x, y, u, v, width, height);
+            return;
+        }
+
+        drawTexture(matrixStack, 0, 16, u, v, width, height);
     }
 
-    @Override
-    public int getAttackCooldown() {
-        return 0;
+    @Inject(method = "renderCrosshair",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/client/gui/hud/InGameHud;drawTexture(Lnet/minecraft/client/util/math/MatrixStack;IIIIII)V",
+                    shift = At.Shift.BY
+            ), cancellable = true
+    )
+    private void scaleCrosshairBefore(MatrixStack matrices, CallbackInfo ci) {
+        if ( PuffConfigs.lerpDelta == 0.0 ) {
+            ci.cancel();
+        }
+
+        crosshairScale = (float) MathHelper.lerp(1.0 / PuffConfigs.lerpDelta, crosshairScale, 1.0);
+        matrices.push();
+        matrices.translate(this.scaledWidth / 2.0F - (crosshairWidth * 0.5F) * crosshairScale,
+                this.scaledHeight / 2.0F - (crosshairHeight * 0.5F) * crosshairScale,
+                0.0);
+        matrices.scale(crosshairScale, crosshairScale, crosshairScale);
     }
 
-    @Override
-    public boolean invokeShouldRenderSpectatorCrosshair(HitResult hitResult) {
-        return false;
+    @Inject(method = "renderCrosshair",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/client/gui/hud/InGameHud;drawTexture(Lnet/minecraft/client/util/math/MatrixStack;IIIIII)V",
+                    shift = At.Shift.AFTER
+            ), cancellable = true
+    )
+    private void scaleCrosshairAfter(MatrixStack matrices, CallbackInfo ci) {
+        if ( PuffConfigs.lerpDelta == 0.0 ) {
+            ci.cancel();
+        }
+
+        matrices.pop();
     }
 }

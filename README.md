@@ -13,6 +13,7 @@
 - [ ] Screenshot flash
 - [ ] GUI open/close animations
 - [ ] Floating compass
+- [ ] Underwater EQ (underwater, in gui, etc.)
 
 #### Map
 

@@ -9,7 +9,8 @@
     "InGameHudInvoker",
     "InGameHudMixin",
     "MinecraftClientAccessor",
-    "MinecraftClientMixin"
+    "MinecraftClientMixin",
+    "ScreenshotRecorderMixin"
   ],
   "injectors": {
     "defaultRequire": 1

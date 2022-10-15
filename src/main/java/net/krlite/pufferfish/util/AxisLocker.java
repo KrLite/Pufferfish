@@ -1,6 +1,10 @@
 package net.krlite.pufferfish.util;
 
 import com.google.common.collect.ImmutableMap;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.screen.option.OptionsScreen;
+import net.minecraft.client.option.GameOptions;
+import net.minecraft.client.render.GameRenderer;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.MathHelper;
 
@@ -28,10 +32,19 @@ public class AxisLocker {
         axisStatic.replace(Axis.YAW, player.getYaw());
     }
 
+    public static void applyPitch(float pitch) {
+        axisStatic.replace(Axis.PITCH, pitch);
+        axisPing.replace(Axis.PITCH, true);
+    }
+
+    public static void applyYaw(float yaw) {
+        axisStatic.replace(Axis.YAW, yaw);
+        axisPing.replace(Axis.YAW, true);
+    }
+
     public static void applyPitch(PlayerEntity player) {
         float pitch = player.getPitch();
-        axisStatic.replace(
-                Axis.PITCH,
+        applyPitch(
                 (pitch < 45)
                         ? (pitch > -45)
                                 ? 0.0F
@@ -42,8 +55,7 @@ public class AxisLocker {
 
     public static void applyYaw(PlayerEntity player) {
         float yaw = player.getYaw();
-        axisStatic.replace(
-                Axis.YAW,
+        applyYaw(
                 (Math.abs(yaw) % 90) >= 45
                         ? yaw < 0
                                 ? ((int) (yaw / 90) - 1) * 90.0F

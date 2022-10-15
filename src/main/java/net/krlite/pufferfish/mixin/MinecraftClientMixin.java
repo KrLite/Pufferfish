@@ -22,8 +22,6 @@ public class MinecraftClientMixin {
     @Final
     public GameOptions options;
 
-    @Shadow public String fpsDebugString;
-
     @Inject(method = "handleInputEvents", at = @At("TAIL"))
     private void handleInputEvents(CallbackInfo ci) {
         crosshairScaleTarget = options.attackKey.isPressed()
@@ -41,40 +39,56 @@ public class MinecraftClientMixin {
         PlayerEntity player = MinecraftClient.getInstance().player;
         if ( player != null ) {
             playerUuid = player.getUuid();
-            if (LOCK_PITCH.wasPressed() && avaliablePitch) {
-                lingerYaw = 0;
-                if (lingerPitch == 0) {  // Trigger When Pitch Locked
-                    lingerPitch = PuffConfigs.lingerKeyTicks;
+            if ( FLIP_PREFIX.isPressed() ) {
+                if ( LOCK_PITCH.wasPressed() && Math.abs(player.getPitch()) >= 0.5F ) {
+                    applyPitch(-player.getPitch());
+                }
 
-                    lockPitch(player);
-                    axisLock.replace(Axis.PITCH, !axisLock.get(Axis.PITCH));
-                } else {    // Trigger When Pitch Applied
-                    lingerPitch = 0;
-
-                    applyPitch(player);
-                    axisLock.replace(Axis.PITCH, false);
-                    axisPing.replace(Axis.PITCH, true);
+                if ( LOCK_YAW.wasPressed() ) {
+                    applyYaw(player.getYaw() + 90.0F);
                 }
             }
 
-            if (LOCK_YAW.wasPressed() && avaliableYaw) {
-                lingerPitch = 0;
-                if (lingerYaw == 0) {   // Trigger When Yaw Locked
-                    lingerYaw = PuffConfigs.lingerKeyTicks;
+            else {
+                if ( LOCK_PITCH.wasPressed() && availableKeyAxis.get(Axis.PITCH) ) {
+                    lingerKeyAxis.replace(Axis.YAW, 0);
 
-                    lockYaw(player);
-                    axisLock.replace(Axis.YAW, !axisLock.get(Axis.YAW));
-                } else {    // Trigger When Yaw Applied
-                    lingerYaw = 0;
+                    if ( lingerKeyAxis.get(Axis.PITCH) == 0 ) {  // Trigger When Pitch Locked
+                        lingerKeyAxis.replace(Axis.PITCH, PuffConfigs.lingerKeyTicks);
 
-                    applyYaw(player);
-                    axisLock.replace(Axis.YAW, false);
-                    axisPing.replace(Axis.YAW, true);
+                        lockPitch(player);
+                        axisLock.replace(Axis.PITCH, !axisLock.get(Axis.PITCH));
+                    }
+
+                    else {    // Trigger When Pitch Applied
+                        lingerKeyAxis.replace(Axis.PITCH, 0);
+
+                        applyPitch(player);
+                        axisLock.replace(Axis.PITCH, false);
+                    }
+                }
+
+                if ( LOCK_YAW.wasPressed() && availableKeyAxis.get(Axis.YAW) ) {
+                    lingerKeyAxis.replace(Axis.PITCH, 0);
+
+                    if ( lingerKeyAxis.get(Axis.YAW) == 0 ) {   // Trigger When Yaw Locked
+                        lingerKeyAxis.replace(Axis.YAW, PuffConfigs.lingerKeyTicks);
+
+                        lockYaw(player);
+                        axisLock.replace(Axis.YAW, !axisLock.get(Axis.YAW));
+                    }
+
+                    else {    // Trigger When Yaw Applied
+                        lingerKeyAxis.replace(Axis.YAW, 0);
+
+                        applyYaw(player);
+                        axisLock.replace(Axis.YAW, false);
+                    }
                 }
             }
         }
 
-        avaliablePitch = !LOCK_PITCH.isPressed();
-        avaliableYaw = !LOCK_YAW.isPressed();
+        availableKeyAxis.replace(Axis.PITCH, !LOCK_PITCH.isPressed());
+        availableKeyAxis.replace(Axis.YAW, !LOCK_YAW.isPressed());
     }
 }

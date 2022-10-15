@@ -20,11 +20,15 @@ public abstract class EntityMixin {
 
     @Inject(method = "getPitch()F", at = @At("RETURN"), cancellable = true)
     public void getPitch(CallbackInfoReturnable<Float> cir) {
-        if ( this.getUuid() == playerUuid && axisLock.get(Axis.PITCH) ) cir.setReturnValue(axisStatic.get(Axis.PITCH));
+        if ( this.getUuid() == playerUuid && axisLock.get(Axis.PITCH) && !axisPing.get(Axis.PITCH) ) {
+            cir.setReturnValue(axisStatic.get(Axis.PITCH));
+        }
     }
 
     @Inject(method = "getYaw()F", at = @At("RETURN"), cancellable = true)
     public void getYaw(CallbackInfoReturnable<Float> cir) {
-        if ( this.getUuid() == playerUuid && axisLock.get(Axis.YAW) ) cir.setReturnValue(axisStatic.get(Axis.YAW));
+        if ( this.getUuid() == playerUuid && axisLock.get(Axis.YAW) && !axisPing.get(Axis.YAW) ) {
+            cir.setReturnValue(axisStatic.get(Axis.YAW));
+        }
     }
 }

@@ -6,11 +6,12 @@
   "mixins": [
   ],
   "client": [
+    "EntityMixin",
     "InGameHudInvoker",
     "InGameHudMixin",
     "MinecraftClientAccessor",
     "MinecraftClientMixin",
-    "EntityMixin",
+    "MouseMixin",
     "ScreenshotRecorderMixin"
   ],
   "injectors": {

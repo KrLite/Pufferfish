@@ -14,11 +14,6 @@ public class PuffKeys {
     public static boolean avaliableXZ = true;
     public static boolean avaliableY = true;
 
-    public static void lerp() {
-        lingerXZ -= lingerXZ == 0 ? 0 : 1;
-        lingerY -= lingerY == 0 ? 0 : 1;
-    }
-
     // Axis X & Z
     public static final KeyBinding LOCK_XZ = KeyBindingHelper.registerKeyBinding(new KeyBinding(
             "key.puff.lock_surface_xz",
@@ -42,6 +37,15 @@ public class PuffKeys {
             GLFW.GLFW_KEY_LEFT_CONTROL,
             "category.puff.locks"
     ));
+
+    private static void lerp() {
+        lingerXZ -= lingerXZ == 0 ? 0 : 1;
+        lingerY -= lingerY == 0 ? 0 : 1;
+    }
+
+    public static void update() {
+        lerp();
+    }
 
 
 

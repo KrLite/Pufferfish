@@ -13,6 +13,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class ScreenshotRecorderMixin {
     @Inject(method = "takeScreenshot", at = @At("TAIL"))
     private static void takeScreenshot(Framebuffer framebuffer, CallbackInfoReturnable<NativeImage> cir) {
-        ScreenshotFlasher.set(1.0F);
+        ScreenshotFlasher.setOpacity(1.0F);
     }
 }

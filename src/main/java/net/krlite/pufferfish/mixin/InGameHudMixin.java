@@ -1,16 +1,18 @@
 package net.krlite.pufferfish.mixin;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import net.krlite.pufferfish.PuffKeys;
 import net.krlite.pufferfish.PuffMod;
 import net.krlite.pufferfish.config.PuffConfigs;
+import net.krlite.pufferfish.util.AxisLocker;
 import net.krlite.pufferfish.util.CrosshairPuffer;
+import net.krlite.pufferfish.util.ScreenEdgeOverlay;
 import net.krlite.pufferfish.util.ScreenshotFlasher;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
-import org.spongepowered.asm.mixin.Final;
+import net.minecraft.util.math.MathHelper;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -27,8 +29,6 @@ public abstract class InGameHudMixin extends DrawableHelper{
     private int scaledHeight;
 
     @Shadow protected abstract void renderOverlay(Identifier texture, float opacity);
-
-    private static final Identifier FLASH = new Identifier("pufferfish", "textures/misc/flash.png");
 
     // Relocate crosshair
     @Redirect(method = "renderCrosshair",
@@ -87,8 +87,54 @@ public abstract class InGameHudMixin extends DrawableHelper{
     @Inject(method = "render", at = @At("TAIL"))
     private void render(MatrixStack matrixStack, float tickDelta, CallbackInfo ci) {
         RenderSystem.enableBlend();
+
+        // Render Screen Edge Overlay by RGBA
+        float r = ScreenEdgeOverlay.red;
+        float g = ScreenEdgeOverlay.green;
+        float b = ScreenEdgeOverlay.blue;
+        float alpha = ScreenEdgeOverlay.alpha;
+
+        // Black
+        RenderSystem.colorMask(true, true, true, true);
+        renderOverlay(
+                ScreenEdgeOverlay.BK,
+                alpha
+        );
+
+        // Red
+        RenderSystem.colorMask(true, false, false, true);
+        renderOverlay(
+                ScreenEdgeOverlay.R,
+                (r / 255) * alpha
+        );
+
+        // Green
+        RenderSystem.colorMask(false, true, false, true);
+        renderOverlay(
+                ScreenEdgeOverlay.G,
+                (g / 255) * alpha
+        );
+
+        // Blue
+        RenderSystem.colorMask(false, false, true, true);
+        renderOverlay(
+                ScreenEdgeOverlay.B,
+                (b / 255) * alpha
+        );
+
+        RenderSystem.colorMask(true, true, true, true);
+        /*
+        PuffMod.LOGGER.warn(
+                        r + " | " +
+                        g + " | " +
+                        b + " / " +
+                        alpha
+        );
+         */
+
+        // Render Flash
         if ( ScreenshotFlasher.flashOpacity > 0 ) {
-            this.renderOverlay(FLASH, ScreenshotFlasher.flashOpacity);
+            this.renderOverlay(ScreenshotFlasher.FLASH, ScreenshotFlasher.flashOpacity);
         }
     }
 }

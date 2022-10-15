@@ -1,10 +1,12 @@
 package net.krlite.pufferfish.mixin;
 
 import net.krlite.pufferfish.config.PuffConfigs;
+import net.krlite.pufferfish.util.AxisLocker;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.GameOptions;
 import net.minecraft.entity.Entity;
 import net.minecraft.text.LiteralText;
+import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.MathHelper;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
@@ -16,6 +18,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import static net.krlite.pufferfish.PuffKeys.*;
 import static net.krlite.pufferfish.util.CrosshairPuffer.crosshairScaleTarget;
+import static net.krlite.pufferfish.util.ScreenEdgeOverlay.*;
 
 @Mixin(MinecraftClient.class)
 public class MinecraftClientMixin {
@@ -36,28 +39,39 @@ public class MinecraftClientMixin {
                 : options.useKey.isPressed()
                         // Using
                         ? MathHelper.clamp(2.0 - PuffConfigs.crosshairPuff, 0.3, 1.0)
-                        //None
+                        // None
                         : PuffConfigs.crosshairOriginal;
 
         if ( LOCK_XZ.wasPressed() && avaliableXZ ) {
             lingerY = 0;
-            if ( lingerXZ == 0 ) {
+            if ( lingerXZ == 0 ) {  // Trigger When XZ Pressed
                 lingerXZ = PuffConfigs.lingerKeyTicks;
-                MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(new LiteralText("XZ"));
-            } else {
+                AxisLocker.lockAxisXZ = !AxisLocker.lockAxisXZ;
+
+                //MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(new LiteralText("§7§lPressed " + LOCK_XZ.getBoundKeyTranslationKey()));
+            } else {    // Trigger When XZ Double Pressed
                 lingerXZ = 0;
-                MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(new LiteralText("XZ-L"));
+                AxisLocker.applyAxisLock(Direction.Axis.X);
+                AxisLocker.applyAxisLock(Direction.Axis.Z);
+                AxisLocker.lockAxisXZ = false;
+
+                //MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(new LiteralText("§f§lPressed " + LOCK_XZ.getBoundKeyTranslationKey() + " twice"));
             }
         }
 
         if ( LOCK_Y.wasPressed() && avaliableY ) {
             lingerXZ = 0;
-            if ( lingerY == 0 ) {
+            if ( lingerY == 0 ) {   // Trigger When Y Pressed
                 lingerY = PuffConfigs.lingerKeyTicks;
-                MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(new LiteralText("Y"));
-            } else {
+                AxisLocker.lockAxisY = !AxisLocker.lockAxisY;
+
+                //MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(new LiteralText("§7§lPressed " + LOCK_Y.getBoundKeyTranslationKey()));
+            } else {    // Trigger When Y Double Pressed
                 lingerY = 0;
-                MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(new LiteralText("Y-L"));
+                AxisLocker.applyAxisLock(Direction.Axis.Y);
+                AxisLocker.lockAxisY = false;
+
+                //MinecraftClient.getInstance().inGameHud.getChatHud().addMessage(new LiteralText("§f§lPressed " + LOCK_Y.getBoundKeyTranslationKey() + " twice"));
             }
         }
 

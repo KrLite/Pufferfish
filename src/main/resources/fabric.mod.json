@@ -14,7 +14,7 @@
   },
 
   "license": "CC0-1.0",
-  "icon": "assets/pufferfish/icon.png",
+  "icon": "assets/puff/icon.png",
 
   "environment": "*",
   "entrypoints": {

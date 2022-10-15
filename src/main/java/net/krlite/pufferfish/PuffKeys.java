@@ -5,26 +5,24 @@ import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
 import org.lwjgl.glfw.GLFW;
 
-import java.util.ArrayList;
-
 public class PuffKeys {
-    public static int lingerXZ = 0;
-    public static int lingerY = 0;
+    public static int lingerPitch = 0;
+    public static int lingerYaw = 0;
 
-    public static boolean avaliableXZ = true;
-    public static boolean avaliableY = true;
+    public static boolean avaliablePitch = true;
+    public static boolean avaliableYaw = true;
 
     // Axis X & Z
-    public static final KeyBinding LOCK_XZ = KeyBindingHelper.registerKeyBinding(new KeyBinding(
-            "key.puff.lock_surface_xz",
+    public static final KeyBinding LOCK_PITCH = KeyBindingHelper.registerKeyBinding(new KeyBinding(
+            "key.puff.lock_coordinate_pitch",
             InputUtil.Type.KEYSYM,
             GLFW.GLFW_KEY_Z,
             "category.puff.locks"
     ));
 
     // Axis Y
-    public static final KeyBinding LOCK_Y = KeyBindingHelper.registerKeyBinding(new KeyBinding(
-            "key.puff.lock_surface_y",
+    public static final KeyBinding LOCK_YAW = KeyBindingHelper.registerKeyBinding(new KeyBinding(
+            "key.puff.lock_coordinate_yaw",
             InputUtil.Type.KEYSYM,
             GLFW.GLFW_KEY_V,
             "category.puff.locks"
@@ -39,8 +37,8 @@ public class PuffKeys {
     ));
 
     private static void lerp() {
-        lingerXZ -= lingerXZ == 0 ? 0 : 1;
-        lingerY -= lingerY == 0 ? 0 : 1;
+        lingerPitch -= lingerPitch == 0 ? 0 : 1;
+        lingerYaw -= lingerYaw == 0 ? 0 : 1;
     }
 
     public static void update() {

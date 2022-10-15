@@ -4,6 +4,8 @@ import net.krlite.pufferfish.PuffMod;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 
+import static net.krlite.pufferfish.util.AxisLocker.*;
+
 public class ScreenEdgeOverlay {
     public enum Color {
         NONE(0, 0, 0, 0),
@@ -21,10 +23,7 @@ public class ScreenEdgeOverlay {
         SCARLET(189, 18, 55, 0.32F),
         VIOLET(120, 18, 118, 0.32F);
 
-        private float red;
-        private float green;
-        private float blue;
-        private float alpha;
+        private float red, green, blue, alpha;
 
         Color(float r, float g, float b, float a) {
             red = r;
@@ -46,14 +45,23 @@ public class ScreenEdgeOverlay {
             blue = b;
             alpha = a;
         }
+
+        public float getColor(int index) {
+            return index == 0
+                    ? red
+                    : index == 1
+                        ? green
+                        : index == 2
+                            ? blue
+                            : index == 3
+                                ? alpha
+                                : 0.0F;
+        }
     }
 
     public static Color targetColor = Color.NONE;
 
-    public static float red;
-    public static float green;
-    public static float blue;
-    public static float alpha;
+    public static float red = 0.0F, green = 0.0F, blue = 0.0F, alpha = 0.0F;
 
     public static void setColor(Color color) {
         red = color.red;
@@ -95,13 +103,13 @@ public class ScreenEdgeOverlay {
     private static void adjustOverlay() {
         // Adjust Overlay State
         targetColor =
-                AxisLocker.lockAxisXZ
-                        ? AxisLocker.lockAxisY
-                        ? ScreenEdgeOverlay.Color.VIOLET
-                        : ScreenEdgeOverlay.Color.OCEAN
-                        : AxisLocker.lockAxisY
-                        ? ScreenEdgeOverlay.Color.SCARLET
-                        : ScreenEdgeOverlay.Color.NONE;
+                axisLock.get(Axis.PITCH)
+                        ? axisLock.get(Axis.YAW)
+                                ? ScreenEdgeOverlay.Color.VIOLET
+                                : ScreenEdgeOverlay.Color.OCEAN
+                        : axisLock.get(Axis.YAW)
+                                ? ScreenEdgeOverlay.Color.SCARLET
+                                : ScreenEdgeOverlay.Color.NONE;
     }
 
     public static void update() {

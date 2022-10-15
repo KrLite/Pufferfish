@@ -10,6 +10,7 @@
     "InGameHudMixin",
     "MinecraftClientAccessor",
     "MinecraftClientMixin",
+    "EntityMixin",
     "ScreenshotRecorderMixin"
   ],
   "injectors": {

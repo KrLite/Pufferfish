@@ -2,17 +2,17 @@ package net.krlite.pufferfish.mixin;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.krlite.pufferfish.config.PuffConfigs;
+import net.krlite.pufferfish.render.AxisHintRenderer;
+import net.krlite.pufferfish.render.CrosshairPuffer;
+import net.krlite.pufferfish.render.ScreenEdgeOverlayRenderer;
+import net.krlite.pufferfish.render.ScreenshotFlasher;
 import net.krlite.pufferfish.util.*;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.hud.InGameHud;
-import net.minecraft.client.option.GameOptions;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.text.LiteralText;
-import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.math.MathHelper;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -99,8 +99,8 @@ public abstract class InGameHudMixin extends DrawableHelper{
 
         // Render Screen Edge Overlay by RGBA
         renderOverlayByRGBA(
-                ScreenEdgeOverlay.R, ScreenEdgeOverlay.G, ScreenEdgeOverlay.B, ScreenEdgeOverlay.BK,
-                ScreenEdgeOverlay.red, ScreenEdgeOverlay.green, ScreenEdgeOverlay.blue, ScreenEdgeOverlay.alpha
+                ScreenEdgeOverlayRenderer.R, ScreenEdgeOverlayRenderer.G, ScreenEdgeOverlayRenderer.B, ScreenEdgeOverlayRenderer.BK,
+                ScreenEdgeOverlayRenderer.red, ScreenEdgeOverlayRenderer.green, ScreenEdgeOverlayRenderer.blue, ScreenEdgeOverlayRenderer.alpha
         );
 
         // Render Flash
@@ -112,7 +112,7 @@ public abstract class InGameHudMixin extends DrawableHelper{
     // Render Axis Hint
     @Inject(method = "render", at = @At("HEAD"))
     private void renderAxisHint(MatrixStack matrixStack, float tickDelta, CallbackInfo ci) {
-        AxisHintProvider.draw(matrixStack, scaledWidth, scaledHeight);
+        AxisHintRenderer.draw(matrixStack, scaledWidth, scaledHeight);
     }
 
     // Render Overlay Dynamically through RGBA Values

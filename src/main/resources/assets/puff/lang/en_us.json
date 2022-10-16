@@ -1,9 +1,9 @@
 {
   "comment.hint": "Hints",
 
-  "hint.puff.pitch": "Pch",
-  "hint.puff.yaw": "Yaw",
-  "hint.puff.pitch_yaw": "P-Y",
+  "hint.puff.pitch": "§lPch",
+  "hint.puff.yaw": "§lYaw",
+  "hint.puff.pitch_yaw": "§lP-Y",
 
 
   "comment.key": "Key Maps",

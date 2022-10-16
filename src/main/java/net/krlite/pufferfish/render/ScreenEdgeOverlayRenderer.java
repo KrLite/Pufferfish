@@ -1,16 +1,12 @@
-package net.krlite.pufferfish.util;
+package net.krlite.pufferfish.render;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import net.krlite.pufferfish.PuffMod;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.DrawableHelper;
-import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 
 import static net.krlite.pufferfish.util.AxisLocker.*;
 
-public class ScreenEdgeOverlay {
+public class ScreenEdgeOverlayRenderer {
     public enum Color {
         NONE(0, 0, 0, 0),
 
@@ -119,11 +115,11 @@ public class ScreenEdgeOverlay {
         targetColor =
                 axisLock.get(Axis.PITCH)
                         ? axisLock.get(Axis.YAW)
-                                ? ScreenEdgeOverlay.Color.VIOLET
-                                : ScreenEdgeOverlay.Color.OCEAN
+                                ? ScreenEdgeOverlayRenderer.Color.VIOLET
+                                : ScreenEdgeOverlayRenderer.Color.OCEAN
                         : axisLock.get(Axis.YAW)
-                                ? ScreenEdgeOverlay.Color.SCARLET
-                                : ScreenEdgeOverlay.Color.NONE;
+                                ? ScreenEdgeOverlayRenderer.Color.SCARLET
+                                : ScreenEdgeOverlayRenderer.Color.NONE;
     }
 
     public static void update() {

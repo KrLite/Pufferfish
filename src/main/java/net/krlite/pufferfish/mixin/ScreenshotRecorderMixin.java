@@ -1,6 +1,6 @@
 package net.krlite.pufferfish.mixin;
 
-import net.krlite.pufferfish.util.ScreenshotFlasher;
+import net.krlite.pufferfish.render.ScreenshotFlasher;
 import net.minecraft.client.gl.Framebuffer;
 import net.minecraft.client.texture.NativeImage;
 import net.minecraft.client.util.ScreenshotRecorder;

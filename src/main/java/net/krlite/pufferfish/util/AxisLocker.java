@@ -1,6 +1,7 @@
 package net.krlite.pufferfish.util;
 
 import com.google.common.collect.ImmutableMap;
+import net.krlite.pufferfish.render.AxisHintRenderer;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.MathHelper;
 
@@ -13,12 +14,14 @@ public class AxisLocker {
     public static UUID playerUuid;
 
     public enum Axis {
-        PITCH, YAW;
+        PITCH, YAW
     }
 
     public static Map<Axis, Boolean> axisLock = new HashMap<>(), axisPing = new HashMap<>();
 
     public static Map<Axis, Float> axisStatic = new HashMap<>();
+
+    public static boolean flippingAxisPitch = false, flippingAxisYaw = false;
 
     public static void lockPitch(PlayerEntity player) {
         axisStatic.replace(Axis.PITCH, player.getPitch());
@@ -87,6 +90,7 @@ public class AxisLocker {
             ));
         } else {
             axisPing.replace(Axis.PITCH, false);
+            flippingAxisPitch = false;
         }
 
         if ( axisPing.get(Axis.YAW) && Math.abs(player.getYaw() - axisStatic.get(Axis.YAW)) >= 0.1F ) {
@@ -97,6 +101,7 @@ public class AxisLocker {
             ));
         } else {
             axisPing.replace(Axis.YAW, false);
+            flippingAxisYaw = false;
         }
     }
 }

@@ -1,4 +1,4 @@
-package net.krlite.pufferfish.util;
+package net.krlite.pufferfish.render;
 
 import net.krlite.pufferfish.config.PuffConfigs;
 import net.minecraft.client.gui.DrawableHelper;

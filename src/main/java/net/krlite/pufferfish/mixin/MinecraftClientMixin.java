@@ -1,7 +1,8 @@
 package net.krlite.pufferfish.mixin;
 
 import net.krlite.pufferfish.config.PuffConfigs;
-import net.krlite.pufferfish.util.AxisHintProvider;
+import net.krlite.pufferfish.render.AxisHintRenderer;
+import net.krlite.pufferfish.util.AxisLocker;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.GameOptions;
 import net.minecraft.entity.player.PlayerEntity;
@@ -14,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import static net.krlite.pufferfish.PuffKeys.*;
-import static net.krlite.pufferfish.util.CrosshairPuffer.crosshairScaleTarget;
+import static net.krlite.pufferfish.render.CrosshairPuffer.crosshairScaleTarget;
 import static net.krlite.pufferfish.util.AxisLocker.*;
 
 @Mixin(MinecraftClient.class)
@@ -43,14 +44,18 @@ public class MinecraftClientMixin {
             if ( FLIP_PREFIX.isPressed() ) {
                 if ( LOCK_PITCH.wasPressed() && Math.abs(player.getPitch()) >= 0.5F ) {
                     applyPitch(-player.getPitch());
+                    flippingAxisPitch = true;
                 }
 
                 if ( LOCK_YAW.wasPressed() ) {
                     applyYaw(player.getYaw() + 90.0F);
+                    flippingAxisYaw = true;
                 }
             }
 
             else {
+                if ( !flippingAxisPitch && !flippingAxisYaw ) AxisHintRenderer.updateHint();
+
                 if ( LOCK_PITCH.wasPressed() && availableKeyAxis.get(Axis.PITCH) ) {
                     lingerKeyAxis.replace(Axis.YAW, 0);
 
@@ -60,7 +65,6 @@ public class MinecraftClientMixin {
                         lockPitch(player);
 
                         axisLock.replace(Axis.PITCH, !axisLock.get(Axis.PITCH));
-                        AxisHintProvider.updateHint();
                     }
 
                     else {    // Trigger When Pitch Applied
@@ -81,7 +85,6 @@ public class MinecraftClientMixin {
                         lockYaw(player);
 
                         axisLock.replace(Axis.YAW, !axisLock.get(Axis.YAW));
-                        AxisHintProvider.updateHint();
                     }
 
                     else {    // Trigger When Yaw Applied

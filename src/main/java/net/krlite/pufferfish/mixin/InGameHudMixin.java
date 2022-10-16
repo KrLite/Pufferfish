@@ -2,10 +2,7 @@ package net.krlite.pufferfish.mixin;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.krlite.pufferfish.config.PuffConfigs;
-import net.krlite.pufferfish.util.AxisLocker;
-import net.krlite.pufferfish.util.CrosshairPuffer;
-import net.krlite.pufferfish.util.ScreenEdgeOverlay;
-import net.krlite.pufferfish.util.ScreenshotFlasher;
+import net.krlite.pufferfish.util.*;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawableHelper;
@@ -79,6 +76,7 @@ public abstract class InGameHudMixin extends DrawableHelper{
     )
     private void scaleCrosshairBefore(MatrixStack matrixStack, CallbackInfo ci) {
         if ( PuffConfigs.lerpDelta == 0.0 ) ci.cancel();
+        matrixStack.push();
         CrosshairPuffer.puffCrosshair(matrixStack, scaledWidth, scaledHeight);
     }
 
@@ -114,42 +112,7 @@ public abstract class InGameHudMixin extends DrawableHelper{
     // Render Axis Hint
     @Inject(method = "render", at = @At("HEAD"))
     private void renderAxisHint(MatrixStack matrixStack, float tickDelta, CallbackInfo ci) {
-        Text hint =
-                AxisLocker.axisLock.get(AxisLocker.Axis.PITCH)
-                        ? AxisLocker.axisLock.get(AxisLocker.Axis.YAW)
-                                ? new LiteralText("Pitch & Yaw")
-                                : new LiteralText("Pitch")
-                        : AxisLocker.axisLock.get(AxisLocker.Axis.YAW)
-                                ? new LiteralText("Yaw")
-                                : null;
-
-        float r = ScreenEdgeOverlay.red;
-        float g = ScreenEdgeOverlay.green;
-        float b = ScreenEdgeOverlay.blue;
-        float a = ScreenEdgeOverlay.alpha;
-
-        matrixStack.push();
-        float f = a / ScreenEdgeOverlay.targetColor.getColor(3);
-        if ( hint != null ) {
-            matrixStack.translate(
-                    scaledWidth / 2.0F - this.getTextRenderer().getWidth(hint) / 2.0F + 0.5F,
-                    scaledHeight / 2.0F + 7 + f * 5,
-                    0.0F
-            );
-
-            this.getTextRenderer().draw(
-                    matrixStack,
-                    hint,
-                    0,
-                    0,
-                    (MathHelper.clamp(Math.round(a * 255.0F) * 3, 0, 255) << 24)
-                            | (Math.round(r) << 16)
-                            | (Math.round(g) << 8)
-                            | (Math.round(b))
-            );
-        }
-        matrixStack.scale(f, f, f);
-        matrixStack.pop();
+        AxisHintProvider.draw(matrixStack, scaledWidth, scaledHeight);
     }
 
     // Render Overlay Dynamically through RGBA Values

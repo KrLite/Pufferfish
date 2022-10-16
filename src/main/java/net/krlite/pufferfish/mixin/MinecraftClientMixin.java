@@ -1,6 +1,7 @@
 package net.krlite.pufferfish.mixin;
 
 import net.krlite.pufferfish.config.PuffConfigs;
+import net.krlite.pufferfish.util.AxisHintProvider;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.GameOptions;
 import net.minecraft.entity.player.PlayerEntity;
@@ -57,13 +58,16 @@ public class MinecraftClientMixin {
                         lingerKeyAxis.replace(Axis.PITCH, PuffConfigs.lingerKeyTicks);
 
                         lockPitch(player);
+
                         axisLock.replace(Axis.PITCH, !axisLock.get(Axis.PITCH));
+                        AxisHintProvider.updateHint();
                     }
 
                     else {    // Trigger When Pitch Applied
                         lingerKeyAxis.replace(Axis.PITCH, 0);
 
                         applyPitch(player);
+
                         axisLock.replace(Axis.PITCH, false);
                     }
                 }
@@ -75,13 +79,16 @@ public class MinecraftClientMixin {
                         lingerKeyAxis.replace(Axis.YAW, PuffConfigs.lingerKeyTicks);
 
                         lockYaw(player);
+
                         axisLock.replace(Axis.YAW, !axisLock.get(Axis.YAW));
+                        AxisHintProvider.updateHint();
                     }
 
                     else {    // Trigger When Yaw Applied
                         lingerKeyAxis.replace(Axis.YAW, 0);
 
                         applyYaw(player);
+
                         axisLock.replace(Axis.YAW, false);
                     }
                 }

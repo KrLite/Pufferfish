@@ -2,6 +2,7 @@ package net.krlite.pufferfish;
 
 import com.google.common.collect.ImmutableMap;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
+import net.krlite.pufferfish.util.PuffIdentifier;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
@@ -18,26 +19,28 @@ public class PuffKeys {
 
     // Axis X & Z
     public static final KeyBinding LOCK_PITCH = KeyBindingHelper.registerKeyBinding(new KeyBinding(
-            "key.puff.lock_coordinate_pitch",
+            PuffIdentifier.translationKey("key", "coordinate", "lock_pitch"),
             InputUtil.Type.KEYSYM,
             GLFW.GLFW_KEY_Z,
-            "category.puff.coordinate"
+            PuffIdentifier.translationKey("category", "coordinate")
     ));
 
     // Axis Y
     public static final KeyBinding LOCK_YAW = KeyBindingHelper.registerKeyBinding(new KeyBinding(
-            "key.puff.lock_coordinate_yaw",
+            PuffIdentifier.translationKey("key", "coordinate", "lock_yaw"),
             InputUtil.Type.KEYSYM,
             GLFW.GLFW_KEY_V,
-            "category.puff.coordinate"
+            PuffIdentifier.translationKey("category", "coordinate")
     ));
 
     // Prefix Key
     public static final KeyBinding FLIP_PREFIX = KeyBindingHelper.registerKeyBinding(new KeyBinding(
-            "key.puff.flip_prefix",
+            PuffIdentifier.translationKey("key", "coordinate", "flip_prefix"),
             InputUtil.Type.KEYSYM,
-            MinecraftClient.IS_SYSTEM_MAC ? GLFW.GLFW_KEY_LEFT_SUPER : GLFW.GLFW_KEY_LEFT_ALT,
-            "category.puff.coordinate"
+            MinecraftClient.IS_SYSTEM_MAC
+                    ? GLFW.GLFW_KEY_LEFT_SUPER
+                    : GLFW.GLFW_KEY_LEFT_ALT,
+            PuffIdentifier.translationKey("category", "coordinate")
     ));
 
     private static void tick() {

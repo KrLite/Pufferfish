@@ -17,11 +17,26 @@ public class CrosshairPuffer extends DrawableHelper {
     }
 
     public static void puffCrosshair(MatrixStack matrixStack, int scaledWidth, int scaledHeight) {
-        crosshairScale = MathHelper.lerp(1.0 / PuffConfigs.lerpDelta, crosshairScale, crosshairScaleTarget);
-        matrixStack.push();
         matrixStack.translate(scaledWidth / 2.0F - (width * 0.5F) * crosshairScale,
                 scaledHeight / 2.0F - (height * 0.5F) * crosshairScale,
                 0.0);
         matrixStack.scale((float) crosshairScale, (float) crosshairScale, (float) crosshairScale);
+    }
+
+    public static void puffCrosshair(MatrixStack matrixStack, int scaledWidth, int scaledHeight, float width, float height, float multiplier) {
+        matrixStack.translate(
+                scaledWidth / 2.0F - (width * 0.5F) * crosshairScale * multiplier,
+                scaledHeight / 2.0F - (height * 0.5F) * crosshairScale * multiplier,
+                0.0
+        );
+        matrixStack.scale((float) crosshairScale * multiplier, (float) crosshairScale * multiplier, (float) crosshairScale * multiplier);
+    }
+
+    private static void lerp() {
+        crosshairScale = MathHelper.lerp(1.0 / PuffConfigs.lerpDelta, crosshairScale, crosshairScaleTarget);
+    }
+
+    public static void update() {
+        lerp();
     }
 }

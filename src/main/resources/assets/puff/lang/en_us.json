@@ -1,0 +1,16 @@
+{
+  "comment.hint": "Hints",
+
+  "hint.puff.pitch": "Pch",
+  "hint.puff.yaw": "Yaw",
+  "hint.puff.pitch_yaw": "P-Y",
+
+
+  "comment.key": "Key Maps",
+
+  "category.puff.coordinate": "Puff Coordinate",
+
+  "key.puff.coordinate.lock_pitch": "Pitch Lock",
+  "key.puff.coordinate.lock_yaw": "Yaw Lock",
+  "key.puff.coordinate.flip_prefix": "Flip Axis"
+}

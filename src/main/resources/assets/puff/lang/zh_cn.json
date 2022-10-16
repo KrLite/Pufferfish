@@ -1,0 +1,16 @@
+{
+  "comment.hint": "提示文本",
+
+  "hint.puff.pitch": "俯仰",
+  "hint.puff.yaw": "偏航",
+  "hint.puff.pitch_yaw": "锁定",
+
+
+  "comment.key": "键盘映射",
+
+  "category.puff.coordinate": "坐标系膨胀",
+
+  "key.puff.coordinate.lock_pitch": "俯仰角锁定",
+  "key.puff.coordinate.lock_yaw": "偏航角锁定",
+  "key.puff.coordinate.flip_prefix": "翻转轴向"
+}

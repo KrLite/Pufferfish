@@ -3,9 +3,7 @@ package net.krlite.pufferfish;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.krlite.pufferfish.config.PuffConfigs;
-import net.krlite.pufferfish.util.AxisLocker;
-import net.krlite.pufferfish.util.ScreenEdgeOverlay;
-import net.krlite.pufferfish.util.ScreenshotFlasher;
+import net.krlite.pufferfish.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,6 +21,8 @@ public class PuffMod implements ClientModInitializer {
 			PuffKeys.update();
 			ScreenshotFlasher.update();
 			ScreenEdgeOverlay.update();
+			CrosshairPuffer.update();
+			AxisHintProvider.update();
 		});
 	}
 }

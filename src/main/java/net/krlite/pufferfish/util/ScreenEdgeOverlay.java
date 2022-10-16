@@ -1,6 +1,10 @@
 package net.krlite.pufferfish.util;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.krlite.pufferfish.PuffMod;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.DrawableHelper;
+import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 
@@ -46,15 +50,23 @@ public class ScreenEdgeOverlay {
             alpha = a;
         }
 
+        /**
+         * @param   index   the index of the target color.
+         * <ul><li>0 Alpha
+         * <li>1 Red
+         * <li>2 Green
+         * <li>3 Blue
+         * </ul>
+         */
         public float getColor(int index) {
             return index == 0
-                    ? red
+                    ? alpha
                     : index == 1
-                        ? green
+                        ? red
                         : index == 2
-                            ? blue
+                            ? green
                             : index == 3
-                                ? alpha
+                                ? blue
                                 : 0.0F;
         }
     }
@@ -76,6 +88,8 @@ public class ScreenEdgeOverlay {
         blue = b;
         alpha = a;
     }
+
+
 
     private static final float delta = 0.17F;
 

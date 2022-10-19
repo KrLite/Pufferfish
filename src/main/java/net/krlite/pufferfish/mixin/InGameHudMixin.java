@@ -1,11 +1,9 @@
 package net.krlite.pufferfish.mixin;
 
+import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.krlite.pufferfish.config.PuffConfigs;
-import net.krlite.pufferfish.render.AxisHintRenderer;
-import net.krlite.pufferfish.render.CrosshairPuffer;
-import net.krlite.pufferfish.render.ScreenEdgeOverlayRenderer;
-import net.krlite.pufferfish.render.ScreenshotFlasher;
+import net.krlite.pufferfish.render.*;
 import net.krlite.pufferfish.util.*;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
@@ -20,6 +18,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.Slice;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+import java.awt.*;
 
 @Mixin(InGameHud.class)
 public abstract class InGameHudMixin extends DrawableHelper{
@@ -36,6 +36,15 @@ public abstract class InGameHudMixin extends DrawableHelper{
     @Inject(method = "render", at = @At("HEAD"))
     private void update(MatrixStack matrices, float tickDelta, CallbackInfo ci) {
         AxisLocker.update(MinecraftClient.getInstance().player);
+    }
+
+    // Set Crosshair Render Style
+    @Redirect(method = "renderCrosshair", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/systems/RenderSystem;blendFuncSeparate(Lcom/mojang/blaze3d/platform/GlStateManager$SrcFactor;Lcom/mojang/blaze3d/platform/GlStateManager$DstFactor;Lcom/mojang/blaze3d/platform/GlStateManager$SrcFactor;Lcom/mojang/blaze3d/platform/GlStateManager$DstFactor;)V"))
+    private void setCrosshairStyle(GlStateManager.SrcFactor srcFactor, GlStateManager.DstFactor dstFactor, GlStateManager.SrcFactor srcAlpha, GlStateManager.DstFactor dstAlpha) {
+        RenderSystem.blendFuncSeparate(
+                GlStateManager.SrcFactor.DST_COLOR, GlStateManager.DstFactor.ONE_MINUS_DST_COLOR,
+                srcAlpha, dstAlpha
+        );
     }
 
     // Relocate Crosshair
@@ -97,10 +106,22 @@ public abstract class InGameHudMixin extends DrawableHelper{
     private void render(MatrixStack matrixStack, float tickDelta, CallbackInfo ci) {
         RenderSystem.enableBlend();
 
+        /*
         // Render Screen Edge Overlay by RGBA
         renderOverlayByRGBA(
                 ScreenEdgeOverlayRenderer.R, ScreenEdgeOverlayRenderer.G, ScreenEdgeOverlayRenderer.B, ScreenEdgeOverlayRenderer.BK,
                 ScreenEdgeOverlayRenderer.red, ScreenEdgeOverlayRenderer.green, ScreenEdgeOverlayRenderer.blue, ScreenEdgeOverlayRenderer.alpha
+        );
+         */
+
+        DynamicColoredTextureRenderer.renderDynamicColoredOverlay(
+                ScreenEdgeOverlayRenderer.WH,
+                new Color(
+                        (int) ScreenEdgeOverlayRenderer.red,
+                        (int) ScreenEdgeOverlayRenderer.green,
+                        (int) ScreenEdgeOverlayRenderer.blue,
+                        (int) (ScreenEdgeOverlayRenderer.alpha * 255)
+                ), scaledWidth, scaledHeight
         );
 
         // Render Flash

@@ -29,4 +29,6 @@ public class PuffMod implements ClientModInitializer {
 			AxisHintRenderer.update();
 		});
 	}
+
+	// TODO: Rebuild Dynamic Color Render System.
 }

@@ -30,8 +30,6 @@ public abstract class InGameHudMixin extends DrawableHelper{
 
     @Shadow protected abstract void renderOverlay(Identifier texture, float opacity);
 
-    @Shadow public abstract TextRenderer getTextRenderer();
-
     // Update
     @Inject(method = "render", at = @At("HEAD"))
     private void update(MatrixStack matrices, float tickDelta, CallbackInfo ci) {
@@ -42,7 +40,7 @@ public abstract class InGameHudMixin extends DrawableHelper{
     @Redirect(method = "renderCrosshair", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/systems/RenderSystem;blendFuncSeparate(Lcom/mojang/blaze3d/platform/GlStateManager$SrcFactor;Lcom/mojang/blaze3d/platform/GlStateManager$DstFactor;Lcom/mojang/blaze3d/platform/GlStateManager$SrcFactor;Lcom/mojang/blaze3d/platform/GlStateManager$DstFactor;)V"))
     private void setCrosshairStyle(GlStateManager.SrcFactor srcFactor, GlStateManager.DstFactor dstFactor, GlStateManager.SrcFactor srcAlpha, GlStateManager.DstFactor dstAlpha) {
         RenderSystem.blendFuncSeparate(
-                GlStateManager.SrcFactor.DST_COLOR, GlStateManager.DstFactor.ONE_MINUS_DST_COLOR,
+                GlStateManager.SrcFactor.DST_COLOR, GlStateManager.DstFactor.DST_COLOR,
                 srcAlpha, dstAlpha
         );
     }

@@ -1,7 +1,6 @@
 package net.krlite.pufferfish.util;
 
 import com.google.common.collect.ImmutableMap;
-import net.krlite.pufferfish.render.AxisHintRenderer;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.MathHelper;
 

@@ -1,4 +1,8 @@
 {
+  "mod.puff.name": "Pufferfish",
+
+
+
   "comment.hint": "提示文本",
 
   "hint.puff.pitch": "§l俯仰",
@@ -8,9 +12,31 @@
 
   "comment.key": "键盘映射",
 
-  "category.puff.coordinate": "坐标系膨胀",
+  "key.puff.category.general": "Pufferfish",
+
+  "key.puff.general.config": "访问设置菜单",
+
+  "key.puff.category.coordinate": "坐标系膨胀",
 
   "key.puff.coordinate.lock_pitch": "俯仰角锁定",
   "key.puff.coordinate.lock_yaw": "偏航角锁定",
-  "key.puff.coordinate.flip_prefix": "翻转轴向"
+  "key.puff.coordinate.flip_prefix": "翻转轴向",
+
+
+
+  "comment.config": "设置菜单",
+
+  "config.puff.category.crosshair": "准星",
+  "config.puff.crosshair.size": "准星大小",
+  "config.puff.crosshair.size.tooltip": "标准准星大小§7（百分比）",
+  "config.puff.crosshair.puff": "膨胀准星大小",
+  "config.puff.crosshair.puff.tooltip": "膨胀准星大小§7（百分比）",
+
+  "config.puff.category.keys": "控制",
+  "config.puff.keys.linger_ticks": "最大滞留时间",
+  "config.puff.keys.linger_ticks.tooltip": "调整双击键盘的最大滞留时间§7（游戏刻）\n§7[1秒 = 20游戏刻]",
+
+  "config.puff.category.colors": "颜色",
+  "config.puff.colors.ocean": "邃海",
+  "config.puff.colors.scarlet": "殷红"
 }

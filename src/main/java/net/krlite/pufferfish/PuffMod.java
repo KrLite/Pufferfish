@@ -3,9 +3,8 @@ package net.krlite.pufferfish;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.krlite.pufferfish.config.PuffConfigs;
-import net.krlite.pufferfish.render.AxisHintRenderer;
+import net.krlite.pufferfish.event.InputEventHandler;
 import net.krlite.pufferfish.render.CrosshairPuffer;
-import net.krlite.pufferfish.render.ScreenEdgeOverlayRenderer;
 import net.krlite.pufferfish.render.ScreenshotFlasher;
 import net.krlite.pufferfish.util.*;
 import org.slf4j.Logger;
@@ -17,18 +16,13 @@ public class PuffMod implements ClientModInitializer {
 
 	@Override
 	public void onInitializeClient() {
-		PuffKeys.registerKeys();
 		PuffConfigs.registerConfigs();
 		AxisLocker.registerAxisMaps();
+		InputEventHandler.init();
 
 		ClientTickEvents.END_CLIENT_TICK.register(client -> {
-			PuffKeys.update();
 			ScreenshotFlasher.update();
-			ScreenEdgeOverlayRenderer.update();
 			CrosshairPuffer.update();
-			AxisHintRenderer.update();
 		});
 	}
-
-	// TODO: Rebuild Dynamic Color Render System.
 }

@@ -20,6 +20,9 @@
   "entrypoints": {
     "client": [
       "net.krlite.pufferfish.PuffMod"
+    ],
+    "modmenu": [
+      "net.krlite.pufferfish.config.PuffModMenuIntegration"
     ]
   },
   "mixins": [

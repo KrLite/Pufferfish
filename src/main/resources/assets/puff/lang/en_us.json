@@ -1,4 +1,8 @@
 {
+  "mod.puff.name": "Pufferfish",
+
+
+
   "comment.hint": "Hints",
 
   "hint.puff.pitch": "§lPch",
@@ -6,11 +10,32 @@
   "hint.puff.pitch_yaw": "§lP-Y",
 
 
-  "comment.key": "Key Maps",
 
-  "category.puff.coordinate": "Puff Coordinate",
+  "comment.key": "Key Mappings",
 
+  "key.puff.category.general": "Pufferfish",
+  "key.puff.general.config": "Config Menu",
+
+  "key.puff.category.coordinate": "Puff Coordinate",
   "key.puff.coordinate.lock_pitch": "Pitch Lock",
   "key.puff.coordinate.lock_yaw": "Yaw Lock",
-  "key.puff.coordinate.flip_prefix": "Flip Axis"
+  "key.puff.coordinate.flip_prefix": "Flip Axis",
+
+
+
+  "comment.config": "Configs",
+
+  "config.puff.category.crosshair": "Crosshair",
+  "config.puff.crosshair.size": "Crosshair Size",
+  "config.puff.crosshair.size.tooltip": "Default crosshair size as percent",
+  "config.puff.crosshair.puff": "Puffed Crosshair Size",
+  "config.puff.crosshair.puff.tooltip": "Puffed crosshair size as percent",
+
+  "config.puff.category.keys": "Keys",
+  "config.puff.keys.linger_ticks": "Max Lingering Ticks",
+  "config.puff.keys.linger_ticks.tooltip": "Decides how long a double-tap takes\n§7[1 Second = 20 Tick]",
+
+  "config.puff.category.colors": "Colors",
+  "config.puff.colors.ocean": "Ocean",
+  "config.puff.colors.scarlet": "Scarlet"
 }

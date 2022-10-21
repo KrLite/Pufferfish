@@ -1,22 +1,23 @@
 package net.krlite.pufferfish.render;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.render.*;
 import net.minecraft.util.Identifier;
 
 import java.awt.*;
 
-public class DynamicColoredTextureRenderer extends DrawableHelper {
+public class ColoredTextureRenderer extends DrawableHelper {
     /**
-     * Renders a centered colorized texture in square by the default size of 256 pixels, a simple version of {@link #renderCenteredDynamicColoredTexture(Identifier, Color, float, float, int, int, int, int, int) RenderCenteredDynamicColoredTexture.}
+     * Renders a centered colorized texture in square by the default size of 256 pixels, a simple version of {@link #renderCenteredColoredTexture(Identifier, Color, float, float, int, int, int, int, int) RenderCenteredColoredTexture.}
      */
-    public static void renderCenteredDynamicColoredTexture(
+    public static void renderCenteredColoredTexture(
             Identifier identifier, Color color,
             float xCentered, float yCentered,
             int x, int y, int width, int height
     ) {
-        renderCenteredDynamicColoredTexture(
+        renderCenteredColoredTexture(
                 identifier, color,
                 xCentered, yCentered,
                 x, y, width, height,
@@ -25,14 +26,14 @@ public class DynamicColoredTextureRenderer extends DrawableHelper {
     }
 
     /**
-     * Renders a colorized texture in square by the default size of 256 pixels, a simple version of {@link #renderDynamicColoredTexture(Identifier, Color, float, float, int, int, int, int, int) RenderDynamicColoredTexture.}
+     * Renders a colorized texture in square by the default size of 256 pixels, a simple version of {@link #renderPositionedColoredTexture(Identifier, Color, float, float, int, int, int, int, int) RenderPositionedColoredTexture.}
      */
-    public static void renderDynamicColoredTexture(
+    public static void renderPositionedColoredTexture(
             Identifier identifier, Color color,
             float xPos, float yPos,
             int x, int y, int width, int height
     ) {
-        renderDynamicColoredTexture(
+        renderPositionedColoredTexture(
                 identifier, color,
                 xPos, yPos,
                 x, y, width, height,
@@ -41,14 +42,15 @@ public class DynamicColoredTextureRenderer extends DrawableHelper {
     }
 
     /**
-     * Renders a centered colorized texture in square, a simple version of {@link #renderPositionedDynamicColoredTexture(Identifier, Color, float, float, float, float, float, float, float, float) RenderPositionedDynamicColoredTexture.}
+     * Renders a centered colorized texture in square, a simple version of {@link #renderColoredTexture(Identifier, Color, float, float, float, float, float, float, float, float) RenderColoredTexture.}
+     *
      * @param xCentered     x center,
      * @param yCentered     y center;
      * @param x             x left-up in texture uv,
      * @param y             y left-up in texture uv.
      * @param textureSize   width and height of the target texture.
      */
-    public static void renderCenteredDynamicColoredTexture(
+    public static void renderCenteredColoredTexture(
             Identifier identifier, Color color,
             float xCentered, float yCentered,
             int x, int y, int width, int height,
@@ -56,7 +58,7 @@ public class DynamicColoredTextureRenderer extends DrawableHelper {
     ) {
         float xPos = xCentered - width / 2.0F, yPos = yCentered + height / 2.0F;
 
-        renderPositionedDynamicColoredTexture(
+        renderColoredTexture(
                 identifier, color,
                 xPos, yPos, xPos + width, xPos + height,
                 (float) x / textureSize, (float) y / textureSize,
@@ -65,20 +67,21 @@ public class DynamicColoredTextureRenderer extends DrawableHelper {
     }
 
     /**
-     * Renders a colorized texture in square, a simple version of {@link #renderPositionedDynamicColoredTexture(Identifier, Color, float, float, float, float, float, float, float, float) RenderPositionedDynamicColoredTexture.}
+     * Renders a colorized texture in square, a simple version of {@link #renderColoredTexture(Identifier, Color, float, float, float, float, float, float, float, float) RenderColoredTexture.}
+     *
      * @param xPos          x left-up,
      * @param yPos          y left-up;
      * @param x             x left-up in texture uv,
      * @param y             y left-up in texture uv.
      * @param textureSize   width and height of the target texture.
      */
-    public static void renderDynamicColoredTexture(
+    public static void renderPositionedColoredTexture(
             Identifier identifier, Color color,
             float xPos, float yPos,
             int x, int y, int width, int height,
             int textureSize
     ) {
-        renderPositionedDynamicColoredTexture(
+        renderColoredTexture(
                 identifier, color,
                 xPos, yPos, xPos + width, xPos + height,
                 (float) x / textureSize, (float) y / textureSize,
@@ -88,31 +91,34 @@ public class DynamicColoredTextureRenderer extends DrawableHelper {
 
     /**
      * Renders a colorized camera overlay.
-     * @see #renderPositionedDynamicColoredTexture(Identifier, Color, float, float, float, float, float, float, float, float) RenderPositionedDynamicColoredTexture
+     *
+     * @see #renderColoredTexture(Identifier, Color, float, float, float, float, float, float, float, float) RenderColoredTexture
      */
-    public static void renderDynamicColoredOverlay(Identifier identifier, Color color, float width, float height) {
-        renderPositionedDynamicColoredTexture(
+    public static void renderColoredOverlay(Identifier identifier, Color color) {
+        renderColoredTexture(
                 identifier, color,
-                0.0F, 0.0F, width, height,
+                0.0F, 0.0F,
+                MinecraftClient.getInstance().getWindow().getScaledWidth(), MinecraftClient.getInstance().getWindow().getScaledHeight(),
                 0.0F, 0.0F, 1.0F, 1.0F
         );
     }
 
     /**
      * Renders a colorized texture in square.
-     * @see  #renderPrecisionPositionedDynamicColoredTexture(Identifier, Color, float, float, float, float, float, float, float, float, float, float, float, float) RenderPrecisionPositionedDynamicColoredTexture
+     *
+     * @see  #renderColoredTexture(Identifier, Color, float, float, float, float, float, float, float, float, float, float, float, float) RenderColoredTexture
      */
-    public static void renderPositionedDynamicColoredTexture(
+    public static void renderColoredTexture(
             Identifier identifier, Color color,
             float xBegin, float yBegin, float xEnd, float yEnd,
             float uBegin, float vBegin, float uEnd, float vEnd
     ) {
-        renderPrecisionPositionedDynamicColoredTexture(
+        renderColoredTexture(
                 identifier, color,
                 xBegin, yBegin,
                 xBegin, yEnd,
-                xEnd,   yBegin,
                 xEnd,   yEnd,
+                xEnd,   yBegin,
                 uBegin, vBegin, uEnd, vEnd
         );
     }
@@ -126,21 +132,21 @@ public class DynamicColoredTextureRenderer extends DrawableHelper {
      * @param yLU           y left-up;
      * @param xLD           x left-down,
      * @param yLD           y left-down;
-     * @param xRU           x right-up,
-     * @param yRU           y right-up;
      * @param xRD           x right-down,
-     * @param yRD           y right-down.
+     * @param yRD           y right-down;
+     * @param xRU           x right-up,
+     * @param yRU           y right-up.
      * @param uBegin        texture u begin,
      * @param vBegin        texture v begin;
      * @param uEnd          texture u end,
      * @param vEnd          texture v end.
      */
-    public static void renderPrecisionPositionedDynamicColoredTexture(
+    public static void renderColoredTexture(
             Identifier identifier, Color color,
             float xLU, float yLU,
             float xLD, float yLD,
-            float xRU, float yRU,
             float xRD, float yRD,
+            float xRU, float yRU,
             float uBegin, float vBegin, float uEnd, float vEnd
     ) {
         int
@@ -162,7 +168,7 @@ public class DynamicColoredTextureRenderer extends DrawableHelper {
 
         bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE_COLOR);
         bufferBuilder
-                .vertex(xRU, yRU, -90.0)
+                .vertex(xLD, yLD, -90.0)
                 .texture(uBegin, vEnd)
                 .color(r, g, b, a)
                 .next();
@@ -174,7 +180,7 @@ public class DynamicColoredTextureRenderer extends DrawableHelper {
                 .next();
 
         bufferBuilder
-                .vertex(xLD, yLD, -90.0)
+                .vertex(xRU, yRU, -90.0)
                 .texture(uEnd, vBegin)
                 .color(r, g, b, a)
                 .next();

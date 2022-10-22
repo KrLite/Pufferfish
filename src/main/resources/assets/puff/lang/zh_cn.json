@@ -31,12 +31,14 @@
   "config.puff.crosshair.size.tooltip": "标准准星大小§7（百分比）",
   "config.puff.crosshair.puff": "膨胀准星大小",
   "config.puff.crosshair.puff.tooltip": "膨胀准星大小§7（百分比）",
+  "config.puff.crosshair.style": "准星样式",
+  "config.puff.crosshair.style.tooltip": "调整准星渲染样式",
 
   "config.puff.category.keys": "控制",
   "config.puff.keys.linger_ticks": "最大滞留时间",
   "config.puff.keys.linger_ticks.tooltip": "调整双击键盘的最大滞留时间§7（游戏刻）\n§7[1秒 = 20游戏刻]",
 
   "config.puff.category.colors": "颜色",
-  "config.puff.colors.ocean": "邃海",
-  "config.puff.colors.scarlet": "殷红"
+  "config.puff.colors.pitch": "俯仰角",
+  "config.puff.colors.yaw": "偏航角",
 }

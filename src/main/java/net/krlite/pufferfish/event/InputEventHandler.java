@@ -4,23 +4,14 @@ import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.krlite.pufferfish.PuffKeys;
 import net.krlite.pufferfish.config.ConfigScreenHandler;
 import net.krlite.pufferfish.config.PuffConfigs;
-import net.krlite.pufferfish.mixin.MinecraftClientMixin;
 import net.krlite.pufferfish.render.AxisHintHandler;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.option.GameOptions;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.math.MathHelper;
-import org.checkerframework.checker.nullness.qual.AssertNonNullIfNonNull;
 
 import static net.krlite.pufferfish.PuffKeys.*;
-import static net.krlite.pufferfish.PuffKeys.LOCK_YAW;
-import static net.krlite.pufferfish.render.CrosshairPuffer.crosshairScaleTarget;
 import static net.krlite.pufferfish.util.AxisLocker.*;
-import static net.krlite.pufferfish.util.AxisLocker.axisLock;
 
 public class InputEventHandler {
-    private static final GameOptions options = MinecraftClient.getInstance().options;
-
     private static void registerInputEvents() {
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             if ( CONFIG.wasPressed() ) {

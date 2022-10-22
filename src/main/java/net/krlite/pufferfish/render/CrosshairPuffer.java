@@ -7,6 +7,9 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.MathHelper;
 
 public class CrosshairPuffer extends DrawableHelper {
+    private static int scaledWidth;
+    private static int scaledHeight;
+
     public static double crosshairScaleTarget = PuffConfigs.crosshairSize;
     public static double crosshairScale = crosshairScaleTarget;
 
@@ -15,12 +18,9 @@ public class CrosshairPuffer extends DrawableHelper {
     }
 
     public static void puffCrosshair(MatrixStack matrixStack, float multiplier) {
-        int width = MinecraftClient.getInstance().getWindow().getScaledWidth();
-        int height = MinecraftClient.getInstance().getWindow().getScaledHeight();
-
         matrixStack.translate(
-                (width * -0.5F) * (crosshairScale - 1) * multiplier,
-                (height * -0.5F) * (crosshairScale - 1) * multiplier,
+                (scaledWidth * -0.5F) * (crosshairScale - 1) * multiplier,
+                (scaledHeight * -0.5F) * (crosshairScale - 1) * multiplier,
                 0.0
         );
         matrixStack.scale(
@@ -31,10 +31,12 @@ public class CrosshairPuffer extends DrawableHelper {
     }
 
     private static void lerp() {
-        crosshairScale = MathHelper.lerp(0.45F, crosshairScale, crosshairScaleTarget);
+        crosshairScale = MathHelper.lerp(0.65F, crosshairScale, crosshairScaleTarget);
     }
 
-    public static void update() {
+    public static void update(int scaledWidth, int scaledHeight) {
+        CrosshairPuffer.scaledWidth = scaledWidth;
+        CrosshairPuffer.scaledHeight = scaledHeight;
         lerp();
     }
 }

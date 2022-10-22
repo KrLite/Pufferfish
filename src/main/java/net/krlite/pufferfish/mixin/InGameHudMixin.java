@@ -5,6 +5,8 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import net.krlite.pufferfish.config.PuffConfigs;
 import net.krlite.pufferfish.render.*;
 import net.krlite.pufferfish.util.AxisLocker;
+import net.krlite.pufferfish.util.ColorUtil;
+import net.krlite.pufferfish.util.Default;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.hud.InGameHud;
@@ -17,6 +19,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.awt.*;
+import java.util.Objects;
 
 @Mixin(InGameHud.class)
 public abstract class InGameHudMixin extends DrawableHelper{
@@ -26,21 +29,24 @@ public abstract class InGameHudMixin extends DrawableHelper{
     @Shadow
     private int scaledHeight;
 
-    private static Color cameraOverlay = PuffConfigs.TRANSLUCENT;
+    private static Color cameraOverlay = ColorUtil.TRANSLUCENT;
 
     // Update
     @Inject(method = "render", at = @At("HEAD"))
     private void update(MatrixStack matrices, float tickDelta, CallbackInfo ci) {
         AxisLocker.update(MinecraftClient.getInstance().player);
+        CrosshairPuffer.update(scaledWidth, scaledHeight);
     }
 
     // Set Crosshair Render Style
     @Redirect(method = "renderCrosshair", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/systems/RenderSystem;blendFuncSeparate(Lcom/mojang/blaze3d/platform/GlStateManager$SrcFactor;Lcom/mojang/blaze3d/platform/GlStateManager$DstFactor;Lcom/mojang/blaze3d/platform/GlStateManager$SrcFactor;Lcom/mojang/blaze3d/platform/GlStateManager$DstFactor;)V"))
     private void setCrosshairStyle(GlStateManager.SrcFactor srcFactor, GlStateManager.DstFactor dstFactor, GlStateManager.SrcFactor srcAlpha, GlStateManager.DstFactor dstAlpha) {
-        RenderSystem.blendFuncSeparate(
-                GlStateManager.SrcFactor.DST_COLOR, GlStateManager.DstFactor.DST_COLOR,
-                srcAlpha, dstAlpha
-        );
+        if ( Objects.equals(PuffConfigs.corsshairStyle, Default.CrosshairStyle.PUFFERFISH.getName()) ) {
+            RenderSystem.blendFuncSeparate(
+                    GlStateManager.SrcFactor.DST_COLOR, GlStateManager.DstFactor.DST_COLOR,
+                    srcAlpha, dstAlpha
+            );
+        }
     }
 
     // Puff Crosshair & Push Matrix Stack
@@ -78,15 +84,15 @@ public abstract class InGameHudMixin extends DrawableHelper{
                 AxisLocker.axisLock.get(AxisLocker.Axis.PITCH)
                         ? AxisLocker.axisLock.get(AxisLocker.Axis.YAW)
                                 ? new Color(
-                                        (PuffConfigs.ocean.getRed() + PuffConfigs.scarlet.getRed()) / 2,
-                                        (PuffConfigs.ocean.getGreen() + PuffConfigs.scarlet.getGreen()) / 2,
-                                        (PuffConfigs.ocean.getBlue() + PuffConfigs.scarlet.getBlue()) / 2,
+                                        (ColorUtil.pitchColor.getRed() + ColorUtil.yawColor.getRed()) / 2,
+                                        (ColorUtil.pitchColor.getGreen() + ColorUtil.yawColor.getGreen()) / 2,
+                                        (ColorUtil.pitchColor.getBlue() + ColorUtil.yawColor.getBlue()) / 2,
                                         255
                                 )
-                                : PuffConfigs.ocean
+                                : ColorUtil.pitchColor
                         : AxisLocker.axisLock.get(AxisLocker.Axis.YAW)
-                                ? PuffConfigs.scarlet
-                                : PuffConfigs.TRANSLUCENT,
+                                ? ColorUtil.yawColor
+                                : ColorUtil.TRANSLUCENT,
                 cameraOverlay.getAlpha() / 255.0F,
                 (AxisLocker.axisLock.get(AxisLocker.Axis.PITCH) || AxisLocker.axisLock.get(AxisLocker.Axis.YAW))
                         ? 0.27F : 0
@@ -94,11 +100,8 @@ public abstract class InGameHudMixin extends DrawableHelper{
         ColoredTextureRenderer.renderColoredOverlay(CameraOverlayHandler.BASIC, cameraOverlay);
 
         // Render Flash
-        if ( ScreenshotFlasher.flashOpacity > 0 ) {
-            ColoredTextureRenderer.renderColoredOverlay(
-                    ScreenshotFlasher.FLASH,
-                    new Color(255, 255, 255, (int) (ScreenshotFlasher.flashOpacity * 255))
-            );
+        if ( ScreenshotFlashRenderer.flashOpacity > 0 ) {
+            ScreenshotFlashRenderer.renderScreenshotFlash();
         }
     }
 

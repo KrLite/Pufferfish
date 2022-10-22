@@ -30,12 +30,14 @@
   "config.puff.crosshair.size.tooltip": "Default crosshair size as percent",
   "config.puff.crosshair.puff": "Puffed Crosshair Size",
   "config.puff.crosshair.puff.tooltip": "Puffed crosshair size as percent",
+  "config.puff.crosshair.style": "Crosshair Style",
+  "config.puff.crosshair.style.tooltip": "Adjust crosshair rendering style",
 
   "config.puff.category.keys": "Keys",
   "config.puff.keys.linger_ticks": "Max Lingering Ticks",
   "config.puff.keys.linger_ticks.tooltip": "Decides how long a double-tap takes\n§7[1 Second = 20 Tick]",
 
   "config.puff.category.colors": "Colors",
-  "config.puff.colors.ocean": "Ocean",
-  "config.puff.colors.scarlet": "Scarlet"
+  "config.puff.colors.pitch": "Pitch",
+  "config.puff.colors.yaw": "Yaw"
 }

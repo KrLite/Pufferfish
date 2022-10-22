@@ -2,22 +2,27 @@
 
 ### TODO:
 
-#### Puff
+#### Pufferfish
 
-- [ ] Axis lock
-
-#### Fish
-
-- [ ] Crosshair bobbing
+- [X] Axis lock
+- [X] Crosshair bobbing
 - [ ] Item icon bobbing
-- [ ] Screenshot flash
-- [ ] GUI open/close animations
+- [ ] Zoomer
+- [X] Screenshot flash
+- [ ] Left/right sided hotbars
+- [ ] GUI animations
 - [ ] Floating compass
 - [ ] Underwater EQ (underwater, in gui, etc.)
+- [X] Modmenu & Cloth Config integration
 
-#### Map
+#### Interaction Map
 
 - [ ] Interaction map
 - [ ] Marker (particles?)
 - [ ] Glancer
-- [ ] Map image export
+- [ ] Image export
+
+#### Render System
+- [X] Colored texture renderer
+- [X] Vertices texture renderer
+- [ ] Relative position solver

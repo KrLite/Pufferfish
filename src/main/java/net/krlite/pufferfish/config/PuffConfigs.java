@@ -6,6 +6,8 @@ import net.krlite.pufferfish.config.simple_config.SimpleConfig;
 import net.krlite.pufferfish.config.simple_config.SimpleConfigHandler;
 import net.krlite.pufferfish.util.ColorUtil;
 import net.krlite.pufferfish.util.Default;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
 import java.io.IOException;
@@ -38,7 +40,7 @@ public class PuffConfigs {
     private static void assignConfigs() {
         crosshairSize = CONFIG.getOrDefault("crosshair_size", DEFAULT_CROSSHAIR_SIZE);
         crosshairPuff = CONFIG.getOrDefault("crosshair_puff", DEFAULT_CROSSHAIR_PUFF);
-        corsshairStyle.parse(CONFIG.getOrDefault("crosshair_style", DEFAULT_CROSSHAIR_STYLE.getName()));
+        corsshairStyle = Default.parse(CONFIG.getOrDefault("crosshair_style", DEFAULT_CROSSHAIR_STYLE.getName()));
 
         keyLingerTicks = CONFIG.getOrDefault("key_linger_ticks", DEFAULT_KEY_LINGER_TICKS);
 
@@ -66,6 +68,8 @@ public class PuffConfigs {
 
         configs = new SimpleConfigHandler();
         createConfigs();
+
+        corsshairStyle = CrosshairStyle.VANILLA;
 
         CONFIG = SimpleConfig.of(PuffMod.MOD_ID).provider(configs).request();
         assignConfigs();

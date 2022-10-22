@@ -41,11 +41,13 @@ public abstract class InGameHudMixin extends DrawableHelper{
     // Set Crosshair Render Style
     @Redirect(method = "renderCrosshair", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/systems/RenderSystem;blendFuncSeparate(Lcom/mojang/blaze3d/platform/GlStateManager$SrcFactor;Lcom/mojang/blaze3d/platform/GlStateManager$DstFactor;Lcom/mojang/blaze3d/platform/GlStateManager$SrcFactor;Lcom/mojang/blaze3d/platform/GlStateManager$DstFactor;)V"))
     private void setCrosshairStyle(GlStateManager.SrcFactor srcFactor, GlStateManager.DstFactor dstFactor, GlStateManager.SrcFactor srcAlpha, GlStateManager.DstFactor dstAlpha) {
-        if ( Objects.equals(PuffConfigs.corsshairStyle, Default.CrosshairStyle.PUFFERFISH.getName()) ) {
+        if ( Objects.equals(PuffConfigs.corsshairStyle, Default.CrosshairStyle.PUFFERFISH) ) {
             RenderSystem.blendFuncSeparate(
                     GlStateManager.SrcFactor.DST_COLOR, GlStateManager.DstFactor.DST_COLOR,
                     srcAlpha, dstAlpha
             );
+        } else {
+            RenderSystem.blendFuncSeparate(srcFactor, dstFactor, srcAlpha, dstAlpha);
         }
     }
 

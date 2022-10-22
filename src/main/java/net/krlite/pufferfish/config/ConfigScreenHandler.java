@@ -3,6 +3,7 @@ package net.krlite.pufferfish.config;
 import me.shedaniel.clothconfig2.api.ConfigBuilder;
 import me.shedaniel.clothconfig2.api.ConfigCategory;
 import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
+import net.krlite.pufferfish.PuffMod;
 import net.krlite.pufferfish.util.ColorUtil;
 import net.krlite.pufferfish.util.IdentifierBuilder;
 import net.minecraft.client.gui.screen.Screen;

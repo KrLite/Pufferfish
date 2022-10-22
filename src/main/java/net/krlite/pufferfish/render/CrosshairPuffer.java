@@ -31,7 +31,7 @@ public class CrosshairPuffer extends DrawableHelper {
     }
 
     private static void lerp() {
-        crosshairScale = MathHelper.lerp(0.65F, crosshairScale, crosshairScaleTarget);
+        crosshairScale = MathHelper.lerp(0.4F, crosshairScale, crosshairScaleTarget);
     }
 
     public static void update(int scaledWidth, int scaledHeight) {

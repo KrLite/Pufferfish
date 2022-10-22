@@ -1,5 +1,7 @@
 package net.krlite.pufferfish.util;
 
+import org.jetbrains.annotations.Nullable;
+
 import java.awt.*;
 import java.util.Objects;
 
@@ -9,7 +11,7 @@ public class Default {
         VANILLA("Vanilla"),
         PUFFERFISH("Pufferfish");
 
-        private String style;
+        private final String style;
 
         CrosshairStyle(String style) {
             this.style = style;
@@ -18,17 +20,16 @@ public class Default {
         public String getName() {
             return style;
         }
+    }
 
-        public void parse(String value) {
-            for ( CrosshairStyle style : CrosshairStyle.values() ) {
-                if (Objects.equals(style.getName(), value)) {
-                    this.style = style.getName();
-                    return;
-                }
+    public static CrosshairStyle parse(String value) {
+        for ( CrosshairStyle style : CrosshairStyle.values() ) {
+            if ( Objects.equals(style.getName(), value) ) {
+                return CrosshairStyle.valueOf(value.toUpperCase());
             }
-
-            this.style = VANILLA.getName();
         }
+
+        return CrosshairStyle.VANILLA;
     }
 
     // Enum

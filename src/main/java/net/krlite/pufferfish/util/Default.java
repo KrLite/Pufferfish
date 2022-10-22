@@ -42,6 +42,9 @@ public class Default {
     public static final double DEFAULT_CROSSHAIR_SIZE = 1.0;
     public static final double DEFAULT_CROSSHAIR_PUFF = 0.35;
 
+    // Boolean
+    public static final boolean DEFAULT_ENABLE_CHAT_ANIMATION = false;
+
     // Color
     public static final Color DEFAULT_PITCH_COLOR = new Color(33, 28, 126, 255);
     public static final Color DEFAULT_YAW_COLOR = new Color(215, 19, 123, 255);

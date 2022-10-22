@@ -33,6 +33,10 @@
   "config.puff.crosshair.style": "Crosshair Style",
   "config.puff.crosshair.style.tooltip": "Adjust crosshair rendering style",
 
+  "config.puff.category.chat": "Chat",
+  "config.puff.chat.enable_animation": "Enable Chat Hud Animation",
+  "config.puff.chat.enable_animation.tooltip": "Decides whether to show animations in chat huds or not",
+
   "config.puff.category.keys": "Keys",
   "config.puff.keys.linger_ticks": "Max Lingering Ticks",
   "config.puff.keys.linger_ticks.tooltip": "Decides how long a double-tap takes\n§7[1 Second = 20 Tick]",

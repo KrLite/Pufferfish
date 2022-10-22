@@ -1,12 +1,8 @@
 package net.krlite.pufferfish;
 
 import net.fabricmc.api.ClientModInitializer;
-import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.krlite.pufferfish.config.PuffConfigs;
 import net.krlite.pufferfish.event.InputEventHandler;
-import net.krlite.pufferfish.event.MouseEventHandler;
-import net.krlite.pufferfish.render.CrosshairPuffer;
-import net.krlite.pufferfish.render.ScreenshotFlashRenderer;
 import net.krlite.pufferfish.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,7 +16,6 @@ public class PuffMod implements ClientModInitializer {
 		PuffConfigs.registerConfigs();
 		AxisLocker.registerAxisMaps();
 		InputEventHandler.init();
-		MouseEventHandler.init();
 		ChatUtil.init();
 	}
 }

@@ -1,7 +1,7 @@
 package net.krlite.pufferfish.mixin;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.krlite.pufferfish.PuffMod;
+import net.krlite.pufferfish.config.PuffConfigs;
 import net.krlite.pufferfish.util.ChatUtil;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
@@ -17,9 +17,9 @@ public class ChatScreenMixin extends DrawableHelper {
     private void render(MatrixStack matrixStack, int x1, int y1, int x2, int y2, int color) {
         MinecraftClient client = MinecraftClient.getInstance();
 
-        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, (float) ChatUtil.backgroundOpacity);
+        if ( PuffConfigs.enableChatAnimation ) RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, (float) ChatUtil.backgroundOpacity);
         fill(
-                matrixStack, -2, y1,
+                matrixStack, -2, client.currentScreen.height - 16,
                 client.currentScreen.width + 2, client.currentScreen.height + 2,
                 client.options.getTextBackgroundColor(Integer.MIN_VALUE)
         );

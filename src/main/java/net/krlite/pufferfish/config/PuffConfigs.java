@@ -23,6 +23,9 @@ public class PuffConfigs {
     public static double crosshairPuff;
     public static CrosshairStyle corsshairStyle = CrosshairStyle.VANILLA;
 
+    // Chat
+    public static boolean enableChatAnimation;
+
     // Keys
     public static int keyLingerTicks;
 
@@ -30,6 +33,8 @@ public class PuffConfigs {
         configs.addConfig("crosshair_size", new Pair<>(DEFAULT_CROSSHAIR_SIZE, "double"));
         configs.addConfig("crosshair_puff", new Pair<>(DEFAULT_CROSSHAIR_PUFF, "double"));
         configs.addConfig("crosshair_style", new Pair<>(DEFAULT_CROSSHAIR_STYLE.getName(), "string"));
+
+        configs.addConfig("enable_chat_animation", new Pair<>(DEFAULT_ENABLE_CHAT_ANIMATION, "boolean"));
 
         configs.addConfig("key_linger_ticks", new Pair<>(DEFAULT_KEY_LINGER_TICKS, "integer"));
 
@@ -41,6 +46,8 @@ public class PuffConfigs {
         crosshairSize = CONFIG.getOrDefault("crosshair_size", DEFAULT_CROSSHAIR_SIZE);
         crosshairPuff = CONFIG.getOrDefault("crosshair_puff", DEFAULT_CROSSHAIR_PUFF);
         corsshairStyle = Default.parse(CONFIG.getOrDefault("crosshair_style", DEFAULT_CROSSHAIR_STYLE.getName()));
+
+        enableChatAnimation = CONFIG.getOrDefault("enable_chat_animation", DEFAULT_ENABLE_CHAT_ANIMATION);
 
         keyLingerTicks = CONFIG.getOrDefault("key_linger_ticks", DEFAULT_KEY_LINGER_TICKS);
 
@@ -54,6 +61,8 @@ public class PuffConfigs {
         configs.modifyConfig(new Pair<>("crosshair_size", crosshairSize));
         configs.modifyConfig(new Pair<>("crosshair_puff", crosshairPuff));
         configs.modifyConfig(new Pair<>("crosshair_style", corsshairStyle.getName()));
+
+        configs.modifyConfig(new Pair<>("enable_chat_animation", enableChatAnimation));
 
         configs.modifyConfig(new Pair<>("key_linger_ticks", keyLingerTicks));
 

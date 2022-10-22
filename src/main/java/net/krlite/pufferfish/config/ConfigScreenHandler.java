@@ -64,6 +64,22 @@ public class ConfigScreenHandler {
                         .build()
         );
 
+        // Category Chat
+        ConfigCategory chat = builder.getOrCreateCategory(IdentifierBuilder.translatableText("config", "category", "chat"));
+
+        // Enable Chat Animation
+        chat.addEntry(
+                entryBuilder
+                        .startBooleanToggle(
+                                IdentifierBuilder.translatableText("config", "chat", "enable_animation"),
+                                enableChatAnimation
+                        )
+                        .setDefaultValue(DEFAULT_ENABLE_CHAT_ANIMATION)
+                        .setTooltip(IdentifierBuilder.translatableText("config", "chat", "enable_animation", "tooltip"))
+                        .setSaveConsumer(value -> enableChatAnimation = value)
+                        .build()
+        );
+
 
 
         // Category Keys

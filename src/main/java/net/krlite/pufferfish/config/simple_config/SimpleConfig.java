@@ -111,7 +111,7 @@ public class SimpleConfig {
     private void loadConfig() throws IOException {
         // Load Config Data
         Scanner reader = new Scanner(request.file);
-        for( int line = 1; reader.hasNextLine(); line ++ ) {
+        for ( int line = 1; reader.hasNextLine(); line ++ ) {
             parseConfigEntry(reader.nextLine(), line);
         }
     }
@@ -124,7 +124,7 @@ public class SimpleConfig {
     }
 
     private void parseConfigEntry(String entry, int line) {
-        if( !entry.isEmpty() && !entry.startsWith("#") ) {
+        if ( !entry.isEmpty() && !entry.startsWith("#") ) {
             String[] parts = entry.split("=", 2);
             if( parts.length == 2 ) {
                 config.put(parts[0], parts[1]);
@@ -138,7 +138,7 @@ public class SimpleConfig {
         this.request = request;
         String identifier = "Config '" + request.filename + "'";
 
-        if( !request.file.exists() ) {
+        if ( !request.file.exists() ) {
             LOGGER.info(identifier + " is missing, generating default one...");
 
             try {
@@ -150,7 +150,7 @@ public class SimpleConfig {
             }
         }
 
-        if( !broken ) {
+        if ( !broken ) {
             try {
                 loadConfig();
             } catch (Exception e) {
@@ -207,7 +207,7 @@ public class SimpleConfig {
      */
     public boolean getOrDefault(String key, boolean def) {
         String val = get(key);
-        if( val != null ) {
+        if ( val != null ) {
             return val.equalsIgnoreCase("true");
         }
 

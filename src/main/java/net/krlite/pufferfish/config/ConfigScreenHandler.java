@@ -3,7 +3,7 @@ package net.krlite.pufferfish.config;
 import me.shedaniel.clothconfig2.api.ConfigBuilder;
 import me.shedaniel.clothconfig2.api.ConfigCategory;
 import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
-import net.krlite.pufferfish.PuffMod;
+import net.krlite.pufferfish.util.ChatUtil;
 import net.krlite.pufferfish.util.ColorUtil;
 import net.krlite.pufferfish.util.IdentifierBuilder;
 import net.minecraft.client.gui.screen.Screen;
@@ -77,6 +77,20 @@ public class ConfigScreenHandler {
                         .setDefaultValue(DEFAULT_ENABLE_CHAT_ANIMATION)
                         .setTooltip(IdentifierBuilder.translatableText("config", "chat", "enable_animation", "tooltip"))
                         .setSaveConsumer(value -> enableChatAnimation = value)
+                        .build()
+        );
+
+        // Chat Text Color
+        // Pitch
+        chat.addEntry(
+                entryBuilder
+                        .startColorField(
+                                IdentifierBuilder.translatableText("config", "chat", "text_color"),
+                                ChatUtil.chatTextColor.getRGB() & 0x00FFFFFF
+                        )
+                        .setDefaultValue(DEFAULT_CHAT_TEXT_COLOR.getRGB() & 0x00FFFFFF)
+                        //.setTooltip(IdentifierBuilder.translatableText("config", "colors", "chat", "text_color"))
+                        .setSaveConsumer(value -> ChatUtil.chatTextColor = new Color(value, false))
                         .build()
         );
 

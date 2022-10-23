@@ -4,10 +4,9 @@ import com.mojang.datafixers.util.Pair;
 import net.krlite.pufferfish.PuffMod;
 import net.krlite.pufferfish.config.simple_config.SimpleConfig;
 import net.krlite.pufferfish.config.simple_config.SimpleConfigHandler;
+import net.krlite.pufferfish.util.ChatUtil;
 import net.krlite.pufferfish.util.ColorUtil;
 import net.krlite.pufferfish.util.Default;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
 import java.io.IOException;
@@ -35,6 +34,7 @@ public class PuffConfigs {
         configs.addConfig("crosshair_style", new Pair<>(DEFAULT_CROSSHAIR_STYLE.getName(), "string"));
 
         configs.addConfig("enable_chat_animation", new Pair<>(DEFAULT_ENABLE_CHAT_ANIMATION, "boolean"));
+        configs.addConfig("chat_text_color", new Pair<>(DEFAULT_CHAT_TEXT_COLOR.getRGB(), "integer color"));
 
         configs.addConfig("key_linger_ticks", new Pair<>(DEFAULT_KEY_LINGER_TICKS, "integer"));
 
@@ -48,6 +48,7 @@ public class PuffConfigs {
         corsshairStyle = Default.parse(CONFIG.getOrDefault("crosshair_style", DEFAULT_CROSSHAIR_STYLE.getName()));
 
         enableChatAnimation = CONFIG.getOrDefault("enable_chat_animation", DEFAULT_ENABLE_CHAT_ANIMATION);
+        ChatUtil.chatTextColor = new Color(CONFIG.getOrDefault("chat_text_color", DEFAULT_CHAT_TEXT_COLOR.getRGB()));
 
         keyLingerTicks = CONFIG.getOrDefault("key_linger_ticks", DEFAULT_KEY_LINGER_TICKS);
 
@@ -63,6 +64,7 @@ public class PuffConfigs {
         configs.modifyConfig(new Pair<>("crosshair_style", corsshairStyle.getName()));
 
         configs.modifyConfig(new Pair<>("enable_chat_animation", enableChatAnimation));
+        configs.modifyConfig(new Pair<>("chat_text_color", ChatUtil.chatTextColor.getRGB()));
 
         configs.modifyConfig(new Pair<>("key_linger_ticks", keyLingerTicks));
 
@@ -78,6 +80,7 @@ public class PuffConfigs {
         configs = new SimpleConfigHandler();
         createConfigs();
 
+        // Put Values Needed to be Initialized Here
         corsshairStyle = CrosshairStyle.VANILLA;
 
         CONFIG = SimpleConfig.of(PuffMod.MOD_ID).provider(configs).request();

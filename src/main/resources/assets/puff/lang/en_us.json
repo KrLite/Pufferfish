@@ -36,6 +36,7 @@
   "config.puff.category.chat": "Chat",
   "config.puff.chat.enable_animation": "Enable Chat Hud Animation",
   "config.puff.chat.enable_animation.tooltip": "Decides whether to show animations in chat huds or not",
+  "config.puff.chat.text_color": "Text Color",
 
   "config.puff.category.keys": "Keys",
   "config.puff.keys.linger_ticks": "Max Lingering Ticks",

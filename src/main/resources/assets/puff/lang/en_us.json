@@ -25,17 +25,27 @@
 
   "comment.config": "Configs",
 
+  "config.puff.category.vanilla": "(Vanilla)",
+  "config.puff.vanilla.chat_opacity": "§aChat Text Opacity",
+  "config.puff.vanilla.chat_opacity.tooltip": "Adjust chat text opacity §7in percentage\n§a[VANILLA]",
+  "config.puff.vanilla.text_background_opacity": "§aText Background Opacity",
+  "config.puff.vanilla.text_background_opacity.tooltip": "Adjust text background opacity §7in percentage\n§a[VANILLA]",
+  "config.puff.vanilla.chat_line_spacing": "§aLine Spacing",
+  "config.puff.vanilla.chat_line_spacing.tooltip": "Adjust chat line spacing §7in percentage\n§a[VANILLA]",
+
   "config.puff.category.crosshair": "Crosshair",
   "config.puff.crosshair.size": "Crosshair Size",
-  "config.puff.crosshair.size.tooltip": "Default crosshair size as percent",
+  "config.puff.crosshair.size.tooltip": "Default crosshair size §7in percentage",
   "config.puff.crosshair.puff": "Puffed Crosshair Size",
-  "config.puff.crosshair.puff.tooltip": "Puffed crosshair size as percent",
+  "config.puff.crosshair.puff.tooltip": "Puffed crosshair size §7in percentage",
   "config.puff.crosshair.style": "Crosshair Style",
   "config.puff.crosshair.style.tooltip": "Adjust crosshair rendering style",
 
   "config.puff.category.chat": "Chat",
   "config.puff.chat.enable_animation": "Enable Chat Hud Animation",
   "config.puff.chat.enable_animation.tooltip": "Decides whether to show animations in chat huds or not",
+  "config.puff.chat.enable_text_shadow": "Enable Shadowed Text",
+  "config.puff.chat.enable_text_shadow.tooltip": "Decides whether to shadow the texts or not",
   "config.puff.chat.text_color": "Text Color",
 
   "config.puff.category.keys": "Keys",

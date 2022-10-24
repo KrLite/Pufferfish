@@ -5,6 +5,7 @@ import net.krlite.pufferfish.PuffMod;
 import net.krlite.pufferfish.config.PuffConfigs;
 import net.krlite.pufferfish.render.ColoredRenderer;
 import net.krlite.pufferfish.util.ChatUtil;
+import net.krlite.pufferfish.util.ColorUtil;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawableHelper;
@@ -46,21 +47,20 @@ public abstract class ChatHudMixin extends DrawableHelper {
 
     private static final List<Double> messageExistingTicks = new ArrayList<>();
 
-    @Inject(method = "render", at = @At("HEAD"))
+    @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/ChatHud;getChatScale()D"))
     private void render(MatrixStack matrices, int tickDelta, CallbackInfo ci) {
         if ( PuffConfigs.enableChatAnimation ) {
             if (!messageExistingTicks.isEmpty()) messageExistingTicks.clear();
-            if (!this.isChatHidden() && this.visibleMessages.size() > 0) {
-                for (
-                        int message = 0;
-                        message + this.scrolledLines < this.visibleMessages.size() && message < this.getVisibleLineCount();
-                        ++message
-                ) {
-                    ChatHudLine<OrderedText> chatHudLine = this.visibleMessages.get(message + this.scrolledLines);
-                    if (chatHudLine != null) {
-                        messageExistingTicks.add(message, (double) (tickDelta - chatHudLine.getCreationTick()));
-                    }
+            for (
+                    int message = 0;
+                    message + this.scrolledLines < this.visibleMessages.size() && message < this.getVisibleLineCount();
+                    ++message
+            ) {
+                ChatHudLine<OrderedText> chatHudLine = this.visibleMessages.get(message + this.scrolledLines);
+                if (chatHudLine != null) {
+                    messageExistingTicks.add(message, (double) (tickDelta - chatHudLine.getCreationTick()));
                 }
+            }
             /*
             StringBuilder builder = new StringBuilder();
             for ( Integer index : messageExistingTicks ) {
@@ -68,7 +68,6 @@ public abstract class ChatHudMixin extends DrawableHelper {
             }
             PuffMod.LOGGER.warn(builder.toString());
              */
-            }
         }
     }
 
@@ -84,10 +83,10 @@ public abstract class ChatHudMixin extends DrawableHelper {
             )
     )
     private void renderChatBackground(MatrixStack matrixStack, int xBegin, int yBegin, int xEnd, int yEnd, int color) {
-        float yOffset = 0.0F;
+        float offset;
         if ( PuffConfigs.enableChatAnimation ) {
             double spacing = 9.0 * (MinecraftClient.getInstance().options.chatLineSpacing + 1.0);
-            int message = (int) (-yBegin / spacing - 1), existingTicks = (int) Math.round(messageExistingTicks.get(message));
+            int message = (-yBegin / (int) spacing - 1), existingTicks = (int) Math.round(messageExistingTicks.get(message));
             float opacity = (float) Math.max(
                     this.isChatFocused()
                             ? existingTicks >= 200
@@ -103,9 +102,9 @@ public abstract class ChatHudMixin extends DrawableHelper {
                             : 0.0F
             );
 
-            yOffset =
+            offset =
                     existingTicks <= 10
-                            ? (float) Math.pow(1 - existingTicks / 10.0, 2.0) * 23.5F
+                            ? (float) Math.pow(1 - existingTicks / 10.0, 2.0)
                             : 0.0F;
 
             messageExistingTicks.set(message, existingTicks + opacity / 10.0);
@@ -114,14 +113,16 @@ public abstract class ChatHudMixin extends DrawableHelper {
                     1.0F, 1.0F, 1.0F,
                     opacity
             );
-        }
 
-        ColoredRenderer.fill(
-                matrixStack,
-                xBegin, yBegin + yOffset,
-                xEnd,   yEnd + yOffset,
-                new Color(color, true)
-        );
+            ColoredRenderer.fillColoredHorizontal(
+                    matrixStack,
+                    xBegin, yBegin,
+                    xEnd - offset * 35.0F, yEnd,
+                    new Color(color, true), ColorUtil.TRANSLUCENT
+            );
+        } else {
+            fill(matrixStack, xBegin, yBegin, xEnd, yEnd, color);
+        }
     }
 
     @Redirect(
@@ -136,46 +137,77 @@ public abstract class ChatHudMixin extends DrawableHelper {
             double
                     spacing = 9.0 * (MinecraftClient.getInstance().options.chatLineSpacing + 1.0),
                     spacingAlt = -8.0 * (MinecraftClient.getInstance().options.chatLineSpacing + 1.0) + 4.0 * MinecraftClient.getInstance().options.chatLineSpacing;
-            int message = (int) ((spacingAlt - y) / spacing), existingTicks = (int) Math.round(messageExistingTicks.get(message));
+            int message = (int) (((int) spacingAlt - y) / (int) spacing), existingTicks = (int) Math.round(messageExistingTicks.get(message));
             float opacity = MathHelper.clamp((float) ((messageExistingTicks.get(message) % 1.0F) * 10.0F), 0.1F, 1.0F);
 
-            float yOffset =
+            float offset =
                     existingTicks <= 10
-                            ? (float) Math.pow(1 - existingTicks / 10.0, 2.0) * 23.5F
+                            ? (float) Math.pow(1 - existingTicks / 10.0, 2.0)
                             : 0.0F;
 
-            MinecraftClient.getInstance().textRenderer.drawWithShadow(
-                    matrixStack, text, x, y + yOffset,
-                    opacity < 1.0F
-                            ? new Color(
-                                    ChatUtil.chatTextColor.getRed() / 255.0F,
-                                    ChatUtil.chatTextColor.getGreen() / 255.0F,
-                                    ChatUtil.chatTextColor.getBlue() / 255.0F,
-                                    opacity
-                            ).getRGB()
-                            : new Color(
-                                    ChatUtil.chatTextColor.getRed() / 255.0F,
-                                    ChatUtil.chatTextColor.getGreen() / 255.0F,
-                                    ChatUtil.chatTextColor.getBlue() / 255.0F,
-                                    (float) (color >> 24 & 255) / 255.0F
-                            ).getRGB()
-            );
+            if ( PuffConfigs.enableChatTextShadow ) {
+                MinecraftClient.getInstance().textRenderer.drawWithShadow(
+                        matrixStack, text, x - offset * 17.5F, y + offset * 5.0F,
+                        opacity < 1.0
+                                ? new Color(
+                                        ChatUtil.chatTextColor.getRed() / 255.0F,
+                                        ChatUtil.chatTextColor.getGreen() / 255.0F,
+                                        ChatUtil.chatTextColor.getBlue() / 255.0F,
+                                        (float) (opacity * MinecraftClient.getInstance().options.chatOpacity)
+                                ).getRGB()
+                                : new Color(
+                                        ChatUtil.chatTextColor.getRed() / 255.0F,
+                                        ChatUtil.chatTextColor.getGreen() / 255.0F,
+                                        ChatUtil.chatTextColor.getBlue() / 255.0F,
+                                        (float) (color >> 24 & 255) / 255.0F
+                        ).getRGB()
+                );
+            } else {
+                MinecraftClient.getInstance().textRenderer.draw(
+                        matrixStack, text, x - offset * 17.5F, y + offset * 5.0F,
+                        opacity < 1.0
+                                ? new Color(
+                                        ChatUtil.chatTextColor.getRed() / 255.0F,
+                                        ChatUtil.chatTextColor.getGreen() / 255.0F,
+                                        ChatUtil.chatTextColor.getBlue() / 255.0F,
+                                        (float) (opacity * MinecraftClient.getInstance().options.chatOpacity)
+                        ).getRGB()
+                                : new Color(
+                                        ChatUtil.chatTextColor.getRed() / 255.0F,
+                                        ChatUtil.chatTextColor.getGreen() / 255.0F,
+                                        ChatUtil.chatTextColor.getBlue() / 255.0F,
+                                        (float) (color >> 24 & 255) / 255.0F
+                        ).getRGB()
+                );
+            }
         } else {
-            MinecraftClient.getInstance().textRenderer.drawWithShadow(
-                    matrixStack, text, x, y,
-                    new Color(
-                            ChatUtil.chatTextColor.getRed() / 255.0F,
-                            ChatUtil.chatTextColor.getGreen() / 255.0F,
-                            ChatUtil.chatTextColor.getBlue() / 255.0F,
-                            (float) (color >> 24 & 255) / 255.0F
-                    ).getRGB()
-            );
+            if ( PuffConfigs.enableChatTextShadow ) {
+                MinecraftClient.getInstance().textRenderer.drawWithShadow(
+                        matrixStack, text, x, y,
+                        new Color(
+                                ChatUtil.chatTextColor.getRed() / 255.0F,
+                                ChatUtil.chatTextColor.getGreen() / 255.0F,
+                                ChatUtil.chatTextColor.getBlue() / 255.0F,
+                                (float) (color >> 24 & 255) / 255.0F
+                        ).getRGB()
+                );
+            } else {
+                MinecraftClient.getInstance().textRenderer.draw(
+                        matrixStack, text, x, y,
+                        new Color(
+                                ChatUtil.chatTextColor.getRed() / 255.0F,
+                                ChatUtil.chatTextColor.getGreen() / 255.0F,
+                                ChatUtil.chatTextColor.getBlue() / 255.0F,
+                                (float) (color >> 24 & 255) / 255.0F
+                        ).getRGB()
+                );
+            }
         }
 
         return 0;
     }
 
-    @Inject(
+    @Redirect(
             method = "render",
             at = @At(
                     value = "INVOKE",
@@ -186,8 +218,19 @@ public abstract class ChatHudMixin extends DrawableHelper {
                     to = @At("TAIL")
             )
     )
-    private void renderStaticChatBackground(MatrixStack matrices, int tickDelta, CallbackInfo ci) {
-        if ( PuffConfigs.enableChatAnimation ) RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, (float) ChatUtil.backgroundOpacity);
+    private void renderStaticChatBackground(MatrixStack matrixStack, int xBegin, int yBegin, int xEnd, int yEnd, int color) {
+        if ( PuffConfigs.enableChatAnimation ) {
+            RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, (float) ChatUtil.backgroundOpacity);
+
+            ColoredRenderer.fillColoredHorizontal(
+                    matrixStack,
+                    xBegin, yBegin,
+                    xEnd,   yEnd,
+                    new Color(color, true), ColorUtil.TRANSLUCENT
+            );
+        } else {
+            fill(matrixStack, xBegin, yBegin, xEnd, yEnd, color);
+        }
     }
 
     @Redirect(
@@ -199,25 +242,49 @@ public abstract class ChatHudMixin extends DrawableHelper {
     )
     private int renderStaticChat(TextRenderer instance, MatrixStack matrixStack, Text text, float x, float y, int color) {
         if ( PuffConfigs.enableChatAnimation ) {
-            MinecraftClient.getInstance().textRenderer.drawWithShadow(
-                    matrixStack, text, x, y,
-                    new Color(
-                            ChatUtil.chatTextColor.getRed() / 255.0F,
-                            ChatUtil.chatTextColor.getGreen() / 255.0F,
-                            ChatUtil.chatTextColor.getBlue() / 255.0F,
-                            (float) ChatUtil.backgroundOpacity
-                    ).getRGB()
-            );
+            if ( PuffConfigs.enableChatTextShadow ) {
+                MinecraftClient.getInstance().textRenderer.drawWithShadow(
+                        matrixStack, text, x, y,
+                        new Color(
+                                ChatUtil.chatTextColor.getRed() / 255.0F,
+                                ChatUtil.chatTextColor.getGreen() / 255.0F,
+                                ChatUtil.chatTextColor.getBlue() / 255.0F,
+                                (float) (ChatUtil.backgroundOpacity * MinecraftClient.getInstance().options.chatOpacity)
+                        ).getRGB()
+                );
+            } else {
+                MinecraftClient.getInstance().textRenderer.draw(
+                        matrixStack, text, x, y,
+                        new Color(
+                                ChatUtil.chatTextColor.getRed() / 255.0F,
+                                ChatUtil.chatTextColor.getGreen() / 255.0F,
+                                ChatUtil.chatTextColor.getBlue() / 255.0F,
+                                (float) (ChatUtil.backgroundOpacity * MinecraftClient.getInstance().options.chatOpacity)
+                        ).getRGB()
+                );
+            }
         } else {
-            MinecraftClient.getInstance().textRenderer.drawWithShadow(
-                    matrixStack, text, x, y,
-                    new Color(
-                            ChatUtil.chatTextColor.getRed() / 255.0F,
-                            ChatUtil.chatTextColor.getGreen() / 255.0F,
-                            ChatUtil.chatTextColor.getBlue() / 255.0F,
-                            (float) (color >> 24 & 255) / 255.0F
-                    ).getRGB()
-            );
+            if ( PuffConfigs.enableChatTextShadow ) {
+                MinecraftClient.getInstance().textRenderer.drawWithShadow(
+                        matrixStack, text, x, y,
+                        new Color(
+                                ChatUtil.chatTextColor.getRed() / 255.0F,
+                                ChatUtil.chatTextColor.getGreen() / 255.0F,
+                                ChatUtil.chatTextColor.getBlue() / 255.0F,
+                                (float) (color >> 24 & 255) / 255.0F
+                        ).getRGB()
+                );
+            } else {
+                MinecraftClient.getInstance().textRenderer.draw(
+                        matrixStack, text, x, y,
+                        new Color(
+                                ChatUtil.chatTextColor.getRed() / 255.0F,
+                                ChatUtil.chatTextColor.getGreen() / 255.0F,
+                                ChatUtil.chatTextColor.getBlue() / 255.0F,
+                                (float) (color >> 24 & 255) / 255.0F
+                        ).getRGB()
+                );
+            }
         }
 
         return  0;

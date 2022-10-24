@@ -35,15 +35,16 @@ public class Default {
     // Enum
     public static final CrosshairStyle DEFAULT_CROSSHAIR_STYLE = CrosshairStyle.VANILLA;
 
+    // Boolean
+    public static final boolean DEFAULT_ENABLE_CHAT_ANIMATION = false;
+    public static final boolean DEFAULT_ENABLE_CHAT_TEXT_SHADOW = true;
+
     // Integer
     public static final int DEFAULT_KEY_LINGER_TICKS = 10;
 
     // Double
     public static final double DEFAULT_CROSSHAIR_SIZE = 1.0;
     public static final double DEFAULT_CROSSHAIR_PUFF = 0.35;
-
-    // Boolean
-    public static final boolean DEFAULT_ENABLE_CHAT_ANIMATION = false;
 
     // Color
     public static final Color DEFAULT_PITCH_COLOR = new Color(33, 28, 126, 255);

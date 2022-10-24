@@ -26,6 +26,14 @@
 
   "comment.config": "设置菜单",
 
+  "config.puff.category.vanilla": "(原版)",
+  "config.puff.vanilla.chat_opacity": "§a聊天文本不透明度",
+  "config.puff.vanilla.chat_opacity.tooltip": "调整聊天文本不透明度§7（百分比）\n§a[原版]",
+  "config.puff.vanilla.text_background_opacity": "§a文本背景不透明度",
+  "config.puff.vanilla.text_background_opacity.tooltip": "调整文本背景不透明度§7（百分比）\n§a[原版]",
+  "config.puff.vanilla.chat_line_spacing": "§a行距",
+  "config.puff.vanilla.chat_line_spacing.tooltip": "调整行距§7（百分比）\n§a[原版]",
+
   "config.puff.category.crosshair": "准星",
   "config.puff.crosshair.size": "准星大小",
   "config.puff.crosshair.size.tooltip": "标准准星大小§7（百分比）",
@@ -37,7 +45,9 @@
   "config.puff.category.chat": "聊天",
   "config.puff.chat.enable_animation": "聊天窗口动画",
   "config.puff.chat.enable_animation.tooltip": "在聊天窗口显示动画",
-  "config.puff.chat.text_color": "文字颜色",
+  "config.puff.chat.enable_text_shadow": "聊天文字阴影",
+  "config.puff.chat.enable_text_shadow.tooltip": "在聊天文字下显示阴影",
+  "config.puff.chat.text_color": "聊天文字颜色",
 
   "config.puff.category.keys": "控制",
   "config.puff.keys.linger_ticks": "最大滞留时间",

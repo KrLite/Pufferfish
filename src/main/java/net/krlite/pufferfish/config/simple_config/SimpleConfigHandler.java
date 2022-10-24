@@ -14,9 +14,19 @@ public class SimpleConfigHandler implements SimpleConfig.DefaultConfig {
         return isStatic ? configListStatic : configList;
     }
 
-    public void syncConfigList() {
+    private void appendConfigList(Pair<?, String> keyValuePair) {
+        configList.add(keyValuePair);
+    }
+
+    private void syncConfigList() {
         configList.clear();
         configList.addAll(configListStatic);
+    }
+
+    public void addCategory(String category) {
+        keyList.add("__category_" + category.toLowerCase());
+        configListStatic.add(new Pair<>("__category", category));
+        appendConfigList(new Pair<>("__category", category));
     }
 
     /**
@@ -39,7 +49,7 @@ public class SimpleConfigHandler implements SimpleConfig.DefaultConfig {
     public void modifyConfig(Pair<String, ?> keyValuePair) {
         int index = keyList.indexOf(keyValuePair.getFirst());
 
-        configList.set(index, new Pair(keyValuePair.getSecond(), configList.get(index).getSecond()));
+        configList.set(index, new Pair<>(keyValuePair.getSecond(), configList.get(index).getSecond()));
     }
 
     public String generateConfigContents() {
@@ -48,11 +58,24 @@ public class SimpleConfigHandler implements SimpleConfig.DefaultConfig {
         for ( String key : keyList) {
             int index = keyList.indexOf(key);
 
-            configContents.append(
-                    key + "=" + configList.get(index).getFirst() +
-                            "\n#value: " + configList.get(index).getSecond() +
-                            " | default: " + configListStatic.get(index).getFirst() + "\n\n"
-            );
+            if ( key.startsWith("__category") ) {
+                String category = (String) configListStatic.get(index).getSecond();
+
+                configContents
+                        .append("#| ")
+                        .append(configListStatic.get(index).getSecond())
+                        .append(" |\n\n");
+            } else {
+                configContents
+                        .append(key)
+                        .append("=")
+                        .append(configList.get(index).getFirst())
+                        .append("\n#value: ")
+                        .append(configList.get(index).getSecond())
+                        .append(" | default: ")
+                        .append(configListStatic.get(index).getFirst())
+                        .append("\n\n");
+            }
         }
 
         return configContents.toString();

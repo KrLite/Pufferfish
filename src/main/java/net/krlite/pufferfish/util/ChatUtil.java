@@ -1,6 +1,7 @@
 package net.krlite.pufferfish.util;
 
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.util.math.MathHelper;
 
 import java.awt.*;

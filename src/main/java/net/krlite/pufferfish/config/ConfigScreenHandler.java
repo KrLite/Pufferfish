@@ -6,6 +6,7 @@ import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
 import net.krlite.pufferfish.util.ChatUtil;
 import net.krlite.pufferfish.util.ColorUtil;
 import net.krlite.pufferfish.util.IdentifierBuilder;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 
 import java.awt.*;
@@ -80,8 +81,20 @@ public class ConfigScreenHandler {
                         .build()
         );
 
+        // Enable Chat Text Shadow
+        chat.addEntry(
+                entryBuilder
+                        .startBooleanToggle(
+                                IdentifierBuilder.translatableText("config", "chat", "enable_text_shadow"),
+                                enableChatTextShadow
+                        )
+                        .setDefaultValue(DEFAULT_ENABLE_CHAT_TEXT_SHADOW)
+                        .setTooltip(IdentifierBuilder.translatableText("config", "chat", "enable_text_shadow", "tooltip"))
+                        .setSaveConsumer(value -> enableChatTextShadow = value)
+                        .build()
+        );
+
         // Chat Text Color
-        // Pitch
         chat.addEntry(
                 entryBuilder
                         .startColorField(
@@ -91,6 +104,45 @@ public class ConfigScreenHandler {
                         .setDefaultValue(DEFAULT_CHAT_TEXT_COLOR.getRGB() & 0x00FFFFFF)
                         //.setTooltip(IdentifierBuilder.translatableText("config", "colors", "chat", "text_color"))
                         .setSaveConsumer(value -> ChatUtil.chatTextColor = new Color(value, false))
+                        .build()
+        );
+
+        // Chat Opacity (Vanilla)
+        chat.addEntry(
+                entryBuilder
+                        .startIntSlider(
+                                IdentifierBuilder.translatableText("config", "vanilla", "chat_opacity"),
+                                (int) (MinecraftClient.getInstance().options.chatOpacity * 100.0), 0, 100
+                        )
+                        .setDefaultValue(100)
+                        .setTooltip(IdentifierBuilder.translatableText("config", "vanilla", "chat_opacity", "tooltip"))
+                        .setSaveConsumer(value -> MinecraftClient.getInstance().options.chatOpacity = value / 100.0)
+                        .build()
+        );
+
+        // Text Background Opacity (Vanilla)
+        chat.addEntry(
+                entryBuilder
+                        .startIntSlider(
+                                IdentifierBuilder.translatableText("config", "vanilla", "text_background_opacity"),
+                                (int) (MinecraftClient.getInstance().options.textBackgroundOpacity * 100.0), 0, 100
+                        )
+                        .setDefaultValue(50)
+                        .setTooltip(IdentifierBuilder.translatableText("config", "vanilla", "text_background_opacity", "tooltip"))
+                        .setSaveConsumer(value -> MinecraftClient.getInstance().options.textBackgroundOpacity = value / 100.0)
+                        .build()
+        );
+
+        // Line Spacing (Vanilla)
+        chat.addEntry(
+                entryBuilder
+                        .startIntSlider(
+                                IdentifierBuilder.translatableText("config", "vanilla", "chat_line_spacing"),
+                                (int) (MinecraftClient.getInstance().options.chatLineSpacing * 100.0), 0, 100
+                        )
+                        .setDefaultValue(0)
+                        .setTooltip(IdentifierBuilder.translatableText("config", "vanilla", "chat_line_spacing", "tooltip"))
+                        .setSaveConsumer(value -> MinecraftClient.getInstance().options.chatLineSpacing = value / 100.0)
                         .build()
         );
 

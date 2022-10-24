@@ -126,7 +126,7 @@ public class ColoredTextureRenderer extends DrawableHelper {
     /**
      * Renders a colorized texture in four specified vertices.
      *
-     * @param identifier    identifier for target texture.
+     * @param identifier    identifier of the target texture.
      * @param color         target Java Color, applies on the texture.
      * @param xLU           x left-up,
      * @param yLU           y left-up;

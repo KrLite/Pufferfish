@@ -1,7 +1,5 @@
 package net.krlite.pufferfish.util;
 
-import org.jetbrains.annotations.Nullable;
-
 import java.awt.*;
 import java.util.Objects;
 
@@ -9,7 +7,8 @@ public class Default {
     // Enum
     public enum CrosshairStyle {
         VANILLA("Vanilla"),
-        PUFFERFISH("Pufferfish");
+        PUFFERFISH("Pufferfish"),
+        OPAQUE("Opaque");
 
         private final String style;
 
@@ -38,6 +37,7 @@ public class Default {
     // Boolean
     public static final boolean DEFAULT_ENABLE_CHAT_ANIMATION = false;
     public static final boolean DEFAULT_ENABLE_CHAT_TEXT_SHADOW = true;
+    public static final boolean DEFAULT_CHAT_SELF_HIGHLIGHTING = false;
 
     // Integer
     public static final int DEFAULT_KEY_LINGER_TICKS = 10;

@@ -94,6 +94,19 @@ public class ConfigScreenHandler {
                         .build()
         );
 
+        // Chat Self Highlighting
+        chat.addEntry(
+                entryBuilder
+                        .startBooleanToggle(
+                                IdentifierBuilder.translatableText("config", "chat", "self_highlighting"),
+                                chatSelfHighlighting
+                        )
+                        .setDefaultValue(DEFAULT_CHAT_SELF_HIGHLIGHTING)
+                        .setTooltip(IdentifierBuilder.translatableText("config", "chat", "self_highlighting", "tooltip"))
+                        .setSaveConsumer(value -> chatSelfHighlighting = value)
+                        .build()
+        );
+
         // Chat Text Color
         chat.addEntry(
                 entryBuilder

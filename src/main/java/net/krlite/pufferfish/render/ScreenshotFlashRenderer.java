@@ -19,7 +19,7 @@ public class ScreenshotFlashRenderer {
     }
 
     public static void renderScreenshotFlash() {
-        ColoredTextureRenderer.renderColoredOverlay(FLASH, new Color(255, 255, 255, flashOpacity));
+        ColoredTextureRenderer.renderColoredOverlay(FLASH, new Color(1.0F, 1.0F, 1.0F, flashOpacity));
         lerp();
     }
 }

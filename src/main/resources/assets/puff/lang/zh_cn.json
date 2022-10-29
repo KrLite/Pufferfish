@@ -1,5 +1,5 @@
 {
-  "mod.puff.name": "Pufferfish",
+  "mod.puff.name": "大爆炸",
 
 
 
@@ -12,12 +12,10 @@
 
   "comment.key": "键盘映射",
 
-  "key.puff.category.general": "Pufferfish",
-
+  "key.puff.category.general": "大爆炸",
   "key.puff.general.config": "访问设置菜单",
 
-  "key.puff.category.coordinate": "坐标系膨胀",
-
+  "key.puff.category.coordinate": "坐标系大爆炸",
   "key.puff.coordinate.lock_pitch": "俯仰角锁定",
   "key.puff.coordinate.lock_yaw": "偏航角锁定",
   "key.puff.coordinate.flip_prefix": "翻转轴向",

@@ -50,6 +50,7 @@ public class Default {
     public static final Color DEFAULT_PITCH_COLOR = new Color(33, 28, 126, 255);
     public static final Color DEFAULT_YAW_COLOR = new Color(215, 19, 123, 255);
     public static final Color DEFAULT_CHAT_TEXT_COLOR = new Color(255, 255, 255, 255);
+    public static final Color DEFAULT_CHAT_BACKGROUND_COLOR = new Color(0, 0, 0, 255);
 
     public static void registerDefaultValues() {
 

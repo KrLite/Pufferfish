@@ -5,6 +5,9 @@ import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.render.*;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.Matrix4f;
+import oshi.util.tuples.Pair;
+
+import static net.krlite.pufferfish.util.Solver.*;
 
 import java.awt.*;
 
@@ -15,6 +18,12 @@ public class ColoredRenderer extends DrawableHelper {
             float xEnd,     float yEnd,
             Color colorUpper,  Color colorLower
     ) {
+        Pair<Pair<Float, Float>, Pair<Float, Float>> pair = gridXY(xBegin, yBegin, xEnd, yEnd);
+        xBegin  = pair.getA().getA();
+        xEnd    = pair.getA().getB();
+        yBegin  = pair.getB().getA();
+        yEnd    = pair.getB().getB();
+
         fillColored(
                 matrixStack,
                 xBegin, yBegin,
@@ -31,6 +40,12 @@ public class ColoredRenderer extends DrawableHelper {
             float xEnd,     float yEnd,
             Color colorLeft,  Color colorRight
     ) {
+        Pair<Pair<Float, Float>, Pair<Float, Float>> pair = gridXY(xBegin, yBegin, xEnd, yEnd);
+        xBegin  = pair.getA().getA();
+        xEnd    = pair.getA().getB();
+        yBegin  = pair.getB().getA();
+        yEnd    = pair.getB().getB();
+
         fillColored(
                 matrixStack,
                 xBegin, yBegin,
@@ -38,6 +53,22 @@ public class ColoredRenderer extends DrawableHelper {
                 colorLeft,  colorLeft,
                 colorRight, colorRight
 
+        );
+    }
+
+    public static void fillColored(
+            MatrixStack matrixStack,
+            float xBegin,   float yBegin,
+            float xEnd,     float yEnd,
+            Color color
+    ) {
+        fillColored(
+                matrixStack.peek().getPositionMatrix(),
+                xBegin, yBegin,
+                xBegin, yEnd,
+                xEnd,   yEnd,
+                xEnd,   yBegin,
+                color, color, color, color
         );
     }
 
@@ -54,7 +85,8 @@ public class ColoredRenderer extends DrawableHelper {
                 xBegin, yEnd,
                 xEnd,   yEnd,
                 xEnd,   yBegin,
-                colorLU, colorLD, colorRD, colorRU
+                colorLU,    colorLD,
+                colorRD,    colorRU
         );
     }
 

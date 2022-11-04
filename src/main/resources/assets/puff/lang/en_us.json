@@ -42,11 +42,12 @@
   "config.puff.crosshair.style.tooltip": "Adjust crosshair rendering style",
 
   "config.puff.category.chat": "Chat",
-  "config.puff.chat.enable_animation": "Enable Chat Hud Animation",
+  "config.puff.chat.enable_animation": "Chat Hud Animation",
   "config.puff.chat.enable_animation.tooltip": "Decides whether to show animations in chat huds or not",
-  "config.puff.chat.enable_text_shadow": "Enable Shadowed Text",
+  "config.puff.chat.enable_text_shadow": "Shadowed Text",
   "config.puff.chat.enable_text_shadow.tooltip": "Decides whether to shadow the texts or not",
   "config.puff.chat.text_color": "Text Color",
+  "config.puff.chat.background_color": "Background Color",
 
   "config.puff.category.keys": "Keys",
   "config.puff.keys.linger_ticks": "Max Lingering Ticks",

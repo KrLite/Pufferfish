@@ -2,7 +2,6 @@ package net.krlite.pufferfish.mixin;
 
 import net.krlite.pufferfish.config.PuffConfigs;
 import net.krlite.pufferfish.util.ChatUtil;
-import net.krlite.pufferfish.util.ColorUtil;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.GameOptions;
 import net.minecraft.util.math.MathHelper;
@@ -37,6 +36,6 @@ public class MinecraftClientMixin {
 
     @Inject(method = "openChatScreen", at = @At("TAIL"))
     private void openChatScreen(String text, CallbackInfo ci) {
-        ChatUtil.backgroundOpacity = 0.0;
+        ChatUtil.chatBackgroundOpacity = 0.0;
     }
 }

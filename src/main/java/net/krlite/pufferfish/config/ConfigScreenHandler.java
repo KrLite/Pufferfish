@@ -120,6 +120,19 @@ public class ConfigScreenHandler {
                         .build()
         );
 
+        // Chat Background Color
+        chat.addEntry(
+                entryBuilder
+                        .startColorField(
+                                IdentifierBuilder.translatableText("config", "chat", "background_color"),
+                                ChatUtil.chatBackgroundColor.getRGB() & 0x00FFFFFF
+                        )
+                        .setDefaultValue(DEFAULT_CHAT_BACKGROUND_COLOR.getRGB() & 0x00FFFFFF)
+                        //.setTooltip(IdentifierBuilder.translatableText("config", "colors", "chat", "background_color"))
+                        .setSaveConsumer(value -> ChatUtil.chatBackgroundColor = new Color(value, false))
+                        .build()
+        );
+
         // Chat Opacity (Vanilla)
         chat.addEntry(
                 entryBuilder

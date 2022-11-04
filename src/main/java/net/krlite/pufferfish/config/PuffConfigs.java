@@ -47,6 +47,7 @@ public class PuffConfigs {
         configs.addConfig("enable_chat_text_shadow", new Pair<>(DEFAULT_ENABLE_CHAT_TEXT_SHADOW, "boolean"));
         configs.addConfig("chat_self_highlight", new Pair<>(DEFAULT_CHAT_SELF_HIGHLIGHTING, "boolean"));
         configs.addConfig("chat_text_color", new Pair<>(DEFAULT_CHAT_TEXT_COLOR.getRGB(), "integer color"));
+        configs.addConfig("chat_background_color", new Pair<>(DEFAULT_CHAT_BACKGROUND_COLOR.getRGB(), "integer color"));
 
         // Keys
         configs.addCategory("Keys");
@@ -69,6 +70,7 @@ public class PuffConfigs {
         enableChatTextShadow = CONFIG.getOrDefault("enable_chat_text_shadow", DEFAULT_ENABLE_CHAT_TEXT_SHADOW);
         chatSelfHighlighting = CONFIG.getOrDefault("chat_self_highlight", DEFAULT_CHAT_SELF_HIGHLIGHTING);
         ChatUtil.chatTextColor = new Color(CONFIG.getOrDefault("chat_text_color", DEFAULT_CHAT_TEXT_COLOR.getRGB()));
+        ChatUtil.chatBackgroundColor = new Color(CONFIG.getOrDefault("chat_background_color", DEFAULT_CHAT_BACKGROUND_COLOR.getRGB()));
 
         // Keys
         keyLingerTicks = CONFIG.getOrDefault("key_linger_ticks", DEFAULT_KEY_LINGER_TICKS);
@@ -92,6 +94,7 @@ public class PuffConfigs {
         configs.modifyConfig(new Pair<>("enable_chat_text_shadow", enableChatTextShadow));
         configs.modifyConfig(new Pair<>("chat_self_highlight", chatSelfHighlighting));
         configs.modifyConfig(new Pair<>("chat_text_color", ChatUtil.chatTextColor.getRGB()));
+        configs.modifyConfig(new Pair<>("chat_background_color", ChatUtil.chatBackgroundColor.getRGB()));
 
         // Keys
         configs.modifyConfig(new Pair<>("key_linger_ticks", keyLingerTicks));

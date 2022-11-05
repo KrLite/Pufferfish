@@ -3,14 +3,6 @@
 
 
 
-  "comment.hint": "Hints",
-
-  "hint.puff.pitch": "§lPch",
-  "hint.puff.yaw": "§lYaw",
-  "hint.puff.pitch_yaw": "§lP-Y",
-
-
-
   "comment.key": "Key Mappings",
 
   "key.puff.category.general": "Pufferfish",

@@ -1,6 +1,7 @@
 package net.krlite.pufferfish.mixin;
 
 import com.mojang.logging.LogUtils;
+import net.krlite.pufferfish.PuffMod;
 import net.krlite.pufferfish.render.ScreenshotFlashRenderer;
 import net.minecraft.client.gl.Framebuffer;
 import net.minecraft.client.texture.NativeImage;

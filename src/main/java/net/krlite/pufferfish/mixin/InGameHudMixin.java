@@ -3,14 +3,18 @@ package net.krlite.pufferfish.mixin;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.krlite.pufferfish.config.PuffConfigs;
-import net.krlite.pufferfish.render.*;
+import net.krlite.pufferfish.interaction_map.render.AnchorRenderer;
+import net.krlite.pufferfish.interaction_map.util.ClientAnchorProvider;
+import net.krlite.pufferfish.render.CrosshairPuffer;
+import net.krlite.pufferfish.render.ExtraInGameHudRenderer;
 import net.krlite.pufferfish.util.AxisLocker;
 import net.krlite.pufferfish.util.ColorUtil;
-import net.krlite.pufferfish.util.Default;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.hud.InGameHud;
+import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.util.math.MathHelper;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -19,7 +23,6 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.awt.*;
-import java.util.Objects;
 
 @Mixin(InGameHud.class)
 public abstract class InGameHudMixin extends DrawableHelper{
@@ -29,11 +32,9 @@ public abstract class InGameHudMixin extends DrawableHelper{
     @Shadow
     private int scaledHeight;
 
-    private static Color cameraOverlay = ColorUtil.TRANSLUCENT;
-
     // Update
     @Inject(method = "render", at = @At("HEAD"))
-    private void update(MatrixStack matrices, float tickDelta, CallbackInfo ci) {
+    private void head(MatrixStack matrixStack, float tickDelta, CallbackInfo ci) {
         AxisLocker.update(MinecraftClient.getInstance().player);
         CrosshairPuffer.update(scaledWidth, scaledHeight);
     }
@@ -80,41 +81,35 @@ public abstract class InGameHudMixin extends DrawableHelper{
         matrixStack.pop();
     }
 
+    // Update
+    @Inject(method = "render", at = @At("TAIL"))
+    private void tail(MatrixStack matrixStack, float tickDelta, CallbackInfo ci) {
+        ExtraInGameHudRenderer.setMatrixStack(matrixStack);
+    }
+
     // Render
     @Inject(method = "render", at = @At("TAIL"))
     private void render(MatrixStack matrixStack, float tickDelta, CallbackInfo ci) {
         RenderSystem.enableBlend();
 
-        // Render Camera Overlay
-        cameraOverlay = CameraOverlayHandler.lerpColor(
-                cameraOverlay,
-                AxisLocker.axisLock.get(AxisLocker.Axis.PITCH)
-                        ? AxisLocker.axisLock.get(AxisLocker.Axis.YAW)
-                                ? new Color(
-                                        (ColorUtil.pitchColor.getRed() + ColorUtil.yawColor.getRed()) / 2,
-                                        (ColorUtil.pitchColor.getGreen() + ColorUtil.yawColor.getGreen()) / 2,
-                                        (ColorUtil.pitchColor.getBlue() + ColorUtil.yawColor.getBlue()) / 2,
-                                        255
-                                )
-                                : ColorUtil.pitchColor
-                        : AxisLocker.axisLock.get(AxisLocker.Axis.YAW)
-                                ? ColorUtil.yawColor
-                                : ColorUtil.TRANSLUCENT,
-                cameraOverlay.getAlpha() / 255.0F,
-                (AxisLocker.axisLock.get(AxisLocker.Axis.PITCH) || AxisLocker.axisLock.get(AxisLocker.Axis.YAW))
-                        ? 0.27F : 0
-        );
-        ColoredTextureRenderer.renderColoredOverlay(CameraOverlayHandler.BASIC, cameraOverlay);
+        // Render Anchor
+        ClientPlayerEntity player = MinecraftClient.getInstance().player;
+        Object anchorPos = ClientAnchorProvider.resolveDeathPos(player, 0.95F);
+        Object anchorDistance = ClientAnchorProvider.resolveDeathDistance(player);
 
-        // Render Flash
-        if ( ScreenshotFlashRenderer.flashOpacity > 0 ) {
-            ScreenshotFlashRenderer.renderScreenshotFlash();
+        if ( anchorPos instanceof Float && anchorDistance instanceof Float ) {
+            float opacity =
+                    (float) MathHelper.clamp(
+                            (float) anchorDistance >= 25
+                                    ? (256 / (float) anchorDistance)
+                                    : Math.pow((float) anchorDistance / 25, 1.7),
+                            0, 1
+                    );
+
+            AnchorRenderer.render(
+                    matrixStack, ColorUtil.castAlpha(Color.RED, opacity),
+                    (float) anchorPos, 540 * opacity
+            );
         }
-    }
-
-    // Render Axis Hint
-    @Inject(method = "render", at = @At("HEAD"))
-    private void renderAxisHint(MatrixStack matrixStack, float tickDelta, CallbackInfo ci) {
-        AxisHintHandler.draw(matrixStack, scaledWidth, scaledHeight);
     }
 }

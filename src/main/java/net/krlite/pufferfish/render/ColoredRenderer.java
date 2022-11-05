@@ -12,17 +12,28 @@ import static net.krlite.pufferfish.util.Solver.*;
 import java.awt.*;
 
 public class ColoredRenderer extends DrawableHelper {
-    public static void fillColoredVertical(
+    public ColoredRenderer() {
+
+    }
+
+    /**
+     * Renders a vertical gradient field in square.
+     *
+     * @see
+     * #fillColored(MatrixStack, float, float, float, float, Color, Color, Color, Color)
+     * fillColored
+     */
+    public void fillGradiantVertical(
             MatrixStack matrixStack,
             float xBegin,   float yBegin,
             float xEnd,     float yEnd,
             Color colorUpper,  Color colorLower
     ) {
-        Pair<Pair<Float, Float>, Pair<Float, Float>> pair = gridXY(xBegin, yBegin, xEnd, yEnd);
-        xBegin  = pair.getA().getA();
-        xEnd    = pair.getA().getB();
-        yBegin  = pair.getB().getA();
-        yEnd    = pair.getB().getB();
+        Pair<Pair<Float, Float>, Pair<Float, Float>> gird = gridXY(xBegin, yBegin, xEnd, yEnd);
+        xBegin  = gird.getA().getA();
+        xEnd    = gird.getA().getB();
+        yBegin  = gird.getB().getA();
+        yEnd    = gird.getB().getB();
 
         fillColored(
                 matrixStack,
@@ -34,17 +45,24 @@ public class ColoredRenderer extends DrawableHelper {
         );
     }
 
-    public static void fillColoredHorizontal(
+    /**
+     * Renders a horizontal gradient field in square.
+     *
+     * @see
+     * #fillColored(MatrixStack, float, float, float, float, Color, Color, Color, Color)
+     * fillColored
+     */
+    public void fillGradiantHorizontal(
             MatrixStack matrixStack,
-            float xBegin,   float yBegin,
-            float xEnd,     float yEnd,
-            Color colorLeft,  Color colorRight
+            float xBegin,       float yBegin,
+            float xEnd,         float yEnd,
+            Color colorLeft,    Color colorRight
     ) {
-        Pair<Pair<Float, Float>, Pair<Float, Float>> pair = gridXY(xBegin, yBegin, xEnd, yEnd);
-        xBegin  = pair.getA().getA();
-        xEnd    = pair.getA().getB();
-        yBegin  = pair.getB().getA();
-        yEnd    = pair.getB().getB();
+        Pair<Pair<Float, Float>, Pair<Float, Float>> grid = gridXY(xBegin, yBegin, xEnd, yEnd);
+        xBegin  = grid.getA().getA();
+        xEnd    = grid.getA().getB();
+        yBegin  = grid.getB().getA();
+        yEnd    = grid.getB().getB();
 
         fillColored(
                 matrixStack,
@@ -56,7 +74,14 @@ public class ColoredRenderer extends DrawableHelper {
         );
     }
 
-    public static void fillColored(
+    /**
+     * Renders a colorized field in square, a simple version of
+     *
+     * {@link
+     * #fillColored(MatrixStack, float, float, float, float, Color, Color, Color, Color)
+     * fillColored.}
+     */
+    public void fillColored(
             MatrixStack matrixStack,
             float xBegin,   float yBegin,
             float xEnd,     float yEnd,
@@ -68,11 +93,20 @@ public class ColoredRenderer extends DrawableHelper {
                 xBegin, yEnd,
                 xEnd,   yEnd,
                 xEnd,   yBegin,
-                color, color, color, color
+                color,  color,
+                color,  color
         );
     }
 
-    public static void fillColored(
+    /**
+     * Renders a colorized field in square by four color-able
+     * vertices.
+     *
+     * @see
+     * #fillColored(MatrixStack, float, float, float, float, Color)
+     * fillColored
+     */
+    public void fillColored(
             MatrixStack matrixStack,
             float xBegin,   float yBegin,
             float xEnd,     float yEnd,
@@ -107,19 +141,18 @@ public class ColoredRenderer extends DrawableHelper {
      * @param colorRD   color of the right-up vertex;
      * @param colorRU   color of the right-down vertex.
      */
-    public static void fillColored(
+    private static void fillColored(
             Matrix4f matrix,
-            float xLU,  float yLU,
-            float xLD,  float yLD,
-            float xRD,  float yRD,
-            float xRU,  float yRU,
-            Color colorLU, Color colorLD,
-            Color colorRD, Color colorRU
+            float xLU,      float yLU,
+            float xLD,      float yLD,
+            float xRD,      float yRD,
+            float xRU,      float yRU,
+            Color colorLU,  Color colorLD,
+            Color colorRD,  Color colorRU
     ) {
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder bufferBuilder = tessellator.getBuffer();
 
-        RenderSystem.enableBlend();
         RenderSystem.disableTexture();
         RenderSystem.defaultBlendFunc();
         RenderSystem.setShader(GameRenderer::getPositionColorShader);
@@ -169,6 +202,5 @@ public class ColoredRenderer extends DrawableHelper {
         BufferRenderer.draw(bufferBuilder);
 
         RenderSystem.enableTexture();
-        RenderSystem.disableBlend();
     }
 }

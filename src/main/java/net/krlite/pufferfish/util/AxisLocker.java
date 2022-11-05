@@ -62,7 +62,7 @@ public class AxisLocker {
         );
     }
 
-    public static void registerAxisMaps() {
+    private static void registerAxisMaps() {
         axisLock.putAll(ImmutableMap.of(
                 Axis.PITCH, false,
                 Axis.YAW, false
@@ -102,5 +102,11 @@ public class AxisLocker {
             axisPing.replace(Axis.YAW, false);
             flippingAxisYaw = false;
         }
+    }
+
+
+
+    public static void init() {
+        registerAxisMaps();
     }
 }

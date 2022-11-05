@@ -1,5 +1,7 @@
 package net.krlite.pufferfish.util;
 
+import net.krlite.pufferfish.PuffMod;
+import net.minecraft.util.math.BlockPos;
 import oshi.util.tuples.Pair;
 
 public class Solver {

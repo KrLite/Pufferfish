@@ -2,14 +2,6 @@
   "mod.puff.name": "大爆炸",
 
 
-
-  "comment.hint": "提示文本",
-
-  "hint.puff.pitch": "§l俯仰",
-  "hint.puff.yaw": "§l偏航",
-  "hint.puff.pitch_yaw": "§l锁定",
-
-
   "comment.key": "键盘映射",
 
   "key.puff.category.general": "大爆炸",

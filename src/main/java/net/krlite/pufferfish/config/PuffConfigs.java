@@ -7,6 +7,9 @@ import net.krlite.pufferfish.config.simple_config.SimpleConfigHandler;
 import net.krlite.pufferfish.util.ChatUtil;
 import net.krlite.pufferfish.util.ColorUtil;
 import net.krlite.pufferfish.util.Default;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.registry.RegistryKey;
+import net.minecraft.world.World;
 
 import java.awt.*;
 import java.io.IOException;
@@ -37,26 +40,26 @@ public class PuffConfigs {
     private static void createConfigs() {
         // Crosshair
         configs.addCategory("Crosshair");
-        configs.addConfig("crosshair_size", new Pair<>(DEFAULT_CROSSHAIR_SIZE, "double"));
-        configs.addConfig("crosshair_puff", new Pair<>(DEFAULT_CROSSHAIR_PUFF, "double"));
-        configs.addConfig("crosshair_style", new Pair<>(DEFAULT_CROSSHAIR_STYLE.getName(), "string"));
+        configs.addConfig("crosshair_size", new Pair<>(DEFAULT_CROSSHAIR_SIZE, "Double"));
+        configs.addConfig("crosshair_puff", new Pair<>(DEFAULT_CROSSHAIR_PUFF, "Double"));
+        configs.addConfig("crosshair_style", new Pair<>(DEFAULT_CROSSHAIR_STYLE.getName(), "String"));
 
         // Chat
         configs.addCategory("Chat");
-        configs.addConfig("enable_chat_animation", new Pair<>(DEFAULT_ENABLE_CHAT_ANIMATION, "boolean"));
-        configs.addConfig("enable_chat_text_shadow", new Pair<>(DEFAULT_ENABLE_CHAT_TEXT_SHADOW, "boolean"));
-        configs.addConfig("chat_self_highlight", new Pair<>(DEFAULT_CHAT_SELF_HIGHLIGHTING, "boolean"));
-        configs.addConfig("chat_text_color", new Pair<>(DEFAULT_CHAT_TEXT_COLOR.getRGB(), "integer color"));
-        configs.addConfig("chat_background_color", new Pair<>(DEFAULT_CHAT_BACKGROUND_COLOR.getRGB(), "integer color"));
+        configs.addConfig("enable_chat_animation", new Pair<>(DEFAULT_ENABLE_CHAT_ANIMATION, "Boolean"));
+        configs.addConfig("enable_chat_text_shadow", new Pair<>(DEFAULT_ENABLE_CHAT_TEXT_SHADOW, "Boolean"));
+        configs.addConfig("chat_self_highlight", new Pair<>(DEFAULT_CHAT_SELF_HIGHLIGHTING, "Boolean"));
+        configs.addConfig("chat_text_color", new Pair<>(DEFAULT_CHAT_TEXT_COLOR.getRGB(), "Integer Color"));
+        configs.addConfig("chat_background_color", new Pair<>(DEFAULT_CHAT_BACKGROUND_COLOR.getRGB(), "Integer Color"));
 
         // Keys
         configs.addCategory("Keys");
-        configs.addConfig("key_linger_ticks", new Pair<>(DEFAULT_KEY_LINGER_TICKS, "integer"));
+        configs.addConfig("key_linger_ticks", new Pair<>(DEFAULT_KEY_LINGER_TICKS, "Integer"));
 
         // Colors
         configs.addCategory("Colors");
-        configs.addConfig("color_pitch", new Pair<>(DEFAULT_PITCH_COLOR.getRGB(), "integer color"));
-        configs.addConfig("color_yaw", new Pair<>(DEFAULT_YAW_COLOR.getRGB(), "integer color"));
+        configs.addConfig("color_pitch", new Pair<>(DEFAULT_PITCH_COLOR.getRGB(), "Integer Color"));
+        configs.addConfig("color_yaw", new Pair<>(DEFAULT_YAW_COLOR.getRGB(), "Integer Color"));
     }
 
     private static void assignConfigs() {
@@ -104,7 +107,7 @@ public class PuffConfigs {
         configs.modifyConfig(new Pair<>("color_yaw", ColorUtil.yawColor.getRGB()));
     }
 
-    public static void registerConfigs() {
+    private static void registerConfigs() {
         // Put Value Handlers Here
         Default.registerDefaultValues();
         ColorUtil.registerColors();
@@ -122,5 +125,11 @@ public class PuffConfigs {
     public static void save() throws IOException {
         saveConfigs();
         CONFIG.saveConfig();
+    }
+
+
+
+    public static void init() {
+        registerConfigs();
     }
 }

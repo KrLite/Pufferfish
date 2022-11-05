@@ -9,6 +9,7 @@
     "ChatHudMixin",
     "ChatScreenMixin",
     "EntityMixin",
+    "GameRendererMixin",
     "InGameHudAccessor",
     "InGameHudInvoker",
     "InGameHudMixin",

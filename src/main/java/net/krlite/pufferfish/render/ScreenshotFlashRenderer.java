@@ -1,25 +1,38 @@
 package net.krlite.pufferfish.render;
 
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.krlite.pufferfish.PuffMod;
+import net.krlite.pufferfish.util.IdentifierBuilder;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 
 import java.awt.*;
 
 public class ScreenshotFlashRenderer {
-    public static float flashOpacity = -0.1F;
-    public static final Identifier FLASH = new Identifier(PuffMod.MOD_ID, "textures/misc/flash.png");
+    public static float flashOpacity = 0.0F;
+    public static final Identifier FLASH = IdentifierBuilder.texture("misc", "flash");
 
     public static void setOpacity(float opacity) {
         flashOpacity = opacity;
     }
 
     private static void lerp() {
-        flashOpacity = MathHelper.lerp(0.47F, flashOpacity, -0.1F);
+        flashOpacity = MathHelper.clamp(MathHelper.lerp(0.265F, flashOpacity, -0.1F), 0.0F, 1.0F);
     }
 
     public static void renderScreenshotFlash() {
-        ColoredTextureRenderer.renderColoredOverlay(FLASH, new Color(1.0F, 1.0F, 1.0F, flashOpacity));
-        lerp();
+        if ( flashOpacity > 0 ) {
+            PuffMod.CTR.renderFixedColoredOverlay(FLASH, new Color(1.0F, 1.0F, 1.0F, flashOpacity));
+        }
+    }
+
+    private static void registerEvents() {
+        ClientTickEvents.END_CLIENT_TICK.register(client -> lerp());
+    }
+
+
+
+    public static void init() {
+        registerEvents();
     }
 }

@@ -4,7 +4,6 @@ import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.krlite.pufferfish.PuffKeys;
 import net.krlite.pufferfish.config.ConfigScreenHandler;
 import net.krlite.pufferfish.config.PuffConfigs;
-import net.krlite.pufferfish.render.AxisHintHandler;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.player.PlayerEntity;
 
@@ -36,8 +35,6 @@ public class InputEventHandler {
                 }
 
                 else {
-                    if ( !flippingAxisPitch && !flippingAxisYaw ) AxisHintHandler.updateHint();
-
                     if ( LOCK_PITCH.wasPressed() && availableKeyAxis.get(Axis.PITCH) ) {
                         lingerKeyAxis.replace(Axis.YAW, 0);
 

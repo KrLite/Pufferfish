@@ -3,7 +3,6 @@ package net.krlite.pufferfish.mixin;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.krlite.pufferfish.PuffMod;
 import net.krlite.pufferfish.config.PuffConfigs;
-import net.krlite.pufferfish.render.ColoredRenderer;
 import net.krlite.pufferfish.util.ChatUtil;
 import net.krlite.pufferfish.util.ColorUtil;
 import net.minecraft.client.MinecraftClient;
@@ -24,7 +23,6 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.Slice;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,7 +44,7 @@ public abstract class ChatHudMixin extends DrawableHelper{
     private static final List<Double> messageExistingTicks = new ArrayList<>();
 
     @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/ChatHud;getChatScale()D"))
-    private void render(MatrixStack matrices, int tickDelta, CallbackInfo ci) {
+    private void render(MatrixStack matrixStack, int tickDelta, CallbackInfo ci) {
         if ( PuffConfigs.enableChatAnimation ) {
             if (!messageExistingTicks.isEmpty()) messageExistingTicks.clear();
             for (
@@ -93,6 +91,7 @@ public abstract class ChatHudMixin extends DrawableHelper{
             )
     )
     private void renderChatBackground(MatrixStack matrixStack, int xBegin, int yBegin, int xEnd, int yEnd, int color) {
+        RenderSystem.enableBlend();
         float opacity = 1.0F;
 
         if ( PuffConfigs.enableChatAnimation ) {
@@ -116,7 +115,7 @@ public abstract class ChatHudMixin extends DrawableHelper{
             );
         }
 
-        ColoredRenderer.fillColoredHorizontal(
+        PuffMod.CR.fillGradiantHorizontal(
                 matrixStack,
                 xBegin, yBegin,
                 xEnd * opacity, yEnd,
@@ -135,6 +134,7 @@ public abstract class ChatHudMixin extends DrawableHelper{
             )
     )
     private int renderChat(TextRenderer instance, MatrixStack matrixStack, OrderedText text, float x, float y, int color) {
+        RenderSystem.enableBlend();
         float opacity = 1.0F, xOffset = 0.0F, yOffset = 0.0F;
 
         if ( PuffConfigs.enableChatAnimation ) {
@@ -148,7 +148,11 @@ public abstract class ChatHudMixin extends DrawableHelper{
                             : 0.0F;
 
             opacity = MathHelper.clamp((float) ((messageExistingTicks.get(message) % 1.0F) * 10.0F), 0.1F, 1.0F);
-            xOffset = -offset * (MinecraftClient.getInstance().player.getName().getString().length() + 6);
+            xOffset = -offset * (
+                    MinecraftClient.getInstance().textRenderer.getWidth(
+                            MinecraftClient.getInstance().player.getName()
+                    ) + 2
+            );
             yOffset = offset * 9.0F;
         }
 
@@ -176,13 +180,14 @@ public abstract class ChatHudMixin extends DrawableHelper{
             )
     )
     private void renderStaticChatBackground(MatrixStack matrixStack, int xBegin, int yBegin, int xEnd, int yEnd, int color) {
+        RenderSystem.enableBlend();
         if ( PuffConfigs.enableChatAnimation ) {
             RenderSystem.setShaderColor(
                     1.0F, 1.0F, 1.0F,
                     (float) ChatUtil.chatBackgroundOpacity
             );
         }
-        ColoredRenderer.fillColoredHorizontal(
+        PuffMod.CR.fillGradiantHorizontal(
                 matrixStack,
                 xBegin, yBegin,
                 xEnd,   yEnd,
@@ -201,6 +206,7 @@ public abstract class ChatHudMixin extends DrawableHelper{
             )
     )
     private int renderStaticChat(TextRenderer instance, MatrixStack matrixStack, Text text, float x, float y, int color) {
+        RenderSystem.enableBlend();
         return drawText(
                 matrixStack, text,
                 x, y,

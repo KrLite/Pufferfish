@@ -9,40 +9,63 @@ import net.minecraft.util.Identifier;
 import java.awt.*;
 
 public class ColoredTextureRenderer extends DrawableHelper {
+    public ColoredTextureRenderer() {
+
+    }
+
     /**
-     * Renders a centered colorized texture in square by the default size of 256 pixels, a simple version of {@link #renderCenteredColoredTexture(Identifier, Color, float, float, int, int, int, int, int) RenderCenteredColoredTexture.}
+     * Renders a centered colorized texture in square by the
+     * default size of 256 pixels, a simple version of
+     *
+     * {@link
+     * #renderCenteredColoredTexture(Identifier, Color, float, float, int, int, int, int, int)
+     * renderCenteredColoredTexture.}
      */
-    public static void renderCenteredColoredTexture(
+    public void renderCenteredColoredTexture(
             Identifier identifier, Color color,
-            float xCentered, float yCentered,
-            int x, int y, int width, int height
+            float xCentered,    float yCentered,
+            int x,              int y,
+            int width,          int height
     ) {
         renderCenteredColoredTexture(
                 identifier, color,
-                xCentered, yCentered,
-                x, y, width, height,
+                xCentered,  yCentered,
+                x,          y,
+                width,      height,
                 256
         );
     }
 
     /**
-     * Renders a colorized texture in square by the default size of 256 pixels, a simple version of {@link #renderPositionedColoredTexture(Identifier, Color, float, float, int, int, int, int, int) RenderPositionedColoredTexture.}
+     * Renders a colorized texture in square by the default
+     * size of 256 pixels, a simple version of
+     *
+     * {@link
+     * #renderPositionedColoredTexture(Identifier, Color, float, float, int, int, int, int, int)
+     * renderPositionedColoredTexture.}
      */
-    public static void renderPositionedColoredTexture(
+    public void renderPositionedColoredTexture(
             Identifier identifier, Color color,
             float xPos, float yPos,
-            int x, int y, int width, int height
+            int x,      int y,
+            int width,  int height
     ) {
         renderPositionedColoredTexture(
                 identifier, color,
-                xPos, yPos,
-                x, y, width, height,
+                xPos,   yPos,
+                x,      y,
+                width,  height,
                 256
         );
     }
 
     /**
-     * Renders a centered colorized texture in square, a simple version of {@link #renderColoredTexture(Identifier, Color, float, float, float, float, float, float, float, float) RenderColoredTexture.}
+     * Renders a centered colorized texture in square, a simple
+     * version of
+     *
+     * {@link
+     * #renderColoredTexture(Identifier, Color, float, float, float, float, float, float, float, float)
+     * renderColoredTexture.}
      *
      * @param xCentered     x center,
      * @param yCentered     y center;
@@ -50,10 +73,11 @@ public class ColoredTextureRenderer extends DrawableHelper {
      * @param y             y left-up in texture uv.
      * @param textureSize   width and height of the target texture.
      */
-    public static void renderCenteredColoredTexture(
+    public void renderCenteredColoredTexture(
             Identifier identifier, Color color,
-            float xCentered, float yCentered,
-            int x, int y, int width, int height,
+            float xCentered,    float yCentered,
+            int x,              int y,
+            int width,          int height,
             int textureSize
     ) {
         float xPos = xCentered - width / 2.0F, yPos = yCentered + height / 2.0F;
@@ -67,7 +91,11 @@ public class ColoredTextureRenderer extends DrawableHelper {
     }
 
     /**
-     * Renders a colorized texture in square, a simple version of {@link #renderColoredTexture(Identifier, Color, float, float, float, float, float, float, float, float) RenderColoredTexture.}
+     * Renders a colorized texture in square, a simple version of
+     *
+     * {@link
+     * #renderColoredTexture(Identifier, Color, float, float, float, float, float, float, float, float)
+     * renderColoredTexture.}
      *
      * @param xPos          x left-up,
      * @param yPos          y left-up;
@@ -75,10 +103,11 @@ public class ColoredTextureRenderer extends DrawableHelper {
      * @param y             y left-up in texture uv.
      * @param textureSize   width and height of the target texture.
      */
-    public static void renderPositionedColoredTexture(
+    public void renderPositionedColoredTexture(
             Identifier identifier, Color color,
             float xPos, float yPos,
-            int x, int y, int width, int height,
+            int x,      int y,
+            int width,  int height,
             int textureSize
     ) {
         renderColoredTexture(
@@ -92,26 +121,107 @@ public class ColoredTextureRenderer extends DrawableHelper {
     /**
      * Renders a colorized camera overlay.
      *
-     * @see #renderColoredTexture(Identifier, Color, float, float, float, float, float, float, float, float) RenderColoredTexture
+     * @see
+     * #renderColoredTexture(Identifier, Color, float, float, float, float, float, float, float, float)
+     * renderColoredTexture
      */
-    public static void renderColoredOverlay(Identifier identifier, Color color) {
+    public void renderColoredOverlay(Identifier identifier, Color color) {
         renderColoredTexture(
                 identifier, color,
                 0.0F, 0.0F,
-                MinecraftClient.getInstance().getWindow().getScaledWidth(), MinecraftClient.getInstance().getWindow().getScaledHeight(),
+                MinecraftClient.getInstance().getWindow().getScaledWidth(),
+                MinecraftClient.getInstance().getWindow().getScaledHeight(),
                 0.0F, 0.0F, 1.0F, 1.0F
+        );
+    }
+
+    /**
+     * Renders a colorized camera overlay in a fixed style
+     * (texture will split into four quarters and render separately).
+     *
+     * @see
+     * #renderColoredTexture(Identifier, Color, float, float, float, float, float, float, float, float)
+     * renderColoredTexture
+     */
+    public void renderFixedColoredOverlay(Identifier identifier, Color color) {
+        float
+                quarterSize = Math.min(
+                        MinecraftClient.getInstance().getWindow().getScaledWidth() / 2.0F,
+                        MinecraftClient.getInstance().getWindow().getScaledHeight() / 2.0F
+                ),
+                width = MinecraftClient.getInstance().getWindow().getScaledWidth(),
+                height = MinecraftClient.getInstance().getWindow().getScaledHeight();
+
+        // Left Up Quarter
+        renderColoredTexture(
+                identifier, color,
+                0.0F, 0.0F,
+                quarterSize, quarterSize,
+                0.0F, 0.0F, 0.5F, 0.5F
+        );
+
+        // Left Fixer
+        renderColoredTexture(
+                identifier, color,
+                0.0F, quarterSize,
+                quarterSize, height - quarterSize,
+                0.0F, 0.5F, 0.5F, 0.5F
+        );
+
+        // Left Down Quarter
+        renderColoredTexture(
+                identifier, color,
+                0.0F, height - quarterSize,
+                quarterSize, height,
+                0.0F, 0.5F, 0.5F, 1.0F
+        );
+
+        // Middle Fixer
+        renderColoredTexture(
+                identifier, color,
+                quarterSize, 0.0F,
+                width - quarterSize, height,
+                0.5F, 0.0F, 0.5F, 1.0F
+        );
+
+        // Right Down Quarter
+        renderColoredTexture(
+                identifier, color,
+                width - quarterSize, height - quarterSize,
+                width, height,
+                0.5F, 0.5F, 1.0F, 1.0F
+        );
+
+        // Right Fixer
+        renderColoredTexture(
+                identifier, color,
+                width - quarterSize, quarterSize,
+                width, height - quarterSize,
+                0.5F, 0.5F, 1.0F, 0.5F
+        );
+
+        // Right Up Quarter
+        renderColoredTexture(
+                identifier, color,
+                width - quarterSize, 0.0F,
+                width, quarterSize,
+                0.5F, 0.0F, 1.0F, 0.5F
         );
     }
 
     /**
      * Renders a colorized texture in square.
      *
-     * @see  #renderColoredTexture(Identifier, Color, float, float, float, float, float, float, float, float, float, float, float, float) RenderColoredTexture
+     * @see
+     * #renderColoredTexture(Identifier, Color, float, float, float, float, float, float, float, float, float, float, float, float)
+     * renderColoredTexture
      */
-    public static void renderColoredTexture(
+    public void renderColoredTexture(
             Identifier identifier, Color color,
-            float xBegin, float yBegin, float xEnd, float yEnd,
-            float uBegin, float vBegin, float uEnd, float vEnd
+            float xBegin,   float yBegin,
+            float xEnd,     float yEnd,
+            float uBegin,   float vBegin,
+            float uEnd,     float vEnd
     ) {
         renderColoredTexture(
                 identifier, color,
@@ -119,7 +229,8 @@ public class ColoredTextureRenderer extends DrawableHelper {
                 xBegin, yEnd,
                 xEnd,   yEnd,
                 xEnd,   yBegin,
-                uBegin, vBegin, uEnd, vEnd
+                uBegin, vBegin,
+                uEnd,   vEnd
         );
     }
 
@@ -141,22 +252,20 @@ public class ColoredTextureRenderer extends DrawableHelper {
      * @param uEnd          texture u end,
      * @param vEnd          texture v end.
      */
-    public static void renderColoredTexture(
+    private static void renderColoredTexture(
             Identifier identifier, Color color,
-            float xLU, float yLU,
-            float xLD, float yLD,
-            float xRD, float yRD,
-            float xRU, float yRU,
-            float uBegin, float vBegin, float uEnd, float vEnd
+            float xLU,      float yLU,
+            float xLD,      float yLD,
+            float xRD,      float yRD,
+            float xRU,      float yRU,
+            float uBegin,   float vBegin,
+            float uEnd,     float vEnd
     ) {
         int
                 r = color.getRed(),
                 g = color.getGreen(),
                 b = color.getBlue(),
                 a = color.getAlpha();
-
-        Tessellator tessellator = Tessellator.getInstance();
-        BufferBuilder bufferBuilder = tessellator.getBuffer();
 
         RenderSystem.disableDepthTest();
         RenderSystem.depthMask(false);
@@ -165,6 +274,9 @@ public class ColoredTextureRenderer extends DrawableHelper {
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderColor(r / 255.0F, g / 255.0F, b / 255.0F, a / 255.0F);
         RenderSystem.setShaderTexture(0, identifier);
+
+        Tessellator tessellator = Tessellator.getInstance();
+        BufferBuilder bufferBuilder = tessellator.getBuffer();
 
         bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE_COLOR);
         bufferBuilder

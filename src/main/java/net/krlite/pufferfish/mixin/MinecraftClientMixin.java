@@ -1,11 +1,10 @@
 package net.krlite.pufferfish.mixin;
 
-import net.krlite.pufferfish.PuffMod;
 import net.krlite.pufferfish.config.PuffConfigs;
-import net.krlite.pufferfish.interaction_map.util.ClientAnchorProvider;
 import net.krlite.pufferfish.util.ChatUtil;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.client.gui.screen.ChatScreen;
+import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.option.GameOptions;
 import net.minecraft.util.math.MathHelper;
 import org.jetbrains.annotations.Nullable;
@@ -22,7 +21,7 @@ import static net.krlite.pufferfish.render.CrosshairPuffer.crosshairScaleTarget;
 public class MinecraftClientMixin {
     @Shadow @Final public GameOptions options;
 
-    @Shadow @Nullable public ClientPlayerEntity player;
+    @Shadow @Nullable public Screen currentScreen;
 
     @Inject(method = "handleInputEvents", at = @At("TAIL"))
     private void handleInputEvents(CallbackInfo ci) {
@@ -40,17 +39,12 @@ public class MinecraftClientMixin {
                                 : PuffConfigs.crosshairSize;
     }
 
-    @Inject(method = "openChatScreen", at = @At("TAIL"))
-    private void openChatScreen(String text, CallbackInfo ci) {
-        ChatUtil.chatBackgroundOpacity = 0.0;
-    }
-
     @Inject(method = "tick", at = @At("TAIL"))
     private void tick(CallbackInfo ci) {
-        if ( player != null ) {
-            if ( player.isDead() ) {
-                ClientAnchorProvider.setDeathPos(player);
-            }
+        if ( currentScreen instanceof ChatScreen ) {
+            ChatUtil.chatBackgroundOpacityTarget = 1.0;
+        } else {
+            ChatUtil.chatBackgroundOpacityTarget = 0.0;
         }
     }
 }

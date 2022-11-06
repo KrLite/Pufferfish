@@ -1,13 +1,12 @@
 package net.krlite.pufferfish.render;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import net.krlite.pufferfish.math.solver.GridSolver;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.render.*;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.Matrix4f;
 import oshi.util.tuples.Pair;
-
-import static net.krlite.pufferfish.util.Solver.*;
 
 import java.awt.*;
 
@@ -29,7 +28,7 @@ public class ColoredRenderer extends DrawableHelper {
             float xEnd,     float yEnd,
             Color colorUpper,  Color colorLower
     ) {
-        Pair<Pair<Float, Float>, Pair<Float, Float>> gird = gridXY(xBegin, yBegin, xEnd, yEnd);
+        Pair<Pair<Float, Float>, Pair<Float, Float>> gird = GridSolver.gridXY(xBegin, yBegin, xEnd, yEnd);
         xBegin  = gird.getA().getA();
         xEnd    = gird.getA().getB();
         yBegin  = gird.getB().getA();
@@ -58,7 +57,7 @@ public class ColoredRenderer extends DrawableHelper {
             float xEnd,         float yEnd,
             Color colorLeft,    Color colorRight
     ) {
-        Pair<Pair<Float, Float>, Pair<Float, Float>> grid = gridXY(xBegin, yBegin, xEnd, yEnd);
+        Pair<Pair<Float, Float>, Pair<Float, Float>> grid = GridSolver.gridXY(xBegin, yBegin, xEnd, yEnd);
         xBegin  = grid.getA().getA();
         xEnd    = grid.getA().getB();
         yBegin  = grid.getB().getA();
@@ -197,10 +196,9 @@ public class ColoredRenderer extends DrawableHelper {
                         colorLU.getAlpha() / 255.0F
                 )
                 .next();
-
-        bufferBuilder.end();
-        BufferRenderer.draw(bufferBuilder);
+        tessellator.draw();
 
         RenderSystem.enableTexture();
+        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
     }
 }

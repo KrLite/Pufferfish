@@ -17,7 +17,15 @@ public class PuffKeys {
     public static Map<Axis, Integer> lingerKeyAxis = new HashMap<>();
     public static Map<Axis, Boolean> availableKeyAxis = new HashMap<>();
 
-    // Axis X & Z
+    // Config Key
+    public static final KeyBinding CONFIG = KeyBindingHelper.registerKeyBinding(new KeyBinding(
+            IdentifierBuilder.translationKey("key", "general", "config"),
+            InputUtil.Type.KEYSYM,
+            GLFW.GLFW_KEY_K,
+            IdentifierBuilder.translationKey("key", "category", "general")
+    ));
+
+    // Pitch Lock
     public static final KeyBinding LOCK_PITCH = KeyBindingHelper.registerKeyBinding(new KeyBinding(
             IdentifierBuilder.translationKey("key", "coordinate", "lock_pitch"),
             InputUtil.Type.KEYSYM,
@@ -25,7 +33,7 @@ public class PuffKeys {
             IdentifierBuilder.translationKey("key", "category", "coordinate")
     ));
 
-    // Axis Y
+    // Yaw Lock
     public static final KeyBinding LOCK_YAW = KeyBindingHelper.registerKeyBinding(new KeyBinding(
             IdentifierBuilder.translationKey("key", "coordinate", "lock_yaw"),
             InputUtil.Type.KEYSYM,
@@ -41,14 +49,6 @@ public class PuffKeys {
                     ? GLFW.GLFW_KEY_LEFT_SUPER
                     : GLFW.GLFW_KEY_LEFT_ALT,
             IdentifierBuilder.translationKey("key", "category", "coordinate")
-    ));
-
-    // Config Key
-    public static final KeyBinding CONFIG = KeyBindingHelper.registerKeyBinding(new KeyBinding(
-            IdentifierBuilder.translationKey("key", "config"),
-            InputUtil.Type.KEYSYM,
-            GLFW.GLFW_KEY_K,
-            IdentifierBuilder.translationKey("key", "category", "general")
     ));
 
     private static void registerKeyMaps() {

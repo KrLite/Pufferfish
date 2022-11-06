@@ -1,15 +1,12 @@
 package net.krlite.pufferfish.mixin;
 
 import com.mojang.logging.LogUtils;
-import net.krlite.pufferfish.PuffMod;
 import net.krlite.pufferfish.render.ScreenshotFlashRenderer;
 import net.minecraft.client.gl.Framebuffer;
 import net.minecraft.client.texture.NativeImage;
 import net.minecraft.client.util.ScreenshotRecorder;
 import net.minecraft.text.ClickEvent;
-import net.minecraft.text.LiteralText;
 import net.minecraft.text.Text;
-import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Formatting;
 import net.minecraft.util.Util;
 import org.slf4j.Logger;
@@ -60,32 +57,32 @@ public abstract class ScreenshotRecorderMixin {
             try {
                 nativeImage.writeTo(file);
                 messageReceiver.accept(
-                        new LiteralText("[")
+                        Text.literal("[")
                                 .formatted(Formatting.GRAY, Formatting.ITALIC)
                                 .append(
-                                        new TranslatableText(
+                                        Text.translatable(
                                                 "screenshot.success",
-                                                new LiteralText(file.getName())
+                                                Text.literal(file.getName())
                                                         .formatted(Formatting.GRAY, Formatting.ITALIC, Formatting.UNDERLINE)
                                                         .styled(
                                                                 (style) -> style.withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_FILE, file.getAbsolutePath()))
                                                         )
                                         )
                                 ).append(
-                                        new LiteralText("]")
+                                        Text.literal("]")
                                                 .formatted(Formatting.GRAY, Formatting.ITALIC)
                                 )
                 );
             } catch (Exception exception) {
                 LOGGER.warn("Couldn't save screenshot", exception);
                 messageReceiver.accept(
-                        new LiteralText("[")
+                        Text.literal("[")
                                 .formatted(Formatting.DARK_RED, Formatting.ITALIC)
                                 .append(
-                                        new TranslatableText("screenshot.failure", exception.getMessage())
+                                        Text.translatable("screenshot.failure", exception.getMessage())
                                                 .formatted(Formatting.DARK_RED, Formatting.ITALIC)
                                 ).append(
-                                        new LiteralText("]")
+                                        Text.literal("]")
                                                 .formatted(Formatting.DARK_RED, Formatting.ITALIC)
                                 )
                 );

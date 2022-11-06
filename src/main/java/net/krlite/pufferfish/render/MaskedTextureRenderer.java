@@ -1,6 +1,6 @@
 package net.krlite.pufferfish.render;
 
-import net.krlite.pufferfish.util.Solver;
+import net.krlite.pufferfish.math.solver.GridSolver;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.util.Identifier;
 import oshi.util.tuples.Pair;
@@ -174,14 +174,14 @@ public class MaskedTextureRenderer extends ColoredTextureRenderer {
             float xMin,     float yMin,
             float xMax,     float yMax
     ) {
-        Pair<Pair<Float, Float>, Pair<Float, Float>> grid = Solver.gridXY(xBegin, yBegin, xEnd, yEnd);
+        Pair<Pair<Float, Float>, Pair<Float, Float>> grid = GridSolver.gridXY(xBegin, yBegin, xEnd, yEnd);
 
         xBegin  = grid.getA().getA();
         xEnd    = grid.getA().getB();
         yBegin  = grid.getB().getA();
         yEnd    = grid.getB().getB();
 
-        Pair<Pair<Float, Float>, Pair<Float, Float>> gridMask = Solver.gridXY(xMin, yMin, xMax, yMax);
+        Pair<Pair<Float, Float>, Pair<Float, Float>> gridMask = GridSolver.gridXY(xMin, yMin, xMax, yMax);
 
         xMin = gridMask.getA().getA();
         xMax = gridMask.getA().getB();

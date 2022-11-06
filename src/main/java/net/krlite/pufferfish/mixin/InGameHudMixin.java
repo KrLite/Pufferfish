@@ -4,9 +4,9 @@ import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.krlite.pufferfish.config.PuffConfigs;
 import net.krlite.pufferfish.interaction_map.render.AnchorRenderer;
-import net.krlite.pufferfish.interaction_map.util.ClientAnchorProvider;
+import net.krlite.pufferfish.interaction_map.util.AnchorProvider;
+import net.krlite.pufferfish.interaction_map.util.solver.AnchorSolver;
 import net.krlite.pufferfish.render.CrosshairPuffer;
-import net.krlite.pufferfish.render.ExtraInGameHudRenderer;
 import net.krlite.pufferfish.util.AxisLocker;
 import net.krlite.pufferfish.util.ColorUtil;
 import net.minecraft.client.MinecraftClient;
@@ -23,6 +23,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.awt.*;
+import java.util.Optional;
 
 @Mixin(InGameHud.class)
 public abstract class InGameHudMixin extends DrawableHelper{
@@ -42,7 +43,7 @@ public abstract class InGameHudMixin extends DrawableHelper{
     // Set Crosshair Render Style
     @Redirect(method = "renderCrosshair", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/systems/RenderSystem;blendFuncSeparate(Lcom/mojang/blaze3d/platform/GlStateManager$SrcFactor;Lcom/mojang/blaze3d/platform/GlStateManager$DstFactor;Lcom/mojang/blaze3d/platform/GlStateManager$SrcFactor;Lcom/mojang/blaze3d/platform/GlStateManager$DstFactor;)V"))
     private void setCrosshairStyle(GlStateManager.SrcFactor srcFactor, GlStateManager.DstFactor dstFactor, GlStateManager.SrcFactor srcAlpha, GlStateManager.DstFactor dstAlpha) {
-        switch (PuffConfigs.corsshairStyle) {
+        switch ( PuffConfigs.corsshairStyle ) {
             case PUFFERFISH -> RenderSystem.blendFuncSeparate(
                     GlStateManager.SrcFactor.DST_COLOR, GlStateManager.DstFactor.DST_COLOR,
                     srcAlpha, dstAlpha
@@ -81,12 +82,6 @@ public abstract class InGameHudMixin extends DrawableHelper{
         matrixStack.pop();
     }
 
-    // Update
-    @Inject(method = "render", at = @At("TAIL"))
-    private void tail(MatrixStack matrixStack, float tickDelta, CallbackInfo ci) {
-        ExtraInGameHudRenderer.setMatrixStack(matrixStack);
-    }
-
     // Render
     @Inject(method = "render", at = @At("TAIL"))
     private void render(MatrixStack matrixStack, float tickDelta, CallbackInfo ci) {
@@ -94,21 +89,22 @@ public abstract class InGameHudMixin extends DrawableHelper{
 
         // Render Anchor
         ClientPlayerEntity player = MinecraftClient.getInstance().player;
-        Object anchorPos = ClientAnchorProvider.resolveLastDeathPos(player, 0.95F);
-        Object anchorDistance = ClientAnchorProvider.resolveDeathDistance(player);
+        Optional<Double> anchorPos = AnchorProvider.lastDeathPosition(player, 0.95F);
+        Optional<Double> anchorDistance = AnchorProvider.lastDeathDistance(player);
 
-        if ( anchorPos instanceof Float && anchorDistance instanceof Float ) {
+        if ( anchorPos.isPresent() && anchorDistance.isPresent() ) {
             float opacity =
                     (float) MathHelper.clamp(
-                            (float) anchorDistance >= 25
-                                    ? (256 / (float) anchorDistance)
-                                    : Math.pow((float) anchorDistance / 25, 1.7),
+                            anchorDistance.get() >= 5
+                                    ? (128 / anchorDistance.get())
+                                    : Math.pow(anchorDistance.get() / 5, 1.7),
                             0, 1
                     );
 
+            // Anchor
             AnchorRenderer.render(
                     matrixStack, ColorUtil.castAlpha(Color.RED, opacity),
-                    (float) anchorPos, 540 * opacity
+                    (float) (double) anchorPos.get(), 540 * opacity
             );
         }
     }

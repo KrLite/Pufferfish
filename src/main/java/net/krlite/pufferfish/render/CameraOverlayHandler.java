@@ -1,9 +1,7 @@
 package net.krlite.pufferfish.render;
 
-import net.krlite.pufferfish.PuffMod;
 import net.krlite.pufferfish.util.IdentifierBuilder;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.math.MathHelper;
 
 import java.awt.*;
 
@@ -21,6 +19,6 @@ public class CameraOverlayHandler {
     }
 
     public static void renderCameraOverlay(Identifier identifier, Color color) {
-        if ( color.getAlpha() / 255.0F > 0 ) PuffMod.CTR.renderColoredOverlay(identifier, color);
+        if ( color.getAlpha() / 255.0F > 0 ) PuffRenderer.COLOR_TEXTURE.renderColoredOverlay(identifier, color);
     }
 }

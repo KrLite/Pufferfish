@@ -3,11 +3,14 @@ package net.krlite.pufferfish.config;
 import me.shedaniel.clothconfig2.api.ConfigBuilder;
 import me.shedaniel.clothconfig2.api.ConfigCategory;
 import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
+import net.krlite.pufferfish.config.simple_config.SimpleConfig;
 import net.krlite.pufferfish.util.ChatUtil;
 import net.krlite.pufferfish.util.ColorUtil;
 import net.krlite.pufferfish.util.IdentifierBuilder;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.option.GameOptions;
+import net.minecraft.client.option.SimpleOption;
 
 import java.awt.*;
 import java.io.IOException;
@@ -16,7 +19,16 @@ import static net.krlite.pufferfish.config.PuffConfigs.*;
 import static net.krlite.pufferfish.util.Default.*;
 
 public class ConfigScreenHandler {
+    private static <T> void setVanilla(SimpleOption<T> simpleOption, T value) {
+        if ( value != null ) {
+            simpleOption.setValue(value);
+            MinecraftClient.getInstance().options.write();
+        }
+    }
+
     public static Screen buildConfigScreen(Screen parent) {
+        GameOptions options = MinecraftClient.getInstance().options;
+
         ConfigBuilder builder = ConfigBuilder
                 .create()
                 .setParentScreen(parent)
@@ -138,11 +150,11 @@ public class ConfigScreenHandler {
                 entryBuilder
                         .startIntSlider(
                                 IdentifierBuilder.translatableText("config", "vanilla", "chat_opacity"),
-                                (int) (MinecraftClient.getInstance().options.chatOpacity * 100.0), 0, 100
+                                (int) (options.getChatOpacity().getValue() * 100.0), 0, 100
                         )
                         .setDefaultValue(100)
                         .setTooltip(IdentifierBuilder.translatableText("config", "vanilla", "chat_opacity", "tooltip"))
-                        .setSaveConsumer(value -> MinecraftClient.getInstance().options.chatOpacity = value / 100.0)
+                        .setSaveConsumer(value -> setVanilla(options.getChatOpacity(), value / 100.0))
                         .build()
         );
 
@@ -151,11 +163,11 @@ public class ConfigScreenHandler {
                 entryBuilder
                         .startIntSlider(
                                 IdentifierBuilder.translatableText("config", "vanilla", "text_background_opacity"),
-                                (int) (MinecraftClient.getInstance().options.textBackgroundOpacity * 100.0), 0, 100
+                                (int) (options.getTextBackgroundOpacity().getValue() * 100.0), 0, 100
                         )
                         .setDefaultValue(50)
                         .setTooltip(IdentifierBuilder.translatableText("config", "vanilla", "text_background_opacity", "tooltip"))
-                        .setSaveConsumer(value -> MinecraftClient.getInstance().options.textBackgroundOpacity = value / 100.0)
+                        .setSaveConsumer(value -> setVanilla(options.getTextBackgroundOpacity(), value / 100.0))
                         .build()
         );
 
@@ -164,11 +176,11 @@ public class ConfigScreenHandler {
                 entryBuilder
                         .startIntSlider(
                                 IdentifierBuilder.translatableText("config", "vanilla", "chat_line_spacing"),
-                                (int) (MinecraftClient.getInstance().options.chatLineSpacing * 100.0), 0, 100
+                                (int) (options.getChatLineSpacing().getValue() * 100.0), 0, 100
                         )
                         .setDefaultValue(0)
                         .setTooltip(IdentifierBuilder.translatableText("config", "vanilla", "chat_line_spacing", "tooltip"))
-                        .setSaveConsumer(value -> MinecraftClient.getInstance().options.chatLineSpacing = value / 100.0)
+                        .setSaveConsumer(value -> setVanilla(options.getChatLineSpacing(), value / 100.0))
                         .build()
         );
 

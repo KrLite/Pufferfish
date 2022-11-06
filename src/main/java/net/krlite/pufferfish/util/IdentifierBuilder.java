@@ -1,7 +1,7 @@
 package net.krlite.pufferfish.util;
 
 import net.krlite.pufferfish.PuffMod;
-import net.minecraft.text.TranslatableText;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
 public class IdentifierBuilder {
@@ -19,8 +19,8 @@ public class IdentifierBuilder {
         return new Identifier(PuffMod.MOD_ID, finalPath.toString());
     }
 
-    public static TranslatableText translatableText(String category, String... keys) {
-        return new TranslatableText(translationKey(category, keys));
+    public static Text translatableText(String category, String... keys) {
+        return Text.translatable(translationKey(category, keys));
     }
 
     public static String translationKey(String category, String... keys) {

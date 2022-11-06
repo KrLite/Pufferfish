@@ -1,7 +1,6 @@
 package net.krlite.pufferfish.render;
 
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
-import net.krlite.pufferfish.PuffMod;
 import net.krlite.pufferfish.util.IdentifierBuilder;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
@@ -22,7 +21,7 @@ public class ScreenshotFlashRenderer {
 
     public static void renderScreenshotFlash() {
         if ( flashOpacity > 0 ) {
-            PuffMod.CTR.renderFixedColoredOverlay(FLASH, new Color(1.0F, 1.0F, 1.0F, flashOpacity));
+            PuffRenderer.COLOR_TEXTURE.renderFixedColoredOverlay(FLASH, new Color(1.0F, 1.0F, 1.0F, flashOpacity));
         }
     }
 

@@ -1,13 +1,11 @@
-package net.krlite.pufferfish.util;
+package net.krlite.pufferfish.math.solver;
 
-import net.krlite.pufferfish.PuffMod;
-import net.minecraft.util.math.BlockPos;
 import oshi.util.tuples.Pair;
 
-public class Solver {
+public class GridSolver {
     public static Pair<Pair<Float, Float>, Pair<Float, Float>> gridXY(
-            float xBegin,   float yBegin,
-            float xEnd,     float yEnd
+            float xBegin, float yBegin,
+            float xEnd, float yEnd
     ) {
         return new Pair<>(
                 xEnd < xBegin

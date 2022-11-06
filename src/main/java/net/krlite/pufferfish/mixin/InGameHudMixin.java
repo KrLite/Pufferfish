@@ -94,7 +94,7 @@ public abstract class InGameHudMixin extends DrawableHelper{
 
         // Render Anchor
         ClientPlayerEntity player = MinecraftClient.getInstance().player;
-        Object anchorPos = ClientAnchorProvider.resolveDeathPos(player, 0.95F);
+        Object anchorPos = ClientAnchorProvider.resolveLastDeathPos(player, 0.95F);
         Object anchorDistance = ClientAnchorProvider.resolveDeathDistance(player);
 
         if ( anchorPos instanceof Float && anchorDistance instanceof Float ) {

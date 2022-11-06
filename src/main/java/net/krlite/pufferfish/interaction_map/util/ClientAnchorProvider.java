@@ -1,14 +1,12 @@
 package net.krlite.pufferfish.interaction_map.util;
 
-import net.krlite.pufferfish.PuffMod;
-import net.krlite.pufferfish.util.Solver;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.option.GameOptions;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.dynamic.GlobalPos;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
-import oshi.util.tuples.Pair;
 
 public class ClientAnchorProvider {
     public static World deathWorld;
@@ -19,7 +17,7 @@ public class ClientAnchorProvider {
         deathPos = player.getBlockPos();
     }
 
-    public static Object resolveDeathPos(ClientPlayerEntity player, float scale) {
+    public static Object resolveLastDeathPos(ClientPlayerEntity player, float scale) {
         World world = player.world;
 
         if (

@@ -1,5 +1,6 @@
 package net.krlite.pufferfish.util;
 
+import net.krlite.pufferfish.PuffMod;
 import net.minecraft.util.math.MathHelper;
 import org.checkerframework.checker.units.qual.C;
 
@@ -62,53 +63,12 @@ public class ColorUtil {
         return castAlpha(color, alphaColor.getAlpha() / 255.0F);
     }
 
-    public static Color castAlpha(Color color, float alpha) {
+    public static Color castAlpha(Color color, float opacity) {
         return new Color(
                 color.getRed() / 255.0F,
                 color.getGreen() / 255.0F,
                 color.getBlue() / 255.0F,
-                alpha
-        );
-    }
-    public static Color lerpColor(Color currentColor, Color targetColor, float delta) {
-        return lerpColor(
-                currentColor, targetColor,
-                currentColor.getAlpha() / 255.0F,
-                targetColor.getAlpha() / 255.0F,
-                delta
-        );
-    }
-
-    public static Color lerpColor(Color currentColor, Color targetColor, float currentOpacity, float targetOpacity, float delta) {
-        return new Color(
-                MathHelper.clamp(
-                        MathHelper.lerp(
-                                delta,
-                                currentColor.getRed() / 255.0F,
-                                targetColor.getRed() / 255.0F
-                        ), 0.0F, 1.0F
-                ),
-                MathHelper.clamp(
-                        MathHelper.lerp(
-                                delta,
-                                currentColor.getGreen() / 255.0F,
-                                targetColor.getGreen() / 255.0F
-                        ), 0.0F, 1.0F
-                ),
-                MathHelper.clamp(
-                        MathHelper.lerp(
-                                delta,
-                                currentColor.getBlue() / 255.0F,
-                                targetColor.getBlue() / 255.0F
-                        ), 0.0F, 1.0F
-                ),
-                MathHelper.clamp(
-                        MathHelper.lerp(
-                                delta,
-                                currentOpacity,
-                                targetOpacity
-                        ), 0.0F, 1.0F
-                )
+                opacity
         );
     }
 

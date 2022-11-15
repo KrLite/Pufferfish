@@ -4,27 +4,68 @@ import java.awt.*;
 import java.util.Objects;
 
 public class Default {
-    // Enum
-    public enum CrosshairStyle {
+    // Enum Classes
+    public enum CrosshairRenderStyle {
         VANILLA("Vanilla"),
         PUFFERFISH("Pufferfish"),
         OPAQUE("Opaque");
 
         private final String style;
 
-        CrosshairStyle(String style) {
+        CrosshairRenderStyle(String style) {
             this.style = style;
         }
 
         public String getName() {
-            return style;
+            return this.style;
         }
     }
 
-    public static CrosshairStyle parse(String value) {
+    public static CrosshairRenderStyle parseCrosshairRenderStyle(String value) {
+        for ( CrosshairRenderStyle style : CrosshairRenderStyle.values() ) {
+            if ( Objects.equals(style.getName(), value) ) {
+                return CrosshairRenderStyle.valueOf(value.toUpperCase().replace(" ", "_").replace("-", "_"));
+            }
+        }
+
+        return CrosshairRenderStyle.VANILLA;
+    }
+
+    public enum CrosshairStyle {
+        EMPTY("Empty", 16),
+        VANILLA("Vanilla", 0),
+        CROSS("Cross", 1),
+        SMALL_CROSS("Small Cross", 2),
+        X_SHAPE("X-Shape", 3),
+        SMALL_X_SHAPE("Small X-Shape", 4),
+        AIM("Aim", 5),
+        SMALL_AIM("Small Aim", 6),
+        CIRCLE("Circle", 7),
+        DOT("Dot", 8),
+        SMALL_DOT("Small Dot", 9),
+        HORIZONTAL("Horizontal", 10);
+
+        private final String style;
+        private final int index;
+
+        CrosshairStyle(String style, int index) {
+            this.style = style;
+            this.index = index;
+        }
+
+        public String getName() {
+            return this.style;
+        }
+
+        public int getIndex() {
+            return this.index;
+        }
+    }
+
+    public static CrosshairStyle parseCrosshairStyle(String value) {
         for ( CrosshairStyle style : CrosshairStyle.values() ) {
             if ( Objects.equals(style.getName(), value) ) {
-                return CrosshairStyle.valueOf(value.toUpperCase());
+                return CrosshairStyle.valueOf(value.toUpperCase().replace(" ", "_").replace("-", "_"));
             }
         }
 
@@ -32,10 +73,12 @@ public class Default {
     }
 
     // Enum
+    public static final CrosshairRenderStyle DEFAULT_CROSSHAIR_RENDER_STYLE = CrosshairRenderStyle.VANILLA;
     public static final CrosshairStyle DEFAULT_CROSSHAIR_STYLE = CrosshairStyle.VANILLA;
 
     // Boolean
-    public static final boolean DEFAULT_ENABLE_CHAT_ANIMATION = false;
+    public static final boolean DEFAULT_ENABLE_TITLE_ANIMATION = true;
+    public static final boolean DEFAULT_ENABLE_CHAT_ANIMATION = true;
     public static final boolean DEFAULT_ENABLE_CHAT_TEXT_SHADOW = true;
     public static final boolean DEFAULT_CHAT_SELF_HIGHLIGHTING = false;
 

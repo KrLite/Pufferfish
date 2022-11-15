@@ -3,7 +3,6 @@ package net.krlite.pufferfish.config;
 import me.shedaniel.clothconfig2.api.ConfigBuilder;
 import me.shedaniel.clothconfig2.api.ConfigCategory;
 import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
-import net.krlite.pufferfish.config.simple_config.SimpleConfig;
 import net.krlite.pufferfish.util.ChatUtil;
 import net.krlite.pufferfish.util.ColorUtil;
 import net.krlite.pufferfish.util.IdentifierBuilder;
@@ -35,6 +34,22 @@ public class ConfigScreenHandler {
                 .setTitle(IdentifierBuilder.translatableText("mod", "name"));
         ConfigEntryBuilder entryBuilder = builder.entryBuilder();
 
+        // Category General
+        ConfigCategory general = builder.getOrCreateCategory(IdentifierBuilder.translatableText("config", "category", "general"));
+
+        // Enable Title Animation
+        general.addEntry(
+                entryBuilder
+                        .startBooleanToggle(
+                                IdentifierBuilder.translatableText("config", "general", "enable_title_animation"),
+                                enableTitleAnimation
+                        )
+                        .setDefaultValue(DEFAULT_ENABLE_TITLE_ANIMATION)
+                        .setTooltip(IdentifierBuilder.translatableText("config", "general", "enable_title_animation", "tooltip"))
+                        .setSaveConsumer(value -> enableTitleAnimation = value)
+                        .build()
+        );
+
         // Category Crosshair
         ConfigCategory crosshair = builder.getOrCreateCategory(IdentifierBuilder.translatableText("config", "category", "crosshair"));
 
@@ -64,16 +79,29 @@ public class ConfigScreenHandler {
                         .build()
         );
 
+        // Crosshair Render Style
+        crosshair.addEntry(
+                entryBuilder
+                        .startEnumSelector(
+                                IdentifierBuilder.translatableText("config", "crosshair", "render_style"),
+                                CrosshairRenderStyle.class, corsshairRenderStyle
+                        )
+                        .setDefaultValue(CrosshairRenderStyle.VANILLA)
+                        .setTooltip(IdentifierBuilder.translatableText("config", "crosshair", "render_style", "tooltip"))
+                        .setSaveConsumer(value -> corsshairRenderStyle = value)
+                        .build()
+        );
+
         // Crosshair Style
         crosshair.addEntry(
                 entryBuilder
                         .startEnumSelector(
                                 IdentifierBuilder.translatableText("config", "crosshair", "style"),
-                                CrosshairStyle.class, corsshairStyle
+                                CrosshairStyle.class, crosshairStyle
                         )
                         .setDefaultValue(CrosshairStyle.VANILLA)
                         .setTooltip(IdentifierBuilder.translatableText("config", "crosshair", "style", "tooltip"))
-                        .setSaveConsumer(value -> corsshairStyle = value)
+                        .setSaveConsumer(value -> crosshairStyle = value)
                         .build()
         );
 

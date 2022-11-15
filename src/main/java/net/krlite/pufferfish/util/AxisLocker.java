@@ -1,6 +1,10 @@
 package net.krlite.pufferfish.util;
 
 import com.google.common.collect.ImmutableMap;
+import net.krlite.pufferfish.PuffMod;
+import net.krlite.pufferfish.render.CrosshairPuffer;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.option.GameOptions;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.MathHelper;
 
@@ -82,22 +86,26 @@ public class AxisLocker {
     public static void update(PlayerEntity player) {
         // Ping Axis
         if ( axisPing.get(Axis.PITCH) && Math.abs(player.getPitch() - axisStatic.get(Axis.PITCH)) >= 0.1F ) {
-            player.setPitch(MathHelper.lerp(
-                    delta,
-                    player.getPitch(),
-                    axisStatic.get(Axis.PITCH)
-            ));
+            player.setPitch(
+                    MathHelper.lerp(
+                            delta,
+                            player.getPitch(),
+                            axisStatic.get(Axis.PITCH)
+                    )
+            );
         } else {
             axisPing.replace(Axis.PITCH, false);
             flippingAxisPitch = false;
         }
 
         if ( axisPing.get(Axis.YAW) && Math.abs(player.getYaw() - axisStatic.get(Axis.YAW)) >= 0.1F ) {
-            player.setYaw(MathHelper.lerp(
-                    delta,
-                    player.getYaw(),
-                    axisStatic.get(Axis.YAW)
-            ));
+            player.setYaw(
+                    MathHelper.lerp(
+                            delta,
+                            player.getYaw(),
+                            axisStatic.get(Axis.YAW)
+                    )
+            );
         } else {
             axisPing.replace(Axis.YAW, false);
             flippingAxisYaw = false;

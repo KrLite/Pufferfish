@@ -24,13 +24,19 @@
   "config.puff.vanilla.chat_line_spacing": "§a行距",
   "config.puff.vanilla.chat_line_spacing.tooltip": "调整行距§7（百分比）\n§a[原版]",
 
+  "config.puff.category.general": "常规",
+  "config.puff.general.enable_title_animation": "标题动画",
+  "config.puff.general.enable_title_animation.tooltip": "在[MINECRAFT]标题上使用动画",
+
   "config.puff.category.crosshair": "准星",
   "config.puff.crosshair.size": "准星大小",
   "config.puff.crosshair.size.tooltip": "标准准星大小§7（百分比）",
   "config.puff.crosshair.puff": "膨胀准星大小",
   "config.puff.crosshair.puff.tooltip": "膨胀准星大小§7（百分比）",
+  "config.puff.crosshair.render_style": "准星渲染样式",
+  "config.puff.crosshair.render_style.tooltip": "调整准星渲染样式",
   "config.puff.crosshair.style": "准星样式",
-  "config.puff.crosshair.style.tooltip": "调整准星渲染样式",
+  "config.puff.crosshair.style.tooltip": "调整准星样式",
 
   "config.puff.category.chat": "聊天",
   "config.puff.chat.enable_animation": "窗口动画",

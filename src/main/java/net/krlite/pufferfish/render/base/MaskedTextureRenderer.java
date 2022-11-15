@@ -1,8 +1,11 @@
-package net.krlite.pufferfish.render;
+package net.krlite.pufferfish.render.base;
 
+import net.krlite.pufferfish.math.IdentifierSprite;
 import net.krlite.pufferfish.math.solver.GridSolver;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.Matrix4f;
 import oshi.util.tuples.Pair;
 
 import java.awt.*;
@@ -17,11 +20,12 @@ public class MaskedTextureRenderer extends ColoredTextureRenderer {
      * by the default size of 256 pixels, a simple version of
      *
      * {@link
-     * #renderCenteredColoredTexture(Identifier, Color, float, float, int, int, int, int, int, float, float, float, float)
+     * #renderCenteredColoredTexture(Identifier, Color, MatrixStack, float, float, int, int, int, int, int, int, float, float, float, float)
      * renderCenteredColoredTexture.}
      */
     public void renderCenteredColoredTexture(
             Identifier identifier, Color color,
+            MatrixStack matrixStack,
             float xCentered,    float yCentered,
             int x,              int y,
             int width,          int height,
@@ -30,10 +34,11 @@ public class MaskedTextureRenderer extends ColoredTextureRenderer {
     ) {
         renderCenteredColoredTexture(
                 identifier, color,
+                matrixStack,
                 xCentered,  yCentered,
                 x,          y,
                 width,      height,
-                256,
+                256, 256,
                 xMin,       yMin,
                 xMax,       yMax
         );
@@ -44,11 +49,12 @@ public class MaskedTextureRenderer extends ColoredTextureRenderer {
      * default size of 256 pixels, a simple version of
      *
      * {@link
-     * #renderPositionedColoredTexture(Identifier, Color, float, float, int, int, int, int, int, float, float, float, float)
+     * #renderPositionedColoredTexture(Identifier, Color, MatrixStack, float, float, int, int, int, int, int, int, float, float, float, float)
      * renderPositionedColoredTexture.}
      */
     public void renderPositionedColoredTexture(
             Identifier identifier, Color color,
+            MatrixStack matrixStack,
             float xPos, float yPos,
             int x,      int y,
             int width,  int height,
@@ -57,10 +63,11 @@ public class MaskedTextureRenderer extends ColoredTextureRenderer {
     ) {
         renderPositionedColoredTexture(
                 identifier, color,
+                matrixStack,
                 xPos,   yPos,
                 x,      y,
                 width,  height,
-                256,
+                256, 256,
                 xMin,   yMin,
                 xMax,   yMax
         );
@@ -71,14 +78,53 @@ public class MaskedTextureRenderer extends ColoredTextureRenderer {
      * area, a simple version of
      *
      * {@link
-     * #renderColoredTexture(Identifier, Color, float, float, float, float, float, float, float, float)
+     * #renderColoredTexture(Identifier, Color, MatrixStack, float, float, float, float, float, float, float, float)
+     * renderColoredTexture.}
+     *
+     * @param xCentered     x center,
+     * @param yCentered     y center;
+     * @param width         width in the target texture,
+     * @param height        height in the target texture.
+     * @param xMin          minimal allowed x,
+     * @param yMin          minimal allowed y;
+     * @param xMax          maximal allowed x,
+     * @param yMax          maximal allowed y.
+     */
+    public void renderCenteredColoredTexture(
+            IdentifierSprite identifierSprite,
+            Color color,
+            MatrixStack matrixStack,
+            float xCentered,    float yCentered,
+            int width,          int height,
+            float xMin,         float yMin,
+            float xMax,         float yMax
+    ) {
+        float xPos = xCentered - width / 2.0F, yPos = yCentered + height / 2.0F;
+
+        renderColoredTexture(
+                identifierSprite.getIdentifier(), color,
+                matrixStack,
+                xPos, yPos, xPos + width, yPos + height,
+                xMin, yMin, xMax, yMax
+        );
+    }
+
+    /**
+     * Renders a centered colorized texture in a limited square
+     * area, a simple version of
+     *
+     * {@link
+     * #renderColoredTexture(Identifier, Color, MatrixStack, float, float, float, float, float, float, float, float)
      * renderColoredTexture.}
      *
      * @param xCentered     x center,
      * @param yCentered     y center;
      * @param x             x left-up in texture uv,
      * @param y             y left-up in texture uv.
-     * @param textureSize   width and height of the target texture.
+     * @param width         width in the target texture,
+     * @param height        height in the target texture.
+     * @param textureWidth  width of the target texture,
+     * @param textureHeight height of the target texture.
      * @param xMin          minimal allowed x,
      * @param yMin          minimal allowed y;
      * @param xMax          maximal allowed x,
@@ -86,10 +132,11 @@ public class MaskedTextureRenderer extends ColoredTextureRenderer {
      */
     public void renderCenteredColoredTexture(
             Identifier identifier, Color color,
+            MatrixStack matrixStack,
             float xCentered,    float yCentered,
             int x,              int y,
             int width,          int height,
-            int textureSize,
+            int textureWidth,   int textureHeight,
             float xMin,         float yMin,
             float xMax,         float yMax
     ) {
@@ -97,9 +144,10 @@ public class MaskedTextureRenderer extends ColoredTextureRenderer {
 
         renderColoredTexture(
                 identifier, color,
-                xPos, yPos, xPos + width, xPos + height,
-                (float) x / textureSize, (float) y / textureSize,
-                (float) (x + width) / textureSize, (float) (y + width) / textureSize,
+                matrixStack,
+                xPos, yPos, xPos + width, yPos + height,
+                (float) x / textureWidth, (float) y / textureHeight,
+                (float) (x + width) / textureWidth, (float) (y + height) / textureHeight,
                 xMin, yMin, xMax, yMax
         );
     }
@@ -109,14 +157,51 @@ public class MaskedTextureRenderer extends ColoredTextureRenderer {
      * a simple version of
      *
      * {@link
-     * #renderColoredTexture(Identifier, Color, float, float, float, float, float, float, float, float)
+     * #renderColoredTexture(Identifier, Color, MatrixStack, float, float, float, float, float, float, float, float)
+     * renderColoredTexture.}
+     *
+     * @param xPos          x left-up,
+     * @param yPos          y left-up;
+     * @param width         width in the target texture,
+     * @param height        height in the target texture.
+     * @param xMin          minimal allowed x,
+     * @param yMin          minimal allowed y;
+     * @param xMax          maximal allowed x,
+     * @param yMax          maximal allowed y.
+     */
+    public void renderPositionedColoredTexture(
+            IdentifierSprite identifierSprite,
+            Color color,
+            MatrixStack matrixStack,
+            float xPos, float yPos,
+            int width,  int height,
+            float xMin, float yMin,
+            float xMax, float yMax
+    ) {
+        renderColoredTexture(
+                identifierSprite.getIdentifier(), color,
+                matrixStack,
+                xPos, yPos, xPos + width, yPos + height,
+                xMin, yMin, xMax, yMax
+        );
+    }
+
+    /**
+     * Renders a colorized texture in a limited square area,
+     * a simple version of
+     *
+     * {@link
+     * #renderColoredTexture(Identifier, Color, MatrixStack, float, float, float, float, float, float, float, float)
      * renderColoredTexture.}
      *
      * @param xPos          x left-up,
      * @param yPos          y left-up;
      * @param x             x left-up in texture uv,
      * @param y             y left-up in texture uv.
-     * @param textureSize   width and height of the target texture.
+     * @param width         width in the target texture,
+     * @param height        height in the target texture.
+     * @param textureWidth  width of the target texture,
+     * @param textureHeight height of the target texture.
      * @param xMin          minimal allowed x,
      * @param yMin          minimal allowed y;
      * @param xMax          maximal allowed x,
@@ -124,18 +209,20 @@ public class MaskedTextureRenderer extends ColoredTextureRenderer {
      */
     public void renderPositionedColoredTexture(
             Identifier identifier, Color color,
-            float xPos, float yPos,
-            int x,      int y,
-            int width,  int height,
-            int textureSize,
-            float xMin, float yMin,
-            float xMax, float yMax
+            MatrixStack matrixStack,
+            float xPos,      float yPos,
+            int x,              int y,
+            int width,          int height,
+            int textureWidth,   int textureHeight,
+            float xMin,         float yMin,
+            float xMax,         float yMax
     ) {
         renderColoredTexture(
                 identifier, color,
-                xPos, yPos, xPos + width, xPos + height,
-                (float) x / textureSize, (float) y / textureSize,
-                (float) (x + width) / textureSize, (float) (y + width) / textureSize,
+                matrixStack,
+                xPos, yPos, xPos + width, yPos + height,
+                (float) x / textureWidth, (float) y / textureHeight,
+                (float) (x + width) / textureWidth, (float) (y + height) / textureHeight,
                 xMin, yMin, xMax, yMax
         );
     }
@@ -144,7 +231,7 @@ public class MaskedTextureRenderer extends ColoredTextureRenderer {
      * Renders a colorized camera overlay in a limited square area.
      *
      * @see
-     * #renderColoredTexture(Identifier, Color, float, float, float, float, float, float, float, float)
+     * #renderColoredTexture(Identifier, Color, MatrixStack, float, float, float, float, float, float, float, float)
      * renderColoredTexture
      */
     public void renderColoredOverlay(
@@ -154,6 +241,7 @@ public class MaskedTextureRenderer extends ColoredTextureRenderer {
     ) {
         renderColoredTexture(
                 identifier, color,
+                new MatrixStack(),
                 0.0F, 0.0F,
                 MinecraftClient.getInstance().getWindow().getScaledWidth(),
                 MinecraftClient.getInstance().getWindow().getScaledHeight(),
@@ -166,7 +254,34 @@ public class MaskedTextureRenderer extends ColoredTextureRenderer {
      * Renders a colorized texture in a limited square area.
      */
     public void renderColoredTexture(
+            IdentifierSprite identifierSprite,
+            Color color,
+            MatrixStack matrixStack,
+            float xBegin,   float yBegin,
+            float xEnd,     float yEnd,
+            float xMin,     float yMin,
+            float xMax,     float yMax
+    ) {
+        renderColoredTexture(
+                identifierSprite.getIdentifier(), color,
+                matrixStack,
+                xBegin, yBegin,
+                xEnd,   yEnd,
+                identifierSprite.uBegin(),
+                identifierSprite.vBegin(),
+                identifierSprite.uEnd(),
+                identifierSprite.vEnd(),
+                xMin,   yMin,
+                xMax,   yMax
+        );
+    }
+
+    /**
+     * Renders a colorized texture in a limited square area.
+     */
+    public void renderColoredTexture(
             Identifier identifier, Color color,
+            MatrixStack matrixStack,
             float xBegin,   float yBegin,
             float xEnd,     float yEnd,
             float uBegin,   float vBegin,
@@ -194,6 +309,7 @@ public class MaskedTextureRenderer extends ColoredTextureRenderer {
 
         super.renderColoredTexture(
                 identifier, color,
+                matrixStack,
                 Math.max(xBegin, xMin), Math.max(yBegin, yMin),
                 Math.min(xEnd, xMax),   Math.min(yEnd, yMax),
                 xBegin < xMin

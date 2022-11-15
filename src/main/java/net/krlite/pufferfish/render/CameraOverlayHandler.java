@@ -19,6 +19,6 @@ public class CameraOverlayHandler {
     }
 
     public static void renderCameraOverlay(Identifier identifier, Color color) {
-        if ( color.getAlpha() / 255.0F > 0 ) PuffRenderer.COLOR_TEXTURE.renderColoredOverlay(identifier, color);
+        if ( color.getAlpha() / 255.0F > 0 ) PuffRenderer.COLORED_TEXTURE.renderColoredOverlay(identifier, color);
     }
 }

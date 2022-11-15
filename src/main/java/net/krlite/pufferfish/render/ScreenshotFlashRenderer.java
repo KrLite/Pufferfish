@@ -21,7 +21,7 @@ public class ScreenshotFlashRenderer {
 
     public static void renderScreenshotFlash() {
         if ( flashOpacity > 0 ) {
-            PuffRenderer.COLOR_TEXTURE.renderFixedColoredOverlay(FLASH, new Color(1.0F, 1.0F, 1.0F, flashOpacity));
+            PuffRenderer.COLORED_TEXTURE.renderFixedColoredOverlay(FLASH, new Color(1.0F, 1.0F, 1.0F, flashOpacity));
         }
     }
 

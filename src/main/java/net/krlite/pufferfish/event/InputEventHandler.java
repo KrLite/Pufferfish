@@ -4,15 +4,34 @@ import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.krlite.pufferfish.PuffKeys;
 import net.krlite.pufferfish.config.ConfigScreenHandler;
 import net.krlite.pufferfish.config.PuffConfigs;
+import net.krlite.pufferfish.util.AxisLocker;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.option.GameOptions;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.math.MathHelper;
 
 import static net.krlite.pufferfish.PuffKeys.*;
+import static net.krlite.pufferfish.render.CrosshairPuffer.crosshairScaleTarget;
 import static net.krlite.pufferfish.util.AxisLocker.*;
 
 public class InputEventHandler {
     private static void registerInputEvents() {
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
+            GameOptions options = MinecraftClient.getInstance().options;
+
+            crosshairScaleTarget =
+                    options.attackKey.isPressed()
+                            ? !options.useKey.isPressed()
+                                // Attacking
+                                ? PuffConfigs.crosshairSize * (1 + PuffConfigs.crosshairPuff)
+                                // Both
+                                : PuffConfigs.crosshairSize
+                            : options.useKey.isPressed()
+                                // Using
+                                ? PuffConfigs.crosshairSize * MathHelper.clamp(1.0 - PuffConfigs.crosshairPuff * 0.6, 0.3, 1.0)
+                                // None
+                                : PuffConfigs.crosshairSize;
+
             if ( CONFIG.wasPressed() ) {
                 MinecraftClient.getInstance().setScreen(
                         ConfigScreenHandler.buildConfigScreen(MinecraftClient.getInstance().currentScreen)
@@ -29,7 +48,7 @@ public class InputEventHandler {
                     }
 
                     if ( LOCK_YAW.wasPressed() ) {
-                        applyYaw(player.getYaw() + 90.0F);
+                        applyYaw(player.getYaw() + 90.0F * (options.sneakKey.isPressed() ? -1 : 1));
                         flippingAxisYaw = true;
                     }
                 }

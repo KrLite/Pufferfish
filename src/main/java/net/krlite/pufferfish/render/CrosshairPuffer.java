@@ -1,6 +1,13 @@
 package net.krlite.pufferfish.render;
 
+import net.krlite.pufferfish.PuffMod;
 import net.krlite.pufferfish.config.PuffConfigs;
+import net.krlite.pufferfish.interaction_map.render.AnchorRenderer;
+import net.krlite.pufferfish.math.HorizontalSprite;
+import net.krlite.pufferfish.math.IdentifierSprite;
+import net.krlite.pufferfish.math.solver.AngleSolver;
+import net.krlite.pufferfish.util.AxisLocker;
+import net.krlite.pufferfish.util.IdentifierBuilder;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.util.math.MatrixStack;
@@ -12,6 +19,9 @@ public class CrosshairPuffer extends DrawableHelper {
 
     public static double crosshairScaleTarget = PuffConfigs.crosshairSize;
     public static double crosshairScale = crosshairScaleTarget;
+
+    public static final IdentifierSprite VANILLA_CROSSHAIR = IdentifierSprite.create(GUI_ICONS_TEXTURE, 256, 0, 0, 15, 15);
+    public static final HorizontalSprite CROSSHAIR = HorizontalSprite.create(IdentifierBuilder.texture("gui", "crosshair"), 16);
 
     public static void puffCrosshair(MatrixStack matrixStack) {
         puffCrosshair(matrixStack, 1);
@@ -31,12 +41,12 @@ public class CrosshairPuffer extends DrawableHelper {
     }
 
     private static void lerp() {
-        crosshairScale = MathHelper.lerp(0.4F, crosshairScale, crosshairScaleTarget);
+        crosshairScale = MathHelper.lerp(0.4, crosshairScale, crosshairScaleTarget);
     }
 
     public static void update(int scaledWidth, int scaledHeight) {
-        CrosshairPuffer.scaledWidth = scaledWidth;
-        CrosshairPuffer.scaledHeight = scaledHeight;
+        CrosshairPuffer.scaledWidth     = scaledWidth;
+        CrosshairPuffer.scaledHeight    = scaledHeight;
         lerp();
     }
 }

@@ -1,4 +1,4 @@
-package net.krlite.pufferfish.render;
+package net.krlite.pufferfish.render.base;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.krlite.pufferfish.math.solver.GridSolver;
@@ -153,7 +153,6 @@ public class ColoredRenderer extends DrawableHelper {
         BufferBuilder bufferBuilder = tessellator.getBuffer();
 
         RenderSystem.disableTexture();
-        RenderSystem.defaultBlendFunc();
         RenderSystem.setShader(GameRenderer::getPositionColorShader);
 
         bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_COLOR);

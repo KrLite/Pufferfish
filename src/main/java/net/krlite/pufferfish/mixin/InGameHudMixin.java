@@ -2,28 +2,30 @@ package net.krlite.pufferfish.mixin;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
+import net.krlite.pufferfish.PuffMod;
 import net.krlite.pufferfish.config.PuffConfigs;
-import net.krlite.pufferfish.interaction_map.render.AnchorRenderer;
-import net.krlite.pufferfish.interaction_map.util.AnchorProvider;
-import net.krlite.pufferfish.interaction_map.util.solver.AnchorSolver;
+import net.krlite.pufferfish.math.IdentifierSprite;
+import net.krlite.pufferfish.math.PreciseColor;
 import net.krlite.pufferfish.render.CrosshairPuffer;
+import net.krlite.pufferfish.render.PuffRenderer;
+import net.krlite.pufferfish.render.ScreenshotFlashRenderer;
 import net.krlite.pufferfish.util.AxisLocker;
-import net.krlite.pufferfish.util.ColorUtil;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.hud.InGameHud;
-import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.util.Util;
 import net.minecraft.util.math.MathHelper;
+import org.checkerframework.checker.units.qual.C;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.Slice;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.awt.*;
-import java.util.Optional;
 
 @Mixin(InGameHud.class)
 public abstract class InGameHudMixin extends DrawableHelper{
@@ -32,6 +34,8 @@ public abstract class InGameHudMixin extends DrawableHelper{
     private int scaledWidth;
     @Shadow
     private int scaledHeight;
+
+    private static double opacity = 1;
 
     // Update
     @Inject(method = "render", at = @At("HEAD"))
@@ -43,23 +47,31 @@ public abstract class InGameHudMixin extends DrawableHelper{
     // Set Crosshair Render Style
     @Redirect(method = "renderCrosshair", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/systems/RenderSystem;blendFuncSeparate(Lcom/mojang/blaze3d/platform/GlStateManager$SrcFactor;Lcom/mojang/blaze3d/platform/GlStateManager$DstFactor;Lcom/mojang/blaze3d/platform/GlStateManager$SrcFactor;Lcom/mojang/blaze3d/platform/GlStateManager$DstFactor;)V"))
     private void setCrosshairStyle(GlStateManager.SrcFactor srcFactor, GlStateManager.DstFactor dstFactor, GlStateManager.SrcFactor srcAlpha, GlStateManager.DstFactor dstAlpha) {
-        switch ( PuffConfigs.corsshairStyle ) {
-            case PUFFERFISH -> RenderSystem.blendFuncSeparate(
-                    GlStateManager.SrcFactor.DST_COLOR, GlStateManager.DstFactor.DST_COLOR,
-                    srcAlpha, dstAlpha
-            );
+        double multiplier = 1 - 0.35 * (MathHelper.abs(MathHelper.sin((float) ((Util.getMeasuringTimeMs() % 10500L) / 10500.0 * (Math.PI * 2)))));
 
-            case OPAQUE -> RenderSystem.blendFuncSeparate(
-                    GlStateManager.SrcFactor.ONE, GlStateManager.DstFactor.ZERO,
-                    srcAlpha, dstAlpha
-            );
+        switch ( PuffConfigs.corsshairRenderStyle ) {
+            case PUFFERFISH -> {
+                RenderSystem.blendFunc(
+                        GlStateManager.SrcFactor.SRC_ALPHA, GlStateManager.DstFactor.DST_COLOR
+                );
+                opacity = 0.625 * multiplier;
+            }
 
-            default -> RenderSystem.blendFuncSeparate(srcFactor, dstFactor, srcAlpha, dstAlpha);
+            case OPAQUE -> {
+                RenderSystem.defaultBlendFunc();
+                opacity = 1;
+            }
+
+            default -> {
+                RenderSystem.blendFuncSeparate(srcFactor, dstFactor, srcAlpha, dstAlpha);
+                opacity = 1;
+            }
         }
     }
 
     // Puff Crosshair & Push Matrix Stack
-    @Inject(method = "renderCrosshair",
+    @Inject(
+            method = "renderCrosshair",
             at = @At(
                     value = "INVOKE",
                     target = "Lnet/minecraft/client/gui/hud/InGameHud;drawTexture(Lnet/minecraft/client/util/math/MatrixStack;IIIIII)V"
@@ -70,8 +82,53 @@ public abstract class InGameHudMixin extends DrawableHelper{
         CrosshairPuffer.puffCrosshair(matrixStack);
     }
 
+    // Re-render Crosshair
+    @Redirect(
+            method = "renderCrosshair",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/client/gui/hud/InGameHud;drawTexture(Lnet/minecraft/client/util/math/MatrixStack;IIIIII)V"
+            ),
+            slice = @Slice(
+                    from = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/systems/RenderSystem;blendFuncSeparate(Lcom/mojang/blaze3d/platform/GlStateManager$SrcFactor;Lcom/mojang/blaze3d/platform/GlStateManager$DstFactor;Lcom/mojang/blaze3d/platform/GlStateManager$SrcFactor;Lcom/mojang/blaze3d/platform/GlStateManager$DstFactor;)V"),
+                    to = @At(value = "INVOKE", target = "Lnet/minecraft/client/option/GameOptions;getAttackIndicator()Lnet/minecraft/client/option/SimpleOption;")
+            )
+    )
+    private void renderCrosshair(InGameHud instance, MatrixStack matrixStack, int x, int y, int u, int v, int width, int height) {
+        matrixStack.push();
+        CrosshairPuffer.puffCrosshair(matrixStack);
+
+        switch ( PuffConfigs.crosshairStyle ) {
+            case EMPTY -> {}
+
+            case VANILLA -> PuffRenderer.COLORED_TEXTURE.renderColoredTexture(
+                    CrosshairPuffer.VANILLA_CROSSHAIR,
+                    PreciseColor.of(Color.WHITE).multipleAlpha(opacity).get(),
+                    matrixStack,
+                    (scaledWidth - 15) / 2.0F, (scaledHeight - 15) / 2.0F,
+                    (scaledWidth + 15) / 2.0F, (scaledHeight + 15) / 2.0F
+            );
+
+            default -> {
+                IdentifierSprite STYLE = CrosshairPuffer.CROSSHAIR.get(PuffConfigs.crosshairStyle.getIndex());
+
+                PuffRenderer.COLORED_TEXTURE.renderColoredTexture(
+                        STYLE,
+                        PreciseColor.of(Color.WHITE).multipleAlpha(opacity).get(),
+                        matrixStack,
+                        (scaledWidth - 15) / 2.0F, (scaledHeight - 15) / 2.0F,
+                        (scaledWidth + 15) / 2.0F, (scaledHeight + 15) / 2.0F
+                );
+            }
+        }
+
+        RenderSystem.setShaderTexture(0, GUI_ICONS_TEXTURE);
+        matrixStack.pop();
+    }
+
     // Pop Matrix Stack
-    @Inject(method = "renderCrosshair",
+    @Inject(
+            method = "renderCrosshair",
             at = @At(
                     value = "INVOKE",
                     target = "Lnet/minecraft/client/gui/hud/InGameHud;drawTexture(Lnet/minecraft/client/util/math/MatrixStack;IIIIII)V",
@@ -80,32 +137,5 @@ public abstract class InGameHudMixin extends DrawableHelper{
     )
     private void scaleCrosshairAfter(MatrixStack matrixStack, CallbackInfo ci) {
         matrixStack.pop();
-    }
-
-    // Render
-    @Inject(method = "render", at = @At("TAIL"))
-    private void render(MatrixStack matrixStack, float tickDelta, CallbackInfo ci) {
-        RenderSystem.enableBlend();
-
-        // Render Anchor
-        ClientPlayerEntity player = MinecraftClient.getInstance().player;
-        Optional<Double> anchorPos = AnchorProvider.lastDeathPosition(player, 0.95F);
-        Optional<Double> anchorDistance = AnchorProvider.lastDeathDistance(player);
-
-        if ( anchorPos.isPresent() && anchorDistance.isPresent() ) {
-            float opacity =
-                    (float) MathHelper.clamp(
-                            anchorDistance.get() >= 5
-                                    ? (128 / anchorDistance.get())
-                                    : Math.pow(anchorDistance.get() / 5, 1.7),
-                            0, 1
-                    );
-
-            // Anchor
-            AnchorRenderer.render(
-                    matrixStack, ColorUtil.castAlpha(Color.RED, opacity),
-                    (float) (double) anchorPos.get(), 540 * opacity
-            );
-        }
     }
 }

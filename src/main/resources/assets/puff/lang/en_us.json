@@ -25,13 +25,19 @@
   "config.puff.vanilla.chat_line_spacing": "§aLine Spacing",
   "config.puff.vanilla.chat_line_spacing.tooltip": "Adjust chat line spacing §7in percentage\n§a[VANILLA]",
 
+  "config.puff.category.general": "General",
+  "config.puff.general.enable_title_animation": "Animated Titles",
+  "config.puff.general.enable_title_animation.tooltip": "Decides whether the [MINECRAFT] title is animated or not",
+
   "config.puff.category.crosshair": "Crosshair",
   "config.puff.crosshair.size": "Crosshair Size",
   "config.puff.crosshair.size.tooltip": "Default crosshair size §7in percentage",
   "config.puff.crosshair.puff": "Puffed Crosshair Size",
   "config.puff.crosshair.puff.tooltip": "Puffed crosshair size §7in percentage",
+  "config.puff.crosshair.render_style": "Crosshair Render Style",
+  "config.puff.crosshair.render_style.tooltip": "Adjust crosshair render style",
   "config.puff.crosshair.style": "Crosshair Style",
-  "config.puff.crosshair.style.tooltip": "Adjust crosshair rendering style",
+  "config.puff.crosshair.style.tooltip": "Adjust crosshair style",
 
   "config.puff.category.chat": "Chat",
   "config.puff.chat.enable_animation": "Chat Hud Animation",

@@ -2,12 +2,12 @@ package net.krlite.pufferfish.math;
 
 import net.krlite.pufferfish.math.solver.CoordinateSolver;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.GlobalPos;
-import net.minecraft.util.math.Position;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -21,15 +21,18 @@ public class DimensionalVec3d {
         this.vec3d = vec3d;
     }
 
-    public static DimensionalVec3d create(Entity entity) {
+    @Contract("_ -> new")
+    public static @NotNull DimensionalVec3d create(@NotNull Entity entity) {
         return new DimensionalVec3d(entity.getWorld().getRegistryKey(), entity.getPos());
     }
 
-    public static DimensionalVec3d create(GlobalPos globalPos) {
+    @Contract("_ -> new")
+    public static @NotNull DimensionalVec3d create(@NotNull GlobalPos globalPos) {
         return new DimensionalVec3d(globalPos.getDimension(), Vec3d.of(globalPos.getPos()));
     }
 
-    public static DimensionalVec3d create(RegistryKey<World> dimension, Vec3d vec3d) {
+    @Contract(value = "_, _ -> new", pure = true)
+    public static @NotNull DimensionalVec3d create(RegistryKey<World> dimension, Vec3d vec3d) {
         return new DimensionalVec3d(dimension, vec3d);
     }
 

@@ -15,7 +15,7 @@ public class PuffMod implements ClientModInitializer {
 	@Override
 	public void onInitializeClient() {
 		PuffConfigs.init();
-		AxisLocker.init();
+		AxisUtil.init();
 		InputEventHandler.init();
 		ChatUtil.init();
 		ScreenshotFlashRenderer.init();

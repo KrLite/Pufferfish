@@ -1,10 +1,6 @@
 package net.krlite.pufferfish.util;
 
 import com.google.common.collect.ImmutableMap;
-import net.krlite.pufferfish.PuffMod;
-import net.krlite.pufferfish.render.CrosshairPuffer;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.option.GameOptions;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.MathHelper;
 
@@ -12,7 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public class AxisLocker {
+public class AxisUtil {
     private static final float delta = 0.25F;
     public static UUID playerUuid;
 

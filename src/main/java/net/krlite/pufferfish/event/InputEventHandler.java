@@ -4,7 +4,6 @@ import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.krlite.pufferfish.PuffKeys;
 import net.krlite.pufferfish.config.ConfigScreenHandler;
 import net.krlite.pufferfish.config.PuffConfigs;
-import net.krlite.pufferfish.util.AxisLocker;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.GameOptions;
 import net.minecraft.entity.player.PlayerEntity;
@@ -12,7 +11,7 @@ import net.minecraft.util.math.MathHelper;
 
 import static net.krlite.pufferfish.PuffKeys.*;
 import static net.krlite.pufferfish.render.CrosshairPuffer.crosshairScaleTarget;
-import static net.krlite.pufferfish.util.AxisLocker.*;
+import static net.krlite.pufferfish.util.AxisUtil.*;
 
 public class InputEventHandler {
     private static void registerInputEvents() {

@@ -23,10 +23,14 @@
   "config.puff.vanilla.text_background_opacity.tooltip": "调整文本背景不透明度§7（百分比）\n§a[原版]",
   "config.puff.vanilla.chat_line_spacing": "§a行距",
   "config.puff.vanilla.chat_line_spacing.tooltip": "调整行距§7（百分比）\n§a[原版]",
+  "config.puff.vanilla.main_hand": "§a惯用手",
+  "config.puff.vanilla.main_hand.tooltip": "选择游戏内惯用手\n§a[原版]",
 
   "config.puff.category.general": "常规",
   "config.puff.general.enable_title_animation": "标题动画",
-  "config.puff.general.enable_title_animation.tooltip": "在[MINECRAFT]标题上使用动画",
+  "config.puff.general.enable_title_animation.tooltip": "在[MINECRAFT]标题上显示动画",
+  "config.puff.general.hotbar_position": "快捷栏位置",
+  "config.puff.general.hotbar_position.tooltip": "选择游戏内快捷栏位置",
 
   "config.puff.category.crosshair": "准星",
   "config.puff.crosshair.size": "准星大小",

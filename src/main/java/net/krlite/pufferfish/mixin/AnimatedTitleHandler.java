@@ -16,7 +16,7 @@ import org.spongepowered.asm.mixin.injection.Slice;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(TitleScreen.class)
-public class TitleScreenMixin {
+public class AnimatedTitleHandler {
     @Redirect(
             method = "render",
             at = @At(

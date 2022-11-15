@@ -24,10 +24,14 @@
   "config.puff.vanilla.text_background_opacity.tooltip": "Adjust text background opacity §7in percentage\n§a[VANILLA]",
   "config.puff.vanilla.chat_line_spacing": "§aLine Spacing",
   "config.puff.vanilla.chat_line_spacing.tooltip": "Adjust chat line spacing §7in percentage\n§a[VANILLA]",
+  "config.puff.vanilla.main_hand": "§aMain Hand",
+  "config.puff.vanilla.main_hand.tooltip": "Choose the main hand\n§a[VANILLA]",
 
   "config.puff.category.general": "General",
   "config.puff.general.enable_title_animation": "Animated Titles",
   "config.puff.general.enable_title_animation.tooltip": "Decides whether the [MINECRAFT] title is animated or not",
+  "config.puff.general.hotbar_position": "Hotbar Position",
+  "config.puff.general.hotbar_position.tooltip": "Choose the hotbar position",
 
   "config.puff.category.crosshair": "Crosshair",
   "config.puff.crosshair.size": "Crosshair Size",

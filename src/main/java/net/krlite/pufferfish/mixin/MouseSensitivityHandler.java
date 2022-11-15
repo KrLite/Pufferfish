@@ -1,8 +1,7 @@
 package net.krlite.pufferfish.mixin;
 
-import net.krlite.pufferfish.util.AxisLocker;
+import net.krlite.pufferfish.util.AxisUtil;
 import net.minecraft.client.Mouse;
-import net.minecraft.client.option.GameOptions;
 import net.minecraft.client.option.SimpleOption;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -10,7 +9,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.Slice;
 
 @Mixin(Mouse.class)
-public class MouseMixin {
+public class MouseSensitivityHandler {
     @Redirect(
             method = "updateMouse",
             at = @At(
@@ -26,7 +25,7 @@ public class MouseMixin {
             )
     )
     private Object mouseSensitivity(SimpleOption<Double> mouseSensitivity) {
-        if ( AxisLocker.axisPing.get(AxisLocker.Axis.PITCH) || AxisLocker.axisPing.get(AxisLocker.Axis.YAW) ) {
+        if ( AxisUtil.axisPing.get(AxisUtil.Axis.PITCH) || AxisUtil.axisPing.get(AxisUtil.Axis.YAW) ) {
             return mouseSensitivity.getValue() * 0.17;
         }
 

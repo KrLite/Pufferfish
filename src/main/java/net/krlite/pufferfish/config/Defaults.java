@@ -1,10 +1,43 @@
-package net.krlite.pufferfish.util;
+package net.krlite.pufferfish.config;
 
 import java.awt.*;
 import java.util.Objects;
 
-public class Default {
+public class Defaults {
     // Enum Classes
+    // Hotbar Position
+    public enum HotbarPosition {
+        CENTER("Center", false),
+        LEFT("Left", true);
+
+        private final String name;
+        private final boolean left;
+
+        HotbarPosition(String name, boolean left) {
+            this.name = name;
+            this.left = left;
+        }
+
+        public String getName() {
+            return this.name;
+        }
+
+        public boolean isLeft() {
+            return this.left;
+        }
+    }
+
+    public static HotbarPosition parseHotbarPosition(String value) {
+        for ( HotbarPosition name : HotbarPosition.values() ) {
+            if ( Objects.equals(name.getName(), value) ) {
+                return HotbarPosition.valueOf(value.toUpperCase().replace(" ", "_").replace("-", "_"));
+            }
+        }
+
+        return HotbarPosition.CENTER;
+    }
+
+    // Crosshair Render Style
     public enum CrosshairRenderStyle {
         VANILLA("Vanilla"),
         PUFFERFISH("Pufferfish"),
@@ -31,6 +64,7 @@ public class Default {
         return CrosshairRenderStyle.VANILLA;
     }
 
+    // Crosshair Style
     public enum CrosshairStyle {
         EMPTY("Empty", 16),
         VANILLA("Vanilla", 0),
@@ -73,6 +107,7 @@ public class Default {
     }
 
     // Enum
+    public static final HotbarPosition DEFAULT_HOTBAR_POSITION = HotbarPosition.CENTER;
     public static final CrosshairRenderStyle DEFAULT_CROSSHAIR_RENDER_STYLE = CrosshairRenderStyle.VANILLA;
     public static final CrosshairStyle DEFAULT_CROSSHAIR_STYLE = CrosshairStyle.VANILLA;
 

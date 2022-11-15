@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(ChatScreen.class)
-public class ChatScreenMixin extends DrawableHelper {
+public class ChatScreenHandler extends DrawableHelper {
     @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/ChatScreen;fill(Lnet/minecraft/client/util/math/MatrixStack;IIIII)V"))
     private void render(MatrixStack matrixStack, int x1, int y1, int x2, int y2, int color) {
     }

@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.Slice;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(GameRenderer.class)
-public class GameRendererMixin {
+public class GameRendererHandler {
     @Inject(
             method = "render",
             at = @At(

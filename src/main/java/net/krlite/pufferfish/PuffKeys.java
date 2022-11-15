@@ -11,7 +11,7 @@ import org.lwjgl.glfw.GLFW;
 import java.util.HashMap;
 import java.util.Map;
 
-import static net.krlite.pufferfish.util.AxisLocker.*;
+import static net.krlite.pufferfish.util.AxisUtil.*;
 
 public class PuffKeys {
     public static Map<Axis, Integer> lingerKeyAxis = new HashMap<>();

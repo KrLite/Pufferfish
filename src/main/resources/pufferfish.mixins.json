@@ -6,18 +6,19 @@
   "mixins": [
   ],
   "client": [
-    "ChatHudMixin",
-    "ChatScreenMixin",
-    "EntityMixin",
-    "GameRendererMixin",
-    "InGameHudAccessor",
-    "InGameHudInvoker",
-    "InGameHudMixin",
-    "MinecraftClientAccessor",
-    "MinecraftClientMixin",
-    "MouseMixin",
-    "ScreenshotRecorderMixin",
-    "TitleScreenMixin"
+    "AnimatedTitleHandler",
+    "AxisLockHandler",
+    "ChatHudHandler",
+    "ChatScreenHandler",
+    "CrosshairHandler",
+    "ExperienceBarHandler",
+    "GameRendererHandler",
+    "HotBarHandler",
+    "MinecraftClientHandler",
+    "MouseSensitivityHandler",
+    "ScreenshotHandler",
+    "SpectatorHudHandler",
+    "StatusBarsHandler"
   ],
   "injectors": {
     "defaultRequire": 1

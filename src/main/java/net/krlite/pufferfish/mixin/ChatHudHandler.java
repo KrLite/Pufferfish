@@ -1,6 +1,5 @@
 package net.krlite.pufferfish.mixin;
 
-import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.krlite.pufferfish.config.PuffConfigs;
 import net.krlite.pufferfish.render.PuffRenderer;
@@ -28,7 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Mixin(ChatHud.class)
-public abstract class ChatHudMixin extends DrawableHelper{
+public abstract class ChatHudHandler extends DrawableHelper{
     @Shadow protected abstract boolean isChatFocused();
 
     @Shadow private int scrolledLines;
@@ -154,6 +153,10 @@ public abstract class ChatHudMixin extends DrawableHelper{
                     ) + 2
             );
             yOffset = offset * 9.0F;
+
+            if ( PuffConfigs.hotbarPosition.isLeft() ) {
+                xOffset += 25;
+            }
         }
 
         return drawText(
@@ -207,6 +210,10 @@ public abstract class ChatHudMixin extends DrawableHelper{
     )
     private int renderStaticChat(TextRenderer instance, MatrixStack matrixStack, Text text, float x, float y, int color) {
         RenderSystem.enableBlend();
+
+        if ( PuffConfigs.hotbarPosition.isLeft() ) {
+            x += 25;
+        }
 
         return drawText(
                 matrixStack, text,

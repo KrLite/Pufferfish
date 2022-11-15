@@ -1,11 +1,10 @@
 package net.krlite.pufferfish.render.extra;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import net.krlite.pufferfish.interaction_map.render.AnchorRenderer;
 import net.krlite.pufferfish.interaction_map.util.AnchorProvider;
 import net.krlite.pufferfish.math.PreciseColor;
 import net.krlite.pufferfish.render.CameraOverlayHandler;
-import net.krlite.pufferfish.util.AxisLocker;
+import net.krlite.pufferfish.util.AxisUtil;
 import net.krlite.pufferfish.util.ColorUtil;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
@@ -26,11 +25,11 @@ public class ExtraInGameHudRenderer {
 
         // Render Camera Overlay
         axisColor.blend(
-                AxisLocker.axisLock.get(AxisLocker.Axis.PITCH)
-                        ? AxisLocker.axisLock.get(AxisLocker.Axis.YAW)
+                AxisUtil.axisLock.get(AxisUtil.Axis.PITCH)
+                        ? AxisUtil.axisLock.get(AxisUtil.Axis.YAW)
                                 ? PreciseColor.of(ColorUtil.blendColor(ColorUtil.pitchColor, ColorUtil.yawColor))
                                 : PreciseColor.of(ColorUtil.pitchColor)
-                        : AxisLocker.axisLock.get(AxisLocker.Axis.YAW)
+                        : AxisUtil.axisLock.get(AxisUtil.Axis.YAW)
                                 ? PreciseColor.of(ColorUtil.yawColor)
                                 : PreciseColor.empty(),
                 0.00951

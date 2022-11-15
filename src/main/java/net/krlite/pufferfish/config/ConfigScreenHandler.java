@@ -10,12 +10,13 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.option.GameOptions;
 import net.minecraft.client.option.SimpleOption;
+import net.minecraft.util.Arm;
 
 import java.awt.*;
 import java.io.IOException;
 
 import static net.krlite.pufferfish.config.PuffConfigs.*;
-import static net.krlite.pufferfish.util.Default.*;
+import static net.krlite.pufferfish.config.Defaults.*;
 
 public class ConfigScreenHandler {
     private static <T> void setVanilla(SimpleOption<T> simpleOption, T value) {
@@ -47,6 +48,32 @@ public class ConfigScreenHandler {
                         .setDefaultValue(DEFAULT_ENABLE_TITLE_ANIMATION)
                         .setTooltip(IdentifierBuilder.translatableText("config", "general", "enable_title_animation", "tooltip"))
                         .setSaveConsumer(value -> enableTitleAnimation = value)
+                        .build()
+        );
+
+        // Hotbar Position
+        general.addEntry(
+                entryBuilder
+                        .startEnumSelector(
+                                IdentifierBuilder.translatableText("config", "general", "hotbar_position"),
+                                HotbarPosition.class, hotbarPosition
+                        )
+                        .setDefaultValue(DEFAULT_HOTBAR_POSITION)
+                        .setTooltip(IdentifierBuilder.translatableText("config", "general", "hotbar_position", "tooltip"))
+                        .setSaveConsumer(value -> hotbarPosition = value)
+                        .build()
+        );
+
+        // Main Hand Position
+        general.addEntry(
+                entryBuilder
+                        .startEnumSelector(
+                                IdentifierBuilder.translatableText("config", "vanilla", "main_hand"),
+                                Arm.class, options.getMainArm().getValue()
+                        )
+                        .setDefaultValue(Arm.RIGHT)
+                        .setTooltip(IdentifierBuilder.translatableText("config", "vanilla", "main_hand", "tooltip"))
+                        .setSaveConsumer(value -> setVanilla(options.getMainArm(), value))
                         .build()
         );
 

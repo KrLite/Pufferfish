@@ -1,14 +1,9 @@
 package net.krlite.pufferfish.render;
 
-import net.krlite.pufferfish.PuffMod;
 import net.krlite.pufferfish.config.PuffConfigs;
-import net.krlite.pufferfish.interaction_map.render.AnchorRenderer;
 import net.krlite.pufferfish.math.HorizontalSprite;
 import net.krlite.pufferfish.math.IdentifierSprite;
-import net.krlite.pufferfish.math.solver.AngleSolver;
-import net.krlite.pufferfish.util.AxisLocker;
 import net.krlite.pufferfish.util.IdentifierBuilder;
-import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.math.MathHelper;

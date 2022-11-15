@@ -6,12 +6,11 @@ import net.krlite.pufferfish.config.simple_config.SimpleConfig;
 import net.krlite.pufferfish.config.simple_config.SimpleConfigHandler;
 import net.krlite.pufferfish.util.ChatUtil;
 import net.krlite.pufferfish.util.ColorUtil;
-import net.krlite.pufferfish.util.Default;
 
 import java.awt.*;
 import java.io.IOException;
 
-import static net.krlite.pufferfish.util.Default.*;
+import static net.krlite.pufferfish.config.Defaults.*;
 
 public class PuffConfigs {
     public static SimpleConfig CONFIG;
@@ -20,6 +19,7 @@ public class PuffConfigs {
 
 
     // Enum
+    public static HotbarPosition hotbarPosition;
     public static CrosshairRenderStyle corsshairRenderStyle;
     public static CrosshairStyle crosshairStyle;
 
@@ -40,6 +40,7 @@ public class PuffConfigs {
         // General
         configs.addCategory("General");
         configs.addConfig("enable_title_animation", new Pair<>(DEFAULT_ENABLE_TITLE_ANIMATION, "Boolean"));
+        configs.addConfig("hotbar_position", new Pair<>(DEFAULT_HOTBAR_POSITION, "Boolean"));
 
         // Crosshair
         configs.addCategory("Crosshair");
@@ -69,12 +70,13 @@ public class PuffConfigs {
     private static void assignConfigs() {
         // General
         enableTitleAnimation = CONFIG.getOrDefault("enable_title_animation", DEFAULT_ENABLE_TITLE_ANIMATION);
+        hotbarPosition = parseHotbarPosition(CONFIG.getOrDefault("hotbar_position", DEFAULT_HOTBAR_POSITION.getName()));
 
         // Crosshair
         crosshairSize = CONFIG.getOrDefault("crosshair_size", DEFAULT_CROSSHAIR_SIZE);
         crosshairPuff = CONFIG.getOrDefault("crosshair_puff", DEFAULT_CROSSHAIR_PUFF);
-        corsshairRenderStyle = Default.parseCrosshairRenderStyle(CONFIG.getOrDefault("crosshair_render_style", DEFAULT_CROSSHAIR_RENDER_STYLE.getName()));
-        crosshairStyle = Default.parseCrosshairStyle(CONFIG.getOrDefault("crosshair_style", DEFAULT_CROSSHAIR_STYLE.getName()));
+        corsshairRenderStyle = parseCrosshairRenderStyle(CONFIG.getOrDefault("crosshair_render_style", DEFAULT_CROSSHAIR_RENDER_STYLE.getName()));
+        crosshairStyle = parseCrosshairStyle(CONFIG.getOrDefault("crosshair_style", DEFAULT_CROSSHAIR_STYLE.getName()));
 
         // Chat
         enableChatAnimation = CONFIG.getOrDefault("enable_chat_animation", DEFAULT_ENABLE_CHAT_ANIMATION);
@@ -128,6 +130,7 @@ public class PuffConfigs {
     private static void saveConfigs() {
         // General
         configs.modifyConfig(new Pair<>("enable_title_animation", enableTitleAnimation));
+        configs.modifyConfig(new Pair<>("hotbar_position", hotbarPosition.getName()));
 
         // Crosshair
         configs.modifyConfig(new Pair<>("crosshair_size", crosshairSize));
@@ -152,13 +155,14 @@ public class PuffConfigs {
 
     private static void registerConfigs() {
         // Put Value Handlers Here
-        Default.registerDefaultValues();
+        Defaults.registerDefaultValues();
         ColorUtil.registerColors();
 
         configs = new SimpleConfigHandler();
         createConfigs();
 
         // Put Values Needed to be Initialized Here
+        hotbarPosition = HotbarPosition.CENTER;
         corsshairRenderStyle = CrosshairRenderStyle.VANILLA;
         crosshairStyle = CrosshairStyle.VANILLA;
 

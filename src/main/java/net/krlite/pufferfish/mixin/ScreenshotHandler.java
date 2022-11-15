@@ -22,7 +22,7 @@ import java.io.File;
 import java.util.function.Consumer;
 
 @Mixin(ScreenshotRecorder.class)
-public abstract class ScreenshotRecorderMixin {
+public abstract class ScreenshotHandler {
     @Final @Shadow
     private static Logger LOGGER = LogUtils.getLogger();
 

@@ -2,21 +2,18 @@ package net.krlite.pufferfish.mixin;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.krlite.pufferfish.PuffMod;
 import net.krlite.pufferfish.config.PuffConfigs;
 import net.krlite.pufferfish.math.IdentifierSprite;
 import net.krlite.pufferfish.math.PreciseColor;
 import net.krlite.pufferfish.render.CrosshairPuffer;
 import net.krlite.pufferfish.render.PuffRenderer;
-import net.krlite.pufferfish.render.ScreenshotFlashRenderer;
-import net.krlite.pufferfish.util.AxisLocker;
+import net.krlite.pufferfish.util.AxisUtil;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Util;
 import net.minecraft.util.math.MathHelper;
-import org.checkerframework.checker.units.qual.C;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -28,7 +25,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.awt.*;
 
 @Mixin(InGameHud.class)
-public abstract class InGameHudMixin extends DrawableHelper{
+public abstract class CrosshairHandler extends DrawableHelper{
     // Access Scaled Width & Height
     @Shadow
     private int scaledWidth;
@@ -40,7 +37,7 @@ public abstract class InGameHudMixin extends DrawableHelper{
     // Update
     @Inject(method = "render", at = @At("HEAD"))
     private void head(MatrixStack matrixStack, float tickDelta, CallbackInfo ci) {
-        AxisLocker.update(MinecraftClient.getInstance().player);
+        AxisUtil.update(MinecraftClient.getInstance().player);
         CrosshairPuffer.update(scaledWidth, scaledHeight);
     }
 

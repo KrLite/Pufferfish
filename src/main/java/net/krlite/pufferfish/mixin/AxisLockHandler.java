@@ -11,11 +11,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.UUID;
 
-import static net.krlite.pufferfish.util.AxisLocker.*;
+import static net.krlite.pufferfish.util.AxisUtil.*;
 
 @Mixin(Entity.class)
 @Environment(EnvType.CLIENT)
-public abstract class EntityMixin {
+public abstract class AxisLockHandler {
     @Shadow public abstract UUID getUuid();
 
     @Inject(method = "getPitch()F", at = @At("RETURN"), cancellable = true)

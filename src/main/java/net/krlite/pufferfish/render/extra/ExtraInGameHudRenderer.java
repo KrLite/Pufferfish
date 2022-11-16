@@ -15,26 +15,11 @@ import java.awt.*;
 import java.util.Optional;
 
 public class ExtraInGameHudRenderer {
-    private static final PreciseColor axisColor = PreciseColor.empty();
-
     public static void render(MatrixStack matrixStack) {
         MinecraftClient client = MinecraftClient.getInstance();
         int
                 width = client.getWindow().getScaledWidth(),
                 height = client.getWindow().getScaledHeight();
-
-        // Render Camera Overlay
-        axisColor.blend(
-                AxisUtil.axisLock.get(AxisUtil.Axis.PITCH)
-                        ? AxisUtil.axisLock.get(AxisUtil.Axis.YAW)
-                                ? PreciseColor.of(ColorUtil.blendColor(ColorUtil.pitchColor, ColorUtil.yawColor))
-                                : PreciseColor.of(ColorUtil.pitchColor)
-                        : AxisUtil.axisLock.get(AxisUtil.Axis.YAW)
-                                ? PreciseColor.of(ColorUtil.yawColor)
-                                : PreciseColor.empty(),
-                0.00951
-        );
-        CameraOverlayHandler.renderCameraOverlay(axisColor.independent().multipleAlpha(0.273).get());
 
         // Render Last Death Anchor
         ClientPlayerEntity player = MinecraftClient.getInstance().player;

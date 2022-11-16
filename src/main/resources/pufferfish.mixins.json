@@ -18,7 +18,8 @@
     "MouseSensitivityHandler",
     "ScreenshotHandler",
     "SpectatorHudHandler",
-    "StatusBarsHandler"
+    "StatusBarsHandler",
+    "SubtitlesHudHandler"
   ],
   "injectors": {
     "defaultRequire": 1

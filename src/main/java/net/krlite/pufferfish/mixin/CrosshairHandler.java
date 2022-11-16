@@ -26,7 +26,6 @@ import java.awt.*;
 
 @Mixin(InGameHud.class)
 public abstract class CrosshairHandler extends DrawableHelper{
-    // Access Scaled Width & Height
     @Shadow
     private int scaledWidth;
     @Shadow
@@ -121,6 +120,28 @@ public abstract class CrosshairHandler extends DrawableHelper{
 
         RenderSystem.setShaderTexture(0, GUI_ICONS_TEXTURE);
         matrixStack.pop();
+    }
+
+    // Re-render Attack Indicator
+    @Redirect(
+            method = "renderCrosshair",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/client/gui/hud/InGameHud;drawTexture(Lnet/minecraft/client/util/math/MatrixStack;IIIIII)V"
+            ),
+            slice = @Slice(
+                    from = @At(value = "INVOKE", target = "Lnet/minecraft/client/option/GameOptions;getAttackIndicator()Lnet/minecraft/client/option/SimpleOption;")
+            )
+    )
+    private void renderAttackIndicator(InGameHud instance, MatrixStack matrixStack, int x, int y, int u, int v, int width, int height) {
+        PuffRenderer.COLORED_TEXTURE.renderPositionedColoredTexture(
+                GUI_ICONS_TEXTURE,
+                PuffConfigs.hotbarPosition.isLeft()
+                        ? PreciseColor.of(Color.WHITE).castAlpha(opacity).get()
+                        : Color.WHITE,
+                matrixStack,
+                x, y, u, v, width, height
+        );
     }
 
     // Pop Matrix Stack

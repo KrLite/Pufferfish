@@ -14,6 +14,8 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.OrderedText;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.Vec3f;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -91,6 +93,7 @@ public abstract class ChatHudHandler extends DrawableHelper{
     )
     private void renderChatBackground(MatrixStack matrixStack, int xBegin, int yBegin, int xEnd, int yEnd, int color) {
         RenderSystem.enableBlend();
+
         float opacity = 1.0F;
 
         if ( PuffConfigs.enableChatAnimation ) {
@@ -114,6 +117,10 @@ public abstract class ChatHudHandler extends DrawableHelper{
             );
         }
 
+        if ( PuffConfigs.hotbarPosition.isLeft() ) {
+            xEnd += 25;
+        }
+
         PuffRenderer.COLORED.fillGradiantHorizontal(
                 matrixStack,
                 xBegin, yBegin,
@@ -134,6 +141,7 @@ public abstract class ChatHudHandler extends DrawableHelper{
     )
     private int renderChat(TextRenderer instance, MatrixStack matrixStack, OrderedText text, float x, float y, int color) {
         RenderSystem.enableBlend();
+
         float opacity = 1.0F, xOffset = 0.0F, yOffset = 0.0F;
 
         if ( PuffConfigs.enableChatAnimation ) {
@@ -153,10 +161,10 @@ public abstract class ChatHudHandler extends DrawableHelper{
                     ) + 2
             );
             yOffset = offset * 9.0F;
+        }
 
-            if ( PuffConfigs.hotbarPosition.isLeft() ) {
-                xOffset += 25;
-            }
+        if ( PuffConfigs.hotbarPosition.isLeft() ) {
+            xOffset += 25;
         }
 
         return drawText(
@@ -184,12 +192,18 @@ public abstract class ChatHudHandler extends DrawableHelper{
     )
     private void renderStaticChatBackground(MatrixStack matrixStack, int xBegin, int yBegin, int xEnd, int yEnd, int color) {
         RenderSystem.enableBlend();
+
         if ( PuffConfigs.enableChatAnimation ) {
             RenderSystem.setShaderColor(
                     1.0F, 1.0F, 1.0F,
                     (float) ChatUtil.chatBackgroundOpacity
             );
         }
+
+        if ( PuffConfigs.hotbarPosition.isLeft() ) {
+            xEnd += 25;
+        }
+
         PuffRenderer.COLORED.fillGradiantHorizontal(
                 matrixStack,
                 xBegin, yBegin,

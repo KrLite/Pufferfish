@@ -3,11 +3,15 @@ package net.krlite.pufferfish.mixin;
 import net.krlite.pufferfish.config.PuffConfigs;
 import net.krlite.pufferfish.render.PuffRenderer;
 import net.krlite.pufferfish.util.HotBarUtil;
+import net.minecraft.client.font.TextRenderer;
+import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.text.Text;
 import net.minecraft.util.math.Vec3f;
+import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -27,6 +31,8 @@ public abstract class HotBarHandler {
     @Shadow protected abstract PlayerEntity getCameraPlayer();
 
     @Shadow protected abstract void renderHotbarItem(int x, int y, float tickDelta, PlayerEntity player, ItemStack itemStack, int seed);
+
+    @Shadow private @Nullable Text overlayMessage;
     private static int seed = 1;
 
     @Inject(method = "renderHotbar", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/systems/RenderSystem;setShaderColor(FFFF)V", ordinal = 0))
@@ -42,6 +48,9 @@ public abstract class HotBarHandler {
             at = @At(
                     value = "INVOKE",
                     target = "Lnet/minecraft/client/gui/hud/InGameHud;drawTexture(Lnet/minecraft/client/util/math/MatrixStack;IIIIII)V"
+            ),
+            slice = @Slice(
+                    to = @At(value = "INVOKE", target = "Lnet/minecraft/client/option/GameOptions;getAttackIndicator()Lnet/minecraft/client/option/SimpleOption;")
             )
     )
     private void pushMatrixStack(float tickDelta, MatrixStack matrixStack, CallbackInfo ci) {
@@ -65,6 +74,9 @@ public abstract class HotBarHandler {
                     value = "INVOKE",
                     target = "Lnet/minecraft/client/gui/hud/InGameHud;drawTexture(Lnet/minecraft/client/util/math/MatrixStack;IIIIII)V",
                     shift = At.Shift.AFTER
+            ),
+            slice = @Slice(
+                    to = @At(value = "INVOKE", target = "Lnet/minecraft/client/option/GameOptions;getAttackIndicator()Lnet/minecraft/client/option/SimpleOption;")
             )
     )
     private void popMatrixStack(float tickDelta, MatrixStack matrixStack, CallbackInfo ci) {
@@ -167,6 +179,48 @@ public abstract class HotBarHandler {
             method = "renderHotbar",
             at = @At(
                     value = "INVOKE",
+                    target = "Lnet/minecraft/client/gui/hud/InGameHud;drawTexture(Lnet/minecraft/client/util/math/MatrixStack;IIIIII)V"
+            ),
+            slice = @Slice(
+                    from = @At(value = "INVOKE", target = "Lnet/minecraft/client/option/GameOptions;getAttackIndicator()Lnet/minecraft/client/option/SimpleOption;")
+            )
+    )
+    private void renderAttackIndicator(InGameHud instance, MatrixStack matrixStack, int x, int y, int u, int v, int width, int height) {
+        if ( PuffConfigs.hotbarPosition.isLeft() ) {
+            x = scaledWidth - 20;
+        }
+
+        PuffRenderer.COLORED_TEXTURE.renderPositionedColoredTexture(
+                DrawableHelper.GUI_ICONS_TEXTURE, Color.WHITE,
+                matrixStack, x, y, u, v, width, height
+        );
+    }
+
+    @Redirect(
+            method = "render",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/client/font/TextRenderer;drawWithShadow(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/text/Text;FFI)I",
+                    ordinal = 0
+            ),
+            slice = @Slice(
+                    from = @At(value = "INVOKE", target = "Lnet/minecraft/util/math/MathHelper;hsvToRgb(FFF)I")
+            )
+    )
+    private int renderOverlayMessage(TextRenderer textRenderer, MatrixStack matrixStack, Text text, float x, float y, int color) {
+        if ( PuffConfigs.hotbarPosition.isLeft() ) {
+            y += 23;
+        }
+
+        return textRenderer.drawWithShadow(
+                matrixStack, overlayMessage, x, y, color
+        );
+    }
+
+    @Redirect(
+            method = "renderHotbar",
+            at = @At(
+                    value = "INVOKE",
                     target = "Lnet/minecraft/client/gui/hud/InGameHud;renderHotbarItem(IIFLnet/minecraft/entity/player/PlayerEntity;Lnet/minecraft/item/ItemStack;I)V",
                     ordinal = 0
             )
@@ -221,7 +275,7 @@ public abstract class HotBarHandler {
             horizontal = 3;
         }
 
-        renderHotbarItem(horizontal, vertical, tickDelta, player, itemStack, seed++);
+        renderHotbarItem(horizontal, vertical, tickDelta, player, itemStack, seed);
     }
 
     @Redirect(
@@ -249,6 +303,6 @@ public abstract class HotBarHandler {
             horizontal = 3;
         }
 
-        renderHotbarItem(horizontal, vertical, tickDelta, player, itemStack, seed++);
+        renderHotbarItem(horizontal, vertical, tickDelta, player, itemStack, seed);
     }
 }

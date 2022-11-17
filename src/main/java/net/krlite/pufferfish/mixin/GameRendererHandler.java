@@ -10,13 +10,16 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Slice;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(GameRenderer.class)
-public class GameRendererHandler {
+public abstract class GameRendererHandler {
+    @Shadow public abstract void tick();
+
     @Inject(
             method = "render",
             at = @At(
@@ -30,7 +33,7 @@ public class GameRendererHandler {
         RenderSystem.defaultBlendFunc();
 
         // Before
-        ExtraBeforeRenderer.render(PuffRenderer.extraBefore);
+        ExtraBeforeRenderer.render(PuffRenderer.extraBefore, tickDelta, startTime, tick);
 
         RenderSystem.disableBlend();
         RenderSystem.clear(GlConst.GL_DEPTH_BUFFER_BIT, MinecraftClient.IS_SYSTEM_MAC);
@@ -54,11 +57,11 @@ public class GameRendererHandler {
 
         if ( client.currentScreen == null ) {
             // In-Game
-            ExtraInGameHudRenderer.render(PuffRenderer.extraInGame);
+            ExtraInGameHudRenderer.render(PuffRenderer.extraInGame, tickDelta, startTime, tick);
         }
 
         // After
-        ExtraAfterRenderer.render(PuffRenderer.extraAfter);
+        ExtraAfterRenderer.render(PuffRenderer.extraAfter, tickDelta, startTime, tick);
 
         RenderSystem.disableBlend();
         RenderSystem.clear(GlConst.GL_DEPTH_BUFFER_BIT, MinecraftClient.IS_SYSTEM_MAC);

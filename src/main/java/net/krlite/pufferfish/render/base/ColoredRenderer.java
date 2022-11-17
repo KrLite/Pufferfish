@@ -2,6 +2,7 @@ package net.krlite.pufferfish.render.base;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.krlite.pufferfish.math.solver.GridSolver;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.render.*;
 import net.minecraft.client.util.math.MatrixStack;
@@ -70,6 +71,18 @@ public class ColoredRenderer extends DrawableHelper {
                 colorLeft,  colorLeft,
                 colorRight, colorRight
 
+        );
+    }
+
+    public void fillColoredOverlay(
+            MatrixStack matrixStack, Color color
+    ) {
+        fillColored(
+                matrixStack,
+                0.0F, 0.0F,
+                MinecraftClient.getInstance().getWindow().getScaledWidth(),
+                MinecraftClient.getInstance().getWindow().getScaledHeight(),
+                color
         );
     }
 

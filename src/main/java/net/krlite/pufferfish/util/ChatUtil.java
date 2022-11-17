@@ -7,7 +7,7 @@ import net.minecraft.util.math.MathHelper;
 import java.awt.*;
 
 public class ChatUtil {
-    public static double chatBackgroundOpacityTarget = 0.0;
+    public static double chatBackgroundOpacityTarget = 0;
     public static double chatBackgroundOpacity = chatBackgroundOpacityTarget;
     public static Color chatTextColor;
     public static Color chatBackgroundColor;

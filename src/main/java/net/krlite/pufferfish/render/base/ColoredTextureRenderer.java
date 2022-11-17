@@ -2,6 +2,7 @@ package net.krlite.pufferfish.render.base;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.krlite.pufferfish.math.IdentifierSprite;
+import net.krlite.pufferfish.math.MatrixWrapper;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.render.*;
@@ -198,14 +199,45 @@ public class ColoredTextureRenderer extends DrawableHelper {
      * #renderColoredTexture(Identifier, Color, MatrixStack, float, float, float, float, float, float, float, float)
      * renderColoredTexture
      */
-    public void renderColoredOverlay(Identifier identifier, Color color) {
+    public void renderColoredOverlay(Identifier identifier, Color color, MatrixStack matrixStack) {
         renderColoredTexture(
                 identifier, color,
-                new MatrixStack(),
+                matrixStack,
                 0.0F, 0.0F,
                 MinecraftClient.getInstance().getWindow().getScaledWidth(),
                 MinecraftClient.getInstance().getWindow().getScaledHeight(),
                 0.0F, 0.0F, 1.0F, 1.0F
+        );
+    }
+
+    public void renderScaledColoredOverlay(
+            Identifier identifier, Color color,
+            MatrixStack matrixStack,
+            int textureSize
+    ) {
+        renderScaledColoredOverlay(
+                identifier, color,
+                matrixStack,
+                textureSize, textureSize
+        );
+    }
+
+    public void renderScaledColoredOverlay(
+            Identifier identifier, Color color,
+            MatrixStack matrixStack,
+            int textureWidth, int textureHeight
+    ) {
+        float
+                scaled = (float) MinecraftClient.getInstance().getWindow().getScaledHeight() / (float) MinecraftClient.getInstance().getWindow().getScaledWidth(),
+                clamped = (float) textureHeight / (float) textureWidth;
+
+        renderColoredTexture(
+                identifier, color,
+                matrixStack,
+                0, 0,
+                MinecraftClient.getInstance().getWindow().getScaledWidth(), MinecraftClient.getInstance().getWindow().getScaledHeight(),
+                (1 - Math.min(clamped / scaled, 1)) / 2, (1 - Math.min(scaled / clamped, 1)) / 2,
+                (1 + Math.min(clamped / scaled, 1)) / 2, (1 + Math.min(scaled / clamped, 1)) / 2
         );
     }
 
@@ -217,7 +249,7 @@ public class ColoredTextureRenderer extends DrawableHelper {
      * #renderColoredTexture(Identifier, Color, MatrixStack, float, float, float, float, float, float, float, float)
      * renderColoredTexture
      */
-    public void renderFixedColoredOverlay(Identifier identifier, Color color) {
+    public void renderFixedColoredOverlay(Identifier identifier, Color color, MatrixStack matrixStack) {
         float
                 quarterSize = Math.min(
                         MinecraftClient.getInstance().getWindow().getScaledWidth() / 2.0F,
@@ -229,7 +261,7 @@ public class ColoredTextureRenderer extends DrawableHelper {
         // Left Up Quarter
         renderColoredTexture(
                 identifier, color,
-                new MatrixStack(),
+                matrixStack,
                 0.0F, 0.0F,
                 quarterSize, quarterSize,
                 0.0F, 0.0F, 0.5F, 0.5F
@@ -238,7 +270,7 @@ public class ColoredTextureRenderer extends DrawableHelper {
         // Left Fixer
         renderColoredTexture(
                 identifier, color,
-                new MatrixStack(),
+                matrixStack,
                 0.0F, quarterSize,
                 quarterSize, height - quarterSize,
                 0.0F, 0.5F, 0.5F, 0.5F
@@ -247,7 +279,7 @@ public class ColoredTextureRenderer extends DrawableHelper {
         // Left Down Quarter
         renderColoredTexture(
                 identifier, color,
-                new MatrixStack(),
+                matrixStack,
                 0.0F, height - quarterSize,
                 quarterSize, height,
                 0.0F, 0.5F, 0.5F, 1.0F
@@ -256,7 +288,7 @@ public class ColoredTextureRenderer extends DrawableHelper {
         // Middle Fixer
         renderColoredTexture(
                 identifier, color,
-                new MatrixStack(),
+                matrixStack,
                 quarterSize, 0.0F,
                 width - quarterSize, height,
                 0.5F, 0.0F, 0.5F, 1.0F
@@ -265,7 +297,7 @@ public class ColoredTextureRenderer extends DrawableHelper {
         // Right Down Quarter
         renderColoredTexture(
                 identifier, color,
-                new MatrixStack(),
+                matrixStack,
                 width - quarterSize, height - quarterSize,
                 width, height,
                 0.5F, 0.5F, 1.0F, 1.0F
@@ -274,7 +306,7 @@ public class ColoredTextureRenderer extends DrawableHelper {
         // Right Fixer
         renderColoredTexture(
                 identifier, color,
-                new MatrixStack(),
+                matrixStack,
                 width - quarterSize, quarterSize,
                 width, height - quarterSize,
                 0.5F, 0.5F, 1.0F, 0.5F
@@ -283,10 +315,63 @@ public class ColoredTextureRenderer extends DrawableHelper {
         // Right Up Quarter
         renderColoredTexture(
                 identifier, color,
-                new MatrixStack(),
+                matrixStack,
                 width - quarterSize, 0.0F,
                 width, quarterSize,
                 0.5F, 0.0F, 1.0F, 0.5F
+        );
+    }
+
+    /**
+     * Renders a wrapped colorized texture in square.
+     *
+     * @see
+     * #renderColoredTexture(Identifier, Color, Matrix4f, float, float, float, float, float, float, float, float, float, float, float, float)
+     * renderColoredTexture
+     */
+    public void renderWrappedTexture(
+            IdentifierSprite identifierSprite,
+            Color color,
+            MatrixStack matrixStack,
+            MatrixWrapper matrixWrapper
+    ) {
+        renderColoredTexture(
+                identifierSprite.getIdentifier(), color,
+                matrixStack.peek().getPositionMatrix(),
+                matrixWrapper.xLU(), matrixWrapper.yLU(),
+                matrixWrapper.xLD(), matrixWrapper.yLD(),
+                matrixWrapper.xRD(), matrixWrapper.yRD(),
+                matrixWrapper.xRU(), matrixWrapper.yRU(),
+                identifierSprite.uBegin(),
+                identifierSprite.vBegin(),
+                identifierSprite.uEnd(),
+                identifierSprite.vEnd()
+        );
+    }
+
+    /**
+     * Renders a wrapped colorized texture in square.
+     *
+     * @see
+     * #renderColoredTexture(Identifier, Color, Matrix4f, float, float, float, float, float, float, float, float, float, float, float, float)
+     * renderColoredTexture
+     */
+    public void renderWrappedTexture(
+            Identifier identifier, Color color,
+            MatrixStack matrixStack,
+            MatrixWrapper matrixWrapper,
+            float uBegin,   float vBegin,
+            float uEnd,     float vEnd
+    ) {
+        renderColoredTexture(
+                identifier, color,
+                matrixStack.peek().getPositionMatrix(),
+                matrixWrapper.xLU(), matrixWrapper.yLU(),
+                matrixWrapper.xLD(), matrixWrapper.yLD(),
+                matrixWrapper.xRD(), matrixWrapper.yRD(),
+                matrixWrapper.xRU(), matrixWrapper.yRU(),
+                uBegin, vBegin,
+                uEnd,   vEnd
         );
     }
 

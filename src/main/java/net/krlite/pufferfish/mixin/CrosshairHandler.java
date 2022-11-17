@@ -43,7 +43,7 @@ public abstract class CrosshairHandler extends DrawableHelper{
     // Set Crosshair Render Style
     @Redirect(method = "renderCrosshair", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/systems/RenderSystem;blendFuncSeparate(Lcom/mojang/blaze3d/platform/GlStateManager$SrcFactor;Lcom/mojang/blaze3d/platform/GlStateManager$DstFactor;Lcom/mojang/blaze3d/platform/GlStateManager$SrcFactor;Lcom/mojang/blaze3d/platform/GlStateManager$DstFactor;)V"))
     private void setCrosshairStyle(GlStateManager.SrcFactor srcFactor, GlStateManager.DstFactor dstFactor, GlStateManager.SrcFactor srcAlpha, GlStateManager.DstFactor dstAlpha) {
-        double multiplier = 1 - 0.35 * (MathHelper.abs(MathHelper.sin((float) ((Util.getMeasuringTimeMs() % 10500L) / 10500.0 * (Math.PI * 2)))));
+        double multiplier = 1 - 0.53 * (MathHelper.abs(MathHelper.sin((float) ((Util.getMeasuringTimeMs() % 10500L) / 10500.0 * (Math.PI * 2)))));
 
         switch ( PuffConfigs.corsshairRenderStyle ) {
             case PUFFERFISH -> {

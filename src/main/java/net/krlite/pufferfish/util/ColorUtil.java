@@ -1,8 +1,6 @@
 package net.krlite.pufferfish.util;
 
-import net.krlite.pufferfish.PuffMod;
 import net.minecraft.util.math.MathHelper;
-import org.checkerframework.checker.units.qual.C;
 
 import java.awt.*;
 
@@ -10,12 +8,6 @@ public class ColorUtil {
     public enum ColorBlendFunc {
         NONE, INVERT, FIRST, SECOND
     }
-
-    public static final Color TRANSLUCENT = new Color(0, 0, 0, 0);
-
-    // Color
-    public static Color pitchColor;
-    public static Color yawColor;
 
     public static Color blendColor(Color first, Color second) {
         return blendColor(first, second, ColorBlendFunc.NONE);
@@ -51,6 +43,10 @@ public class ColorUtil {
         }
     }
 
+    public static Color multipleAlpha(Color color, float multiplier) {
+        return castAlpha(color, color.getAlpha() / 255.0F * MathHelper.clamp(multiplier, 0, 1));
+    }
+
     public static Color castAlpha(Color color) {
         return castAlpha(color, 0.0F);
     }
@@ -70,8 +66,5 @@ public class ColorUtil {
                 color.getBlue() / 255.0F,
                 opacity
         );
-    }
-
-    public static void registerColors() {
     }
 }

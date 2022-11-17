@@ -3,8 +3,8 @@ package net.krlite.pufferfish.config;
 import me.shedaniel.clothconfig2.api.ConfigBuilder;
 import me.shedaniel.clothconfig2.api.ConfigCategory;
 import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
+import net.krlite.pufferfish.util.AxisUtil;
 import net.krlite.pufferfish.util.ChatUtil;
-import net.krlite.pufferfish.util.ColorUtil;
 import net.krlite.pufferfish.util.IdentifierBuilder;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
@@ -267,11 +267,11 @@ public class ConfigScreenHandler {
                 entryBuilder
                         .startColorField(
                                 IdentifierBuilder.translatableText("config", "colors", "pitch"),
-                                ColorUtil.pitchColor.getRGB() & 0x00FFFFFF
+                                AxisUtil.pitchColor.getRGB() & 0x00FFFFFF
                         )
                         .setDefaultValue(DEFAULT_PITCH_COLOR.getRGB() & 0x00FFFFFF)
                         //.setTooltip(IdentifierBuilder.translatableText("config", "colors", "pitch", "tooltip"))
-                        .setSaveConsumer(value -> ColorUtil.pitchColor = new Color(value, false))
+                        .setSaveConsumer(value -> AxisUtil.pitchColor = new Color(value, false))
                         .build()
         );
 
@@ -280,11 +280,11 @@ public class ConfigScreenHandler {
                 entryBuilder
                         .startColorField(
                                 IdentifierBuilder.translatableText("config", "colors", "yaw"),
-                                ColorUtil.yawColor.getRGB() & 0x00FFFFFF
+                                AxisUtil.yawColor.getRGB() & 0x00FFFFFF
                         )
                         .setDefaultValue(DEFAULT_YAW_COLOR.getRGB() & 0x00FFFFFF)
                         //.setTooltip(IdentifierBuilder.translatableText("config", "colors", "yaw", "tooltip"))
-                        .setSaveConsumer(value -> ColorUtil.yawColor = new Color(value, false))
+                        .setSaveConsumer(value -> AxisUtil.yawColor = new Color(value, false))
                         .build()
         );
 

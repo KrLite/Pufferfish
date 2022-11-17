@@ -4,6 +4,7 @@ import com.mojang.datafixers.util.Pair;
 import net.krlite.pufferfish.PuffMod;
 import net.krlite.pufferfish.config.simple_config.SimpleConfig;
 import net.krlite.pufferfish.config.simple_config.SimpleConfigHandler;
+import net.krlite.pufferfish.util.AxisUtil;
 import net.krlite.pufferfish.util.ChatUtil;
 import net.krlite.pufferfish.util.ColorUtil;
 
@@ -105,7 +106,7 @@ public class PuffConfigs {
         keyLingerTicks = CONFIG.getOrDefault("key_linger_ticks", DEFAULT_KEY_LINGER_TICKS);
 
         // Colors
-        ColorUtil.pitchColor = new Color(
+        AxisUtil.pitchColor = new Color(
                 (int) Long.parseLong(
                         CONFIG.getOrDefault(
                                 "color_pitch",
@@ -113,7 +114,7 @@ public class PuffConfigs {
                         ),
                         16)
         );
-        ColorUtil.yawColor = new Color(
+        AxisUtil.yawColor = new Color(
                 (int) Long.parseLong(
                         CONFIG.getOrDefault(
                                 "color_yaw",
@@ -149,14 +150,13 @@ public class PuffConfigs {
         configs.modifyConfig(new Pair<>("key_linger_ticks", keyLingerTicks));
 
         // Colors
-        configs.modifyConfig(new Pair<>("color_pitch", Integer.toHexString(ColorUtil.pitchColor.getRGB()).toUpperCase()));
-        configs.modifyConfig(new Pair<>("color_yaw", Integer.toHexString(ColorUtil.yawColor.getRGB()).toUpperCase()));
+        configs.modifyConfig(new Pair<>("color_pitch", Integer.toHexString(AxisUtil.pitchColor.getRGB()).toUpperCase()));
+        configs.modifyConfig(new Pair<>("color_yaw", Integer.toHexString(AxisUtil.yawColor.getRGB()).toUpperCase()));
     }
 
     private static void registerConfigs() {
         // Put Value Handlers Here
         Defaults.registerDefaultValues();
-        ColorUtil.registerColors();
 
         configs = new SimpleConfigHandler();
         createConfigs();

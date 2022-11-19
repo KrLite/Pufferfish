@@ -2,11 +2,10 @@ package net.krlite.pufferfish.config;
 
 import com.mojang.datafixers.util.Pair;
 import net.krlite.pufferfish.PuffMod;
-import net.krlite.pufferfish.config.simple_config.SimpleConfig;
-import net.krlite.pufferfish.config.simple_config.SimpleConfigHandler;
+import net.krlite.pufferfish.config.base.SimpleConfig;
+import net.krlite.pufferfish.config.base.SimpleConfigHandler;
 import net.krlite.pufferfish.util.AxisUtil;
 import net.krlite.pufferfish.util.ChatUtil;
-import net.krlite.pufferfish.util.ColorUtil;
 
 import java.awt.*;
 import java.io.IOException;

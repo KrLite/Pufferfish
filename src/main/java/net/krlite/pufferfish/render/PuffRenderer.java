@@ -1,8 +1,8 @@
 package net.krlite.pufferfish.render;
 
-import net.krlite.pufferfish.render.base.ColoredRenderer;
-import net.krlite.pufferfish.render.base.ColoredTextureRenderer;
-import net.krlite.pufferfish.render.base.MaskedTextureRenderer;
+import net.krlite.pufferfish.render.renderer.base.ColoredRenderer;
+import net.krlite.pufferfish.render.renderer.base.ColoredTextureRenderer;
+import net.krlite.pufferfish.render.renderer.base.MaskedTextureRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 
 public class PuffRenderer {

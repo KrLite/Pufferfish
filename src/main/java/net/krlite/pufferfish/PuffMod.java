@@ -4,6 +4,7 @@ import net.fabricmc.api.ClientModInitializer;
 import net.krlite.pufferfish.config.PuffConfigs;
 import net.krlite.pufferfish.event.InputEventHandler;
 import net.krlite.pufferfish.render.*;
+import net.krlite.pufferfish.render.renderer.PuffProxiedRenderer;
 import net.krlite.pufferfish.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,6 +23,10 @@ public class PuffMod implements ClientModInitializer {
 
 		// Renderer
 		PuffRenderer.init();
-		PuffDelayedRenderer.init();
+		PuffProxiedRenderer.init();
+
+		// TODO: Clean Utils, Textures and Mixins
+		// TODO: Deprecate @Redirections
+		// TODO: Restructure Renderers
 	}
 }

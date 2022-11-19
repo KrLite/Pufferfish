@@ -22,7 +22,7 @@
       "net.krlite.pufferfish.PuffMod"
     ],
     "modmenu": [
-      "net.krlite.pufferfish.config.PuffModMenuIntegration"
+      "net.krlite.pufferfish.config.config_screen.PuffModMenuIntegration"
     ]
   },
   "mixins": [

@@ -15,8 +15,8 @@ public class CrosshairPuffer extends DrawableHelper {
     public static double crosshairScaleTarget = PuffConfigs.crosshairSize;
     public static double crosshairScale = crosshairScaleTarget;
 
-    public static final IdentifierSprite VANILLA_CROSSHAIR = IdentifierSprite.create(GUI_ICONS_TEXTURE, 256, 0, 0, 15, 15);
-    public static final HorizontalSprite CROSSHAIR = HorizontalSprite.create(IdentifierBuilder.texture("gui", "crosshair"), 16);
+    public static final IdentifierSprite VANILLA_CROSSHAIR = new IdentifierSprite(GUI_ICONS_TEXTURE, 256, 0, 0, 15, 15);
+    public static final HorizontalSprite CROSSHAIR = new HorizontalSprite(IdentifierBuilder.texture("gui", "crosshair"), 16);
 
     public static void puffCrosshair(MatrixStack matrixStack) {
         puffCrosshair(matrixStack, 1);

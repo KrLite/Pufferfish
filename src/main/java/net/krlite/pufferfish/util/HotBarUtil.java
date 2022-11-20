@@ -14,19 +14,19 @@ public class HotBarUtil {
 
     public static Identifier WIDGETS_TEXTURE = new Identifier("minecraft", "textures/gui/widgets.png");
 
-    public static IdentifierSprite VANILLA_HOTBAR = IdentifierSprite.create(
+    public static IdentifierSprite VANILLA_HOTBAR = new IdentifierSprite(
             WIDGETS_TEXTURE, 256, 0, 0, 182, 22
     );
 
-    public static IdentifierSprite VANILLA_SELECTED_SLOT = IdentifierSprite.create(
+    public static IdentifierSprite VANILLA_SELECTED_SLOT = new IdentifierSprite(
             WIDGETS_TEXTURE, 256, 0, 22, 24, 24
     );
 
-    public static IdentifierSprite VANILLA_OFFHAND_SLOT_LEFT = IdentifierSprite.create(
+    public static IdentifierSprite VANILLA_OFFHAND_SLOT_LEFT = new IdentifierSprite(
             WIDGETS_TEXTURE, 256, 24, 22, 29, 24
     );
 
-    public static IdentifierSprite VANILLA_OFFHAND_SLOT_RIGHT= IdentifierSprite.create(
+    public static IdentifierSprite VANILLA_OFFHAND_SLOT_RIGHT= new IdentifierSprite(
             WIDGETS_TEXTURE, 256, 53, 22, 29, 24
     );
 

@@ -9,23 +9,16 @@ public class SurfaceSprite {
     private final Identifier identifier;
     private final int stepX, stepY;
 
-    private SurfaceSprite(Identifier identifier, int stepX, int stepY) {
+    public SurfaceSprite(Identifier identifier, int stepX, int stepY) {
         this.identifier = identifier;
-        this.stepX      = stepX;
-        this.stepY      = stepY;
+        this.stepX = stepX;
+        this.stepY = stepY;
     }
 
-    @Contract("_, _, _ -> new")
-    public static @NotNull SurfaceSprite create(Identifier identifier, int stepX, int stepY) {
-        return new SurfaceSprite(
-                identifier,
-                stepX, stepY
-        );
-    }
-
-    @Contract("_, _ -> new")
-    public static @NotNull SurfaceSprite create(Identifier identifier, int step) {
-        return create(identifier, step, step);
+    public SurfaceSprite(Identifier identifier, int step) {
+        this.identifier = identifier;
+        stepX = step;
+        stepY = step;
     }
 
     public Identifier getIdentifier() {
@@ -43,7 +36,7 @@ public class SurfaceSprite {
                 vBegin = (float) (MathHelper.clamp(indexY, 1, stepY) - 1) / this.stepY,
                 vEnd = (float) MathHelper.clamp(indexY, 1, stepY) / this.stepY;
 
-        return IdentifierSprite.create(
+        return new IdentifierSprite(
                 identifier,
                 uBegin, vBegin, uEnd, vEnd
         );

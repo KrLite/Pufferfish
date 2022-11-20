@@ -1,8 +1,10 @@
 package net.krlite.pufferfish.mixin.trigger;
 
+import net.krlite.pufferfish.PuffMod;
 import net.krlite.pufferfish.config.PuffConfigs;
+import net.krlite.pufferfish.core.IBooleanRanger;
+import net.krlite.pufferfish.math.ClassID;
 import net.krlite.pufferfish.util.ChatUtil;
-import net.krlite.pufferfish.util.TitleUtil;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.ChatScreen;
 import net.minecraft.client.gui.screen.Screen;
@@ -15,7 +17,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(MinecraftClient.class)
-public class MinecraftClientTrigger {
+public class MinecraftClientTrigger implements IBooleanRanger {
     @Shadow @Nullable public Screen currentScreen;
 
     @Inject(method = "tick", at = @At("TAIL"))
@@ -28,9 +30,9 @@ public class MinecraftClientTrigger {
     }
 
     @Inject(method = "setScreen", at = @At("TAIL"))
-    private void setScreen(@Nullable Screen screen, CallbackInfo ci) {
+    private void setScreen(Screen screen, CallbackInfo ci) {
         if ( !(screen instanceof TitleScreen) && PuffConfigs.enableTitleAnimation ) {
-            TitleUtil.resetMeasuringStartTime();
+            putBoolean(new ClassID(TitleScreen.class, "ShowTitle"), false);
         }
     }
 }

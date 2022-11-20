@@ -18,7 +18,7 @@ public class AnchorRenderer {
 
     // Identifiers
     public static final Identifier ANCHOR = identifierBuilder("anchor");
-    public static final HorizontalSprite URMENETA = HorizontalSprite.create(identifierBuilder("urmeneta"), 4);
+    public static final HorizontalSprite URMENETA = new HorizontalSprite(identifierBuilder("urmeneta"), 4);
 
     // Identifier Sprites
     public static final IdentifierSprite NORTH = URMENETA.get(1);

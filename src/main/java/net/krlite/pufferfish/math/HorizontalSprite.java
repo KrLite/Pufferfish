@@ -9,19 +9,14 @@ public class HorizontalSprite {
     private final Identifier identifier;
     private final int step;
 
-    private HorizontalSprite(Identifier identifier, int step) {
+    public HorizontalSprite(Identifier identifier, int step) {
         this.identifier = identifier;
-        this.step       = step;
+        this.step = step;
     }
 
-    @Contract("_, _, _ -> new")
-    public static @NotNull HorizontalSprite create(Identifier identifier, int textureWidth, int textureHeight) {
-        return create(identifier, textureWidth / textureHeight);
-    }
-
-    @Contract("_, _ -> new")
-    public static @NotNull HorizontalSprite create(Identifier identifier, int step) {
-        return new HorizontalSprite(identifier, step);
+    public HorizontalSprite(Identifier identifier, int textureWidth, int textureHeight) {
+        this.identifier = identifier;
+        step = textureWidth / textureHeight;
     }
 
     public Identifier getIdentifier() {
@@ -33,7 +28,7 @@ public class HorizontalSprite {
                 uBegin = (float) (MathHelper.clamp(index, 1, this.step)  - 1) / this.step,
                 uEnd = (float) MathHelper.clamp(index, 1, this.step) / this.step;
 
-        return IdentifierSprite.create(
+        return new IdentifierSprite(
                 this.identifier,
                 uBegin, 0, uEnd, 1
         );

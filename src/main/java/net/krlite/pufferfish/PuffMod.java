@@ -3,9 +3,11 @@ package net.krlite.pufferfish;
 import net.fabricmc.api.ClientModInitializer;
 import net.krlite.pufferfish.config.PuffConfigs;
 import net.krlite.pufferfish.event.InputEventHandler;
-import net.krlite.pufferfish.render.*;
+import net.krlite.pufferfish.render.PuffRenderer;
+import net.krlite.pufferfish.render.ScreenshotFlashRenderer;
 import net.krlite.pufferfish.render.renderer.PuffProxiedRenderer;
-import net.krlite.pufferfish.util.*;
+import net.krlite.pufferfish.util.AxisUtil;
+import net.krlite.pufferfish.util.ChatUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

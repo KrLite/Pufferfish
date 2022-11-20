@@ -1,13 +1,16 @@
 package net.krlite.pufferfish.mixin.animator;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import net.krlite.pufferfish.PuffMod;
 import net.krlite.pufferfish.config.PuffConfigs;
+import net.krlite.pufferfish.core.IBooleanRanger;
+import net.krlite.pufferfish.core.ITimer;
+import net.krlite.pufferfish.math.ClassID;
 import net.krlite.pufferfish.math.solver.EasingFunctions;
 import net.krlite.pufferfish.util.TitleUtil;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.TitleScreen;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.util.Util;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -15,8 +18,13 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.Slice;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.util.Optional;
+
 @Mixin(TitleScreen.class)
-public class MainTitleAnimator {
+public class MainTitleAnimator implements ITimer, IBooleanRanger {
+    private static ClassID titleTimer;
+    private static double titlePos = 0;
+
     @Redirect(
             method = "render",
             at = @At(
@@ -29,8 +37,9 @@ public class MainTitleAnimator {
     )
     private void setShaderColor(float red, float green, float blue, float alpha) {
         RenderSystem.setShaderColor(red, green, blue, alpha);
-        if ( alpha > 0 && TitleUtil.titleMeasuringStartMs == -1 && PuffConfigs.enableTitleAnimation ) {
-            TitleUtil.titleMeasuringStartMs = Util.getMeasuringTimeMs();
+        if ( alpha > 0 && PuffConfigs.enableTitleAnimation && !getBooleanOrDefault(new ClassID(TitleScreen.class, "ShowTitle"), false) ) {
+            putBoolean(new ClassID(TitleScreen.class, "ShowTitle"), true);
+            titleTimer = regTimer();
         }
     }
 
@@ -42,15 +51,15 @@ public class MainTitleAnimator {
             )
     )
     private void update(MatrixStack matrixStack, int mouseX, int mouseY, float delta, CallbackInfo ci) {
-        double
-                time = Util.getMeasuringTimeMs() - TitleUtil.titleMeasuringStartMs,
-                offset = PuffConfigs.enableTitleAnimation
-                        ? MinecraftClient.getInstance().getWindow().getScaledHeight() / 3.5
-                        : 0;
-        if ( time > TitleUtil.titleMs ) time = TitleUtil.titleMs;
-        TitleUtil.titlePos = TitleUtil.titleMeasuringStartMs == -1
-                ? -offset
-                : EasingFunctions.easeOutBounce(time, -offset, offset, TitleUtil.titleMs);
+        double offset = PuffConfigs.enableTitleAnimation
+                ? MinecraftClient.getInstance().getWindow().getScaledHeight() / 3.5 : 0;
+
+        if ( getBooleanOrDefault(new ClassID(TitleScreen.class, "ShowTitle"), false) ) {
+            double time = getTimer(titleTimer) > TitleUtil.titleMs ? TitleUtil.titleMs : getTimer(titleTimer);
+            titlePos = EasingFunctions.easeOutBounce(time, -offset, offset, TitleUtil.titleMs);
+        } else {
+            titlePos = -offset;
+        }
     }
 
     @Inject(
@@ -63,7 +72,7 @@ public class MainTitleAnimator {
     )
     private void beforeMinecraft(MatrixStack matrixStack, int mouseX, int mouseY, float delta, CallbackInfo ci) {
         matrixStack.push();
-        matrixStack.translate(0, TitleUtil.titlePos, 0);
+        matrixStack.translate(0, titlePos, 0);
     }
 
     @Inject(
@@ -89,7 +98,7 @@ public class MainTitleAnimator {
     )
     private void beforeEdition(MatrixStack matrixStack, int mouseX, int mouseY, float delta, CallbackInfo ci) {
         matrixStack.push();
-        matrixStack.translate(0, TitleUtil.titlePos, 0);
+        matrixStack.translate(0, titlePos, 0);
     }
 
     @Inject(
@@ -117,6 +126,6 @@ public class MainTitleAnimator {
             )
     )
     private void splash(MatrixStack matrixStack, double x, double y, double z) {
-        matrixStack.translate(x, TitleUtil.titlePos + 70, z);
+        matrixStack.translate(x, titlePos + 70, z);
     }
 }

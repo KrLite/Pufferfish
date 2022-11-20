@@ -22,11 +22,11 @@ public class PreciseColor {
      * @param blue      blue (double 0 to 1),
      * @param alpha     alpha (double 0 to 1).
      */
-    private PreciseColor(double red, double green, double blue, double alpha) {
-        this.red    = Double.isNaN(red) ? Double.NaN : MathHelper.clamp(red, 0, 1);
-        this.green  = Double.isNaN(green) ? Double.NaN : MathHelper.clamp(green, 0, 1);
-        this.blue   = Double.isNaN(blue) ? Double.NaN : MathHelper.clamp(blue, 0, 1);
-        this.alpha  = Double.isNaN(alpha) ? Double.NaN : MathHelper.clamp(alpha, 0, 1);
+    public PreciseColor(double red, double green, double blue, double alpha) {
+        this.red = Double.isNaN(red) ? Double.NaN : MathHelper.clamp(red, 0, 1);
+        this.green = Double.isNaN(green) ? Double.NaN : MathHelper.clamp(green, 0, 1);
+        this.blue = Double.isNaN(blue) ? Double.NaN : MathHelper.clamp(blue, 0, 1);
+        this.alpha = Double.isNaN(alpha) ? Double.NaN : MathHelper.clamp(alpha, 0, 1);
     }
 
     /**
@@ -73,51 +73,25 @@ public class PreciseColor {
         return new PreciseColor(Double.NaN, Double.NaN, Double.NaN, 1);
     }
 
-    /**
-     * Creates a {@link  PreciseColor} from the RGBA values.
-     *
-     * @return       returns a {@link PreciseColor PreciseColor.}
-     */
-    @Contract(value = "_, _, _, _ -> new", pure = true)
-    public static @NotNull PreciseColor of(double red, double green, double blue, double alpha) {
-        return new PreciseColor(red, green, blue, alpha);
+    public PreciseColor(double red, double green, double blue) {
+        this.red = Double.isNaN(red) ? Double.NaN : MathHelper.clamp(red, 0, 1);
+        this.green = Double.isNaN(green) ? Double.NaN : MathHelper.clamp(green, 0, 1);
+        this.blue = Double.isNaN(blue) ? Double.NaN : MathHelper.clamp(blue, 0, 1);
+        alpha = 1;
     }
 
-    /**
-     * Creates an opaque {@link PreciseColor} from the RGB values.
-     *
-     * @return      returns an opaque {@link PreciseColor PreciseColor.}
-     */
-    @Contract(value = "_, _, _ -> new", pure = true)
-    public static @NotNull PreciseColor of(double red, double green, double blue) {
-        return of(red, green, blue, 1);
+    public PreciseColor(double red, double green, double blue, boolean opaque) {
+        this.red = Double.isNaN(red) ? Double.NaN : MathHelper.clamp(red, 0, 1);
+        this.green = Double.isNaN(green) ? Double.NaN : MathHelper.clamp(green, 0, 1);
+        this.blue = Double.isNaN(blue) ? Double.NaN : MathHelper.clamp(blue, 0, 1);
+        alpha = opaque ? 1 : 0;
     }
 
-    /**
-     * Creates a {@link PreciseColor} from the RGB values which is opaque or translucent.
-     *
-     * @param opaque    whether the color is opaque or translucent.
-     * @return          returns an opaque or translucent {@link PreciseColor PreciseColor.}
-     */
-    @Contract(value = "_, _, _, _ -> new", pure = true)
-    public static @NotNull PreciseColor of(double red, double green, double blue, boolean opaque) {
-        return of(red, green, blue, opaque ? 1 : 0);
-    }
-
-    /**
-     * Creates a {@link PreciseColor} from the dedicated {@link Color Color.}
-     *
-     * @param color     the dedicated {@link Color Color.}
-     * @return          returns a {@link PreciseColor PreciseColor.}
-     */
-    @Contract("_ -> new")
-    public static @NotNull PreciseColor of(@NotNull Color color) {
-        return new PreciseColor(
-                color.getRed() / 255.0,
-                color.getGreen() / 255.0,
-                color.getBlue() / 255.0,
-                color.getAlpha() / 255.0
-        );
+    public PreciseColor(@NotNull Color color) {
+        red = color.getRed() / 255.0;
+        green = color.getGreen() / 255.0;
+        blue = color.getBlue() / 255.0;
+        alpha = color.getAlpha() / 255.0;
     }
 
     public PreciseColor independent() {
@@ -221,23 +195,10 @@ public class PreciseColor {
         return this.castAlpha(alpha * multiplier);
     }
 
-    /**
-     * Blends the self with a {@link PreciseColor PreciseColor.}
-     *
-     * @param color     the dedicated {@link PreciseColor PreciseColor.}
-     * @return          returns a blended {@link PreciseColor PreciseColor.}
-     */
     public void blend(PreciseColor color) {
         blend(color, 0.5);
     }
 
-    /**
-     * Blends the self with a {@link PreciseColor} in an index.
-     *
-     * @param color     the dedicated {@link PreciseColor PreciseColor,}
-     * @param delta     the index.
-     * @return          returns a blended {@link PreciseColor PreciseColor.}
-     */
     public void blend(@NotNull PreciseColor color, double delta) {
         castRed(lerp(this.red, color.red, delta));
         castGreen(lerp(this.green, color.green, delta));
@@ -275,7 +236,7 @@ public class PreciseColor {
      * @return              returns a {@link PreciseColor} in which the value equals the hex string.
      */
     public static PreciseColor decode(String hexString) {
-        return PreciseColor.of(Color.decode(hexString));
+        return new PreciseColor(Color.decode(hexString));
     }
 
     public int hashCode() {

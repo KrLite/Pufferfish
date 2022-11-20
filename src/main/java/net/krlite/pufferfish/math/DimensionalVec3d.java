@@ -16,24 +16,19 @@ public class DimensionalVec3d {
     private final RegistryKey<World> dimension;
     private final Vec3d vec3d;
 
-    private DimensionalVec3d(RegistryKey<World> dimension, Vec3d vec3d) {
+    public DimensionalVec3d(RegistryKey<World> dimension, Vec3d vec3d) {
         this.dimension = dimension;
         this.vec3d = vec3d;
     }
 
-    @Contract("_ -> new")
-    public static @NotNull DimensionalVec3d create(@NotNull Entity entity) {
-        return new DimensionalVec3d(entity.getWorld().getRegistryKey(), entity.getPos());
+    public DimensionalVec3d(@NotNull Entity entity) {
+        dimension = entity.world.getRegistryKey();
+        vec3d = entity.getPos();
     }
 
-    @Contract("_ -> new")
-    public static @NotNull DimensionalVec3d create(@NotNull GlobalPos globalPos) {
-        return new DimensionalVec3d(globalPos.getDimension(), Vec3d.of(globalPos.getPos()));
-    }
-
-    @Contract(value = "_, _ -> new", pure = true)
-    public static @NotNull DimensionalVec3d create(RegistryKey<World> dimension, Vec3d vec3d) {
-        return new DimensionalVec3d(dimension, vec3d);
+    public DimensionalVec3d(@NotNull GlobalPos globalPos) {
+        dimension = globalPos.getDimension();
+        vec3d = Vec3d.of(globalPos.getPos());
     }
 
     public RegistryKey<World> getDimension() {

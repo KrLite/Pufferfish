@@ -99,7 +99,7 @@ public abstract class CrosshairAnimator extends DrawableHelper{
 
             case VANILLA -> PuffRenderer.COLORED_TEXTURE.renderColoredTexture(
                     CrosshairPuffer.VANILLA_CROSSHAIR,
-                    PreciseColor.of(Color.WHITE).multipleAlpha(opacity).get(),
+                    new PreciseColor(Color.WHITE).multipleAlpha(opacity).get(),
                     matrixStack,
                     (scaledWidth - 15) / 2.0F, (scaledHeight - 15) / 2.0F,
                     (scaledWidth + 15) / 2.0F, (scaledHeight + 15) / 2.0F
@@ -110,7 +110,7 @@ public abstract class CrosshairAnimator extends DrawableHelper{
 
                 PuffRenderer.COLORED_TEXTURE.renderColoredTexture(
                         STYLE,
-                        PreciseColor.of(Color.WHITE).multipleAlpha(opacity).get(),
+                        new PreciseColor(Color.WHITE).multipleAlpha(opacity).get(),
                         matrixStack,
                         (scaledWidth - 15) / 2.0F, (scaledHeight - 15) / 2.0F,
                         (scaledWidth + 15) / 2.0F, (scaledHeight + 15) / 2.0F
@@ -137,7 +137,7 @@ public abstract class CrosshairAnimator extends DrawableHelper{
         PuffRenderer.COLORED_TEXTURE.renderPositionedColoredTexture(
                 GUI_ICONS_TEXTURE,
                 PuffConfigs.hotbarPosition.isLeft()
-                        ? PreciseColor.of(Color.WHITE).castAlpha(opacity).get()
+                        ? new PreciseColor(Color.WHITE).castAlpha(opacity).get()
                         : Color.WHITE,
                 matrixStack,
                 x, y, u, v, width, height

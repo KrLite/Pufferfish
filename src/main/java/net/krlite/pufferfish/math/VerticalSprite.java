@@ -9,19 +9,14 @@ public class VerticalSprite {
     private final Identifier identifier;
     private final int step;
 
-    private VerticalSprite(Identifier identifier, int step) {
+    public VerticalSprite(Identifier identifier, int step) {
         this.identifier = identifier;
-        this.step       = step;
+        this.step = step;
     }
 
-    @Contract("_, _, _ -> new")
-    public static @NotNull VerticalSprite create(Identifier identifier, int textureWidth, int textureHeight) {
-        return create(identifier, textureHeight / textureWidth);
-    }
-
-    @Contract("_, _ -> new")
-    public static @NotNull VerticalSprite create(Identifier identifier, int step) {
-        return new VerticalSprite(identifier, step);
+    public VerticalSprite(Identifier identifier, int textureWidth, int textureHeight) {
+        this.identifier = identifier;
+        step = textureHeight / textureWidth;
     }
 
     public Identifier getIdentifier() {
@@ -33,7 +28,7 @@ public class VerticalSprite {
                 vBegin = (float) (MathHelper.clamp(index, 1, this.step) - 1) / this.step,
                 vEnd = (float) MathHelper.clamp(index, 1, this.step) / this.step;
 
-        return IdentifierSprite.create(
+        return new IdentifierSprite(
                 this.identifier,
                 0, vBegin, 1, vEnd
         );

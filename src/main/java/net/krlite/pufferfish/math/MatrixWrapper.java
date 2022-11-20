@@ -16,7 +16,7 @@ public class MatrixWrapper {
         return (value + target) / 2.0F;
     }
 
-    private MatrixWrapper(
+    public MatrixWrapper(
             float xLU, float yLU,
             float xLD, float yLD,
             float xRD, float yRD,
@@ -32,16 +32,7 @@ public class MatrixWrapper {
         this.yRU = yRU;
     }
 
-    public static MatrixWrapper wrap(
-            float xLU, float yLU,
-            float xLD, float yLD,
-            float xRD, float yRD,
-            float xRU, float yRU
-    ) {
-        return new MatrixWrapper(xLU, yLU, xLD, yLD, xRD, yRD, xRU, yRU);
-    }
-
-    public static MatrixWrapper wrap(
+    public MatrixWrapper(
             float xBegin,   float yBegin,
             float xEnd,     float yEnd
     ) {
@@ -52,7 +43,14 @@ public class MatrixWrapper {
         yBegin  = grid.getB().getA();
         yEnd    = grid.getB().getB();
 
-        return new MatrixWrapper(xBegin, yBegin, xBegin, yEnd, xEnd, yEnd, xEnd, yBegin);
+        xLU = xBegin;
+        yLU = yBegin;
+        xLD = xBegin;
+        yLD = yEnd;
+        xRD = xEnd;
+        yRD = yEnd;
+        xRU = xEnd;
+        yRU = yBegin;
     }
 
     public float xLU() {

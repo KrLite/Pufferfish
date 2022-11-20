@@ -6,26 +6,26 @@
   "mixins": [
   ],
   "client": [
-    "animator.MainTitleAnimator",
+    "actor.MouseSensitivityActor",
     "actor.PlayerCameraActor",
     "animator.ChatHudAnimator",
     "animator.ChatScreenAnimator",
     "animator.CrosshairAnimator",
-    "handler.screen_background.DownloadingTerrainScreenBackgroundHandler",
-    "handler.hotbar.ExperienceBarHandler",
-    "trigger.GameRendererTrigger",
     "animator.HandledScreenAnimator",
-    "handler.hotbar.HotBarHandler",
-    "handler.screen_background.LevelLoadingScreenHandler",
-    "handler.screen_background.MessageScreenHandler",
-    "trigger.MinecraftClientTrigger",
-    "actor.MouseSensitivityActor",
-    "handler.screen_background.ProgressScreenHandler",
-    "handler.screen_background.ScreenBackgroundHandler",
+    "animator.MainTitleAnimator",
     "handler.ScreenshotHandler",
+    "handler.hotbar.ExperienceBarHandler",
+    "handler.hotbar.HotBarHandler",
     "handler.hotbar.SpectatorHudHandler",
     "handler.hotbar.StatusBarsHandler",
-    "handler.hotbar.SubtitlesHudHandler"
+    "handler.hotbar.SubtitlesHudHandler",
+    "handler.screen_background.DownloadingTerrainScreenBackgroundHandler",
+    "handler.screen_background.LevelLoadingScreenHandler",
+    "handler.screen_background.MessageScreenHandler",
+    "handler.screen_background.ProgressScreenHandler",
+    "handler.screen_background.ScreenBackgroundHandler",
+    "trigger.GameRendererTrigger",
+    "trigger.MinecraftClientTrigger"
   ],
   "injectors": {
     "defaultRequire": 1

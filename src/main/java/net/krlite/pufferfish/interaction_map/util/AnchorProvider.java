@@ -31,12 +31,12 @@ public class AnchorProvider {
     }
 
     public static Optional<Double> dimensionalDistance(PlayerEntity player, DimensionalVec3d position) {
-        return position.distance(DimensionalVec3d.create(player));
+        return position.distance(new DimensionalVec3d(player));
     }
 
     public static Optional<Double> lastDeathPosition(PlayerEntity player) {
         if ( player.getLastDeathPos().isPresent() ) {
-            return dimensionalPosition(player, DimensionalVec3d.create(player.getLastDeathPos().get()));
+            return dimensionalPosition(player, new DimensionalVec3d(player.getLastDeathPos().get()));
         }
 
         return Optional.empty();
@@ -44,7 +44,7 @@ public class AnchorProvider {
 
     public static Optional<Double> lastDeathDistance(PlayerEntity player) {
         if ( player.getLastDeathPos().isPresent() ) {
-            return dimensionalDistance(player, DimensionalVec3d.create(player.getLastDeathPos().get()));
+            return dimensionalDistance(player, new DimensionalVec3d(player.getLastDeathPos().get()));
         }
 
         return Optional.empty();

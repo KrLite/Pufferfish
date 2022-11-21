@@ -15,6 +15,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
@@ -23,26 +24,23 @@ import java.util.function.Consumer;
 
 @Mixin(ScreenshotRecorder.class)
 public abstract class ScreenshotHandler {
-    @Final @Shadow
-    private static Logger LOGGER = LogUtils.getLogger();
+    @Final @Shadow private static Logger LOGGER = LogUtils.getLogger();
 
-    @Shadow
-    private static File getScreenshotFilename(File directory) {
+    @Shadow private static File getScreenshotFilename(File directory) {
         return null;
     }
 
-    @Shadow
-    public static NativeImage takeScreenshot(Framebuffer framebuffer) {
+    @Shadow public static NativeImage takeScreenshot(Framebuffer framebuffer) {
         return null;
     }
 
     @Inject(method = "takeScreenshot", at = @At("TAIL"))
-    private static void takeScreenshot(Framebuffer framebuffer, CallbackInfoReturnable<NativeImage> cir) {
+    private static void ScreenshotHandler$takeScreenshot(Framebuffer framebuffer, CallbackInfoReturnable<NativeImage> cir) {
         ScreenshotFlashRenderer.setOpacity(1.0F);
     }
 
     @Inject(method = "saveScreenshotInner", at = @At("HEAD"), cancellable = true)
-    private static void saveScreenshotInner(File gameDirectory, String fileName, Framebuffer framebuffer, Consumer<Text> messageReceiver, CallbackInfo ci) {
+    private static void ScreenshotHandler$saveScreenshotInner(File gameDirectory, String fileName, Framebuffer framebuffer, Consumer<Text> messageReceiver, CallbackInfo ci) {
         // TODO: Deprecate This
         NativeImage nativeImage = takeScreenshot(framebuffer);
         File fileDummy = new File(gameDirectory, "screenshots");

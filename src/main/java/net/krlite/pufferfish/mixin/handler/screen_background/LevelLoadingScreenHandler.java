@@ -19,6 +19,7 @@ import java.awt.*;
 
 @Mixin(LevelLoadingScreen.class)
 public abstract class LevelLoadingScreenHandler {
+    /*
     @Shadow @Final private WorldGenerationProgressTracker progressProvider;
 
     @Inject(
@@ -62,4 +63,6 @@ public abstract class LevelLoadingScreenHandler {
                 color
         );
     }
+
+     */
 }

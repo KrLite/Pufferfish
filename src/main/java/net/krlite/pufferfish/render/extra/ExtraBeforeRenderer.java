@@ -22,10 +22,10 @@ public class ExtraBeforeRenderer {
         axisColor.blend(
                 AxisUtil.axisLock.get(AxisUtil.Axis.PITCH)
                         ? AxisUtil.axisLock.get(AxisUtil.Axis.YAW)
-                        ? new PreciseColor(ColorUtil.blendColor(AxisUtil.pitchColor, AxisUtil.yawColor))
-                        : new PreciseColor(AxisUtil.pitchColor)
+                        ? new PreciseColor(ColorUtil.blendColor(PuffConfigs.pitchColor, PuffConfigs.yawColor))
+                        : new PreciseColor(PuffConfigs.pitchColor)
                         : AxisUtil.axisLock.get(AxisUtil.Axis.YAW)
-                        ? new PreciseColor(AxisUtil.yawColor)
+                        ? new PreciseColor(PuffConfigs.yawColor)
                         : PreciseColor.empty(),
                 0.0147
         );

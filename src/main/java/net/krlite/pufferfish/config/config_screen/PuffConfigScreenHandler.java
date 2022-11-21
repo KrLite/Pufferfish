@@ -4,8 +4,6 @@ import me.shedaniel.clothconfig2.api.ConfigBuilder;
 import me.shedaniel.clothconfig2.api.ConfigCategory;
 import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
 import net.krlite.pufferfish.config.PuffConfigs;
-import net.krlite.pufferfish.util.AxisUtil;
-import net.krlite.pufferfish.util.ChatUtil;
 import net.krlite.pufferfish.util.IdentifierBuilder;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
@@ -162,6 +160,7 @@ public class PuffConfigScreenHandler {
                         .build()
         );
 
+        /*
         // Chat Self Highlighting
         chat.addEntry(
                 entryBuilder
@@ -175,16 +174,18 @@ public class PuffConfigScreenHandler {
                         .build()
         );
 
+         */
+
         // Chat Text Color
         chat.addEntry(
                 entryBuilder
                         .startColorField(
                                 IdentifierBuilder.translatableText("config", "chat", "text_color"),
-                                ChatUtil.chatTextColor.getRGB() & 0x00FFFFFF
+                                chatTextColor.getRGB() & 0x00FFFFFF
                         )
                         .setDefaultValue(DEFAULT_CHAT_TEXT_COLOR.getRGB() & 0x00FFFFFF)
                         //.setTooltip(IdentifierBuilder.translatableText("config", "colors", "chat", "text_color"))
-                        .setSaveConsumer(value -> ChatUtil.chatTextColor = new Color(value, false))
+                        .setSaveConsumer(value -> chatTextColor = new Color(value, false))
                         .build()
         );
 
@@ -193,11 +194,11 @@ public class PuffConfigScreenHandler {
                 entryBuilder
                         .startColorField(
                                 IdentifierBuilder.translatableText("config", "chat", "background_color"),
-                                ChatUtil.chatBackgroundColor.getRGB() & 0x00FFFFFF
+                                chatBackgroundColor.getRGB() & 0x00FFFFFF
                         )
                         .setDefaultValue(DEFAULT_CHAT_BACKGROUND_COLOR.getRGB() & 0x00FFFFFF)
                         //.setTooltip(IdentifierBuilder.translatableText("config", "colors", "chat", "background_color"))
-                        .setSaveConsumer(value -> ChatUtil.chatBackgroundColor = new Color(value, false))
+                        .setSaveConsumer(value -> chatBackgroundColor = new Color(value, false))
                         .build()
         );
 
@@ -268,11 +269,11 @@ public class PuffConfigScreenHandler {
                 entryBuilder
                         .startColorField(
                                 IdentifierBuilder.translatableText("config", "colors", "pitch"),
-                                AxisUtil.pitchColor.getRGB() & 0x00FFFFFF
+                                pitchColor.getRGB() & 0x00FFFFFF
                         )
                         .setDefaultValue(DEFAULT_PITCH_COLOR.getRGB() & 0x00FFFFFF)
                         //.setTooltip(IdentifierBuilder.translatableText("config", "colors", "pitch", "tooltip"))
-                        .setSaveConsumer(value -> AxisUtil.pitchColor = new Color(value, false))
+                        .setSaveConsumer(value -> pitchColor = new Color(value, false))
                         .build()
         );
 
@@ -281,11 +282,11 @@ public class PuffConfigScreenHandler {
                 entryBuilder
                         .startColorField(
                                 IdentifierBuilder.translatableText("config", "colors", "yaw"),
-                                AxisUtil.yawColor.getRGB() & 0x00FFFFFF
+                                yawColor.getRGB() & 0x00FFFFFF
                         )
                         .setDefaultValue(DEFAULT_YAW_COLOR.getRGB() & 0x00FFFFFF)
                         //.setTooltip(IdentifierBuilder.translatableText("config", "colors", "yaw", "tooltip"))
-                        .setSaveConsumer(value -> AxisUtil.yawColor = new Color(value, false))
+                        .setSaveConsumer(value -> yawColor = new Color(value, false))
                         .build()
         );
 

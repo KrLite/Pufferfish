@@ -10,12 +10,14 @@
     "actor.PlayerCameraActor",
     "animator.ChatHudAnimator",
     "animator.ChatScreenAnimator",
+    "animator.ChatScreenTrigger",
     "animator.CrosshairAnimator",
     "animator.HandledScreenAnimator",
-    "animator.MainTitleAnimator",
+    "animator.TitleScreenAnimator",
+    "animator.TitleScreenTrigger",
     "handler.ScreenshotHandler",
     "handler.hotbar.ExperienceBarHandler",
-    "handler.hotbar.HotBarHandler",
+    "handler.hotbar.HotbarHandler",
     "handler.hotbar.SpectatorHudHandler",
     "handler.hotbar.StatusBarsHandler",
     "handler.hotbar.SubtitlesHudHandler",
@@ -24,8 +26,7 @@
     "handler.screen_background.MessageScreenHandler",
     "handler.screen_background.ProgressScreenHandler",
     "handler.screen_background.ScreenBackgroundHandler",
-    "trigger.GameRendererTrigger",
-    "trigger.MinecraftClientTrigger"
+    "trigger.GameRendererTrigger"
   ],
   "injectors": {
     "defaultRequire": 1

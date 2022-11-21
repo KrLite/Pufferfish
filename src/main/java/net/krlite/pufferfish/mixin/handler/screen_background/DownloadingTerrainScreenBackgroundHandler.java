@@ -11,6 +11,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(DownloadingTerrainScreen.class)
 public class DownloadingTerrainScreenBackgroundHandler {
+    /*
     @Redirect(
             method = "render",
             at = @At(
@@ -26,4 +27,6 @@ public class DownloadingTerrainScreenBackgroundHandler {
                 color
         );
     }
+
+     */
 }

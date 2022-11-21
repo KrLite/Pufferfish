@@ -7,7 +7,6 @@ import net.krlite.pufferfish.render.PuffRenderer;
 import net.krlite.pufferfish.render.ScreenshotFlashRenderer;
 import net.krlite.pufferfish.render.renderer.PuffProxiedRenderer;
 import net.krlite.pufferfish.util.AxisUtil;
-import net.krlite.pufferfish.util.ChatUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,7 +19,6 @@ public class PuffMod implements ClientModInitializer {
 		PuffConfigs.init();
 		AxisUtil.init();
 		InputEventHandler.init();
-		ChatUtil.init();
 		ScreenshotFlashRenderer.init();
 
 		// Renderer

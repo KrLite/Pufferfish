@@ -15,6 +15,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(Screen.class)
 public class ScreenBackgroundHandler {
+    /*
     @Shadow @Nullable protected MinecraftClient client;
 
     @Redirect(
@@ -54,4 +55,6 @@ public class ScreenBackgroundHandler {
             }
         }
     }
+
+     */
 }

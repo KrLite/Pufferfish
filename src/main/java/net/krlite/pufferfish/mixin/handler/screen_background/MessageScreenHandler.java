@@ -11,6 +11,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(MessageScreen.class)
 public class MessageScreenHandler {
+    /*
     @Redirect(
             method = "render",
             at = @At(
@@ -26,4 +27,6 @@ public class MessageScreenHandler {
                 color
         );
     }
+
+     */
 }

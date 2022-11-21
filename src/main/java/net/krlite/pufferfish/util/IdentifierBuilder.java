@@ -8,7 +8,6 @@ import java.util.Arrays;
 import java.util.stream.Collectors;
 
 public class IdentifierBuilder {
-
     public static Identifier texture(String... pathsAndName) {
         return new Identifier(
                 PuffMod.MOD_ID,

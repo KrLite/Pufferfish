@@ -11,6 +11,7 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(ProgressScreen.class)
 public class ProgressScreenHandler {
+    /*
     @Redirect(
             method = "render",
             at = @At(
@@ -44,4 +45,6 @@ public class ProgressScreenHandler {
                 color
         );
     }
+
+     */
 }

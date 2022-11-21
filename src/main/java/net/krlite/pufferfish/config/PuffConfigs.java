@@ -4,8 +4,6 @@ import com.mojang.datafixers.util.Pair;
 import net.krlite.pufferfish.PuffMod;
 import net.krlite.pufferfish.config.base.SimpleConfig;
 import net.krlite.pufferfish.config.base.SimpleConfigHandler;
-import net.krlite.pufferfish.util.AxisUtil;
-import net.krlite.pufferfish.util.ChatUtil;
 
 import java.awt.*;
 import java.io.IOException;
@@ -15,8 +13,6 @@ import static net.krlite.pufferfish.config.Defaults.*;
 public class PuffConfigs {
     public static SimpleConfig CONFIG;
     private static SimpleConfigHandler configs;
-
-
 
     // Enum
     public static HotbarPosition hotbarPosition;
@@ -35,6 +31,12 @@ public class PuffConfigs {
     // Double
     public static double crosshairSize;
     public static double crosshairPuff;
+
+    // Color
+    public static Color chatTextColor;
+    public static Color chatBackgroundColor;
+    public static Color pitchColor;
+    public static Color yawColor;
 
     private static void createConfigs() {
         // General
@@ -82,7 +84,7 @@ public class PuffConfigs {
         enableChatAnimation = CONFIG.getOrDefault("enable_chat_animation", DEFAULT_ENABLE_CHAT_ANIMATION);
         enableChatTextShadow = CONFIG.getOrDefault("enable_chat_text_shadow", DEFAULT_ENABLE_CHAT_TEXT_SHADOW);
         chatSelfHighlighting = CONFIG.getOrDefault("chat_self_highlight", DEFAULT_CHAT_SELF_HIGHLIGHTING);
-        ChatUtil.chatTextColor = new Color(
+        chatTextColor = new Color(
                 (int) Long.parseLong(
                         CONFIG.getOrDefault(
                                 "chat_text_color",
@@ -91,7 +93,7 @@ public class PuffConfigs {
                         16
                 )
         );
-        ChatUtil.chatBackgroundColor = new Color(
+        chatBackgroundColor = new Color(
                 (int) Long.parseLong(
                         CONFIG.getOrDefault(
                                 "chat_background_color",
@@ -105,7 +107,7 @@ public class PuffConfigs {
         keyLingerTicks = CONFIG.getOrDefault("key_linger_ticks", DEFAULT_KEY_LINGER_TICKS);
 
         // Colors
-        AxisUtil.pitchColor = new Color(
+        pitchColor = new Color(
                 (int) Long.parseLong(
                         CONFIG.getOrDefault(
                                 "color_pitch",
@@ -113,7 +115,7 @@ public class PuffConfigs {
                         ),
                         16)
         );
-        AxisUtil.yawColor = new Color(
+        yawColor = new Color(
                 (int) Long.parseLong(
                         CONFIG.getOrDefault(
                                 "color_yaw",
@@ -142,15 +144,15 @@ public class PuffConfigs {
         configs.modifyConfig(new Pair<>("enable_chat_animation", enableChatAnimation));
         configs.modifyConfig(new Pair<>("enable_chat_text_shadow", enableChatTextShadow));
         configs.modifyConfig(new Pair<>("chat_self_highlight", chatSelfHighlighting));
-        configs.modifyConfig(new Pair<>("chat_text_color", Integer.toHexString(ChatUtil.chatTextColor.getRGB()).toUpperCase()));
-        configs.modifyConfig(new Pair<>("chat_background_color", Integer.toHexString(ChatUtil.chatBackgroundColor.getRGB()).toUpperCase()));
+        configs.modifyConfig(new Pair<>("chat_text_color", Integer.toHexString(chatTextColor.getRGB()).toUpperCase()));
+        configs.modifyConfig(new Pair<>("chat_background_color", Integer.toHexString(chatBackgroundColor.getRGB()).toUpperCase()));
 
         // Keys
         configs.modifyConfig(new Pair<>("key_linger_ticks", keyLingerTicks));
 
         // Colors
-        configs.modifyConfig(new Pair<>("color_pitch", Integer.toHexString(AxisUtil.pitchColor.getRGB()).toUpperCase()));
-        configs.modifyConfig(new Pair<>("color_yaw", Integer.toHexString(AxisUtil.yawColor.getRGB()).toUpperCase()));
+        configs.modifyConfig(new Pair<>("color_pitch", Integer.toHexString(pitchColor.getRGB()).toUpperCase()));
+        configs.modifyConfig(new Pair<>("color_yaw", Integer.toHexString(yawColor.getRGB()).toUpperCase()));
     }
 
     private static void registerConfigs() {

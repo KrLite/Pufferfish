@@ -4,7 +4,6 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import net.krlite.pufferfish.config.PuffConfigs;
 import net.krlite.pufferfish.render.renderer.PuffProxiedRenderer;
 import net.krlite.pufferfish.render.PuffRenderer;
-import net.krlite.pufferfish.util.ChatUtil;
 import net.krlite.pufferfish.util.ColorUtil;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.hud.SubtitlesHud;
@@ -43,7 +42,7 @@ public class SubtitlesHudHandler {
                     matrixStack,
                     xBegin, yBegin,
                     xEnd,   yEnd,
-                    ColorUtil.castAlpha(ChatUtil.chatBackgroundColor, MinecraftClient.getInstance().options.getTextBackgroundOpacity().getValue().floatValue())
+                    ColorUtil.castAlpha(PuffConfigs.chatBackgroundColor, MinecraftClient.getInstance().options.getTextBackgroundOpacity().getValue().floatValue())
             );
 
             RenderSystem.disableBlend();

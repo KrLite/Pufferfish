@@ -2,14 +2,16 @@ package net.krlite.pufferfish.mixin.animator;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.krlite.pufferfish.config.PuffConfigs;
+import net.krlite.pufferfish.core.Broadcaster;
+import net.krlite.pufferfish.core.IHashable;
 import net.krlite.pufferfish.render.PuffRenderer;
-import net.krlite.pufferfish.util.ChatUtil;
 import net.krlite.pufferfish.util.ColorUtil;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.hud.ChatHud;
 import net.minecraft.client.gui.hud.ChatHudLine;
+import net.minecraft.client.gui.screen.ChatScreen;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.text.OrderedText;
 import net.minecraft.text.Text;
@@ -27,25 +29,31 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Mixin(ChatHud.class)
-public abstract class ChatHudAnimator extends DrawableHelper{
+public abstract class ChatHudAnimator extends DrawableHelper implements Broadcaster.IBroadcaster, IHashable {
     @Shadow protected abstract boolean isChatFocused();
-
     @Shadow private int scrolledLines;
-
     @Shadow public abstract int getVisibleLineCount();
-
-    @Shadow
-    private static double getMessageOpacityMultiplier(int age) {
+    @Shadow private static double getMessageOpacityMultiplier(int age) {
         return 0;
     }
-
     @Shadow @Final private List<ChatHudLine.Visible> visibleMessages;
-    private static final List<Double> messageExistingTicks = new ArrayList<>();
+    private final List<Double> messageExistingTicks = new ArrayList<>();
+    private final int chatBackgroundOpacityTarget = hash(ChatScreen.class, "ChatBackgroundOpacityTarget");
+    private final int chatBackgroundOpacity = hash(ChatScreen.class, "ChatBackgroundOpacity");
 
     @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/ChatHud;getChatScale()D"))
-    private void render(MatrixStack matrixStack, int tickDelta, CallbackInfo ci) {
+    private void ChatHudAnimator$render(MatrixStack matrixStack, int tickDelta, CallbackInfo ci) {
         if ( PuffConfigs.enableChatAnimation ) {
-            if (!messageExistingTicks.isEmpty()) messageExistingTicks.clear();
+            broadcast(
+                    chatBackgroundOpacity,
+                    MathHelper.lerp(
+                            0.107,
+                            (double) getBroadcastOrDefault(chatBackgroundOpacity, 0.0),
+                            (double) getBroadcast(chatBackgroundOpacityTarget)
+                    )
+            );
+
+            if ( !messageExistingTicks.isEmpty() ) messageExistingTicks.clear();
             for (
                     int message = 0;
                     message + this.scrolledLines < this.visibleMessages.size() && message < this.getVisibleLineCount();
@@ -89,9 +97,8 @@ public abstract class ChatHudAnimator extends DrawableHelper{
                     to = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/ChatHudLine$Visible;indicator()Lnet/minecraft/client/gui/hud/MessageIndicator;")
             )
     )
-    private void renderChatBackground(MatrixStack matrixStack, int xBegin, int yBegin, int xEnd, int yEnd, int color) {
+    private void ChatHudAnimator$renderChatBackground(MatrixStack matrixStack, int xBegin, int yBegin, int xEnd, int yEnd, int color) {
         RenderSystem.enableBlend();
-
         float opacity = 1.0F;
 
         if ( PuffConfigs.enableChatAnimation ) {
@@ -104,7 +111,7 @@ public abstract class ChatHudAnimator extends DrawableHelper{
                                     ? getMessageOpacityMultiplier(message)
                                     : Math.pow(existingTicks / 10.0, 2.0),
                     this.isChatFocused()
-                            ? ChatUtil.chatBackgroundOpacity
+                            ? (double) getBroadcast(chatBackgroundOpacity)
                             : 0.0F
             );
 
@@ -123,10 +130,10 @@ public abstract class ChatHudAnimator extends DrawableHelper{
                 matrixStack,
                 xBegin, yBegin,
                 xEnd * opacity, yEnd,
-                ColorUtil.castAlpha(ChatUtil.chatBackgroundColor, color),
+                ColorUtil.castAlpha(PuffConfigs.chatBackgroundColor, color),
                 PuffConfigs.enableChatAnimation
-                        ? ColorUtil.castAlpha(ChatUtil.chatBackgroundColor)
-                        : ColorUtil.castAlpha(ChatUtil.chatBackgroundColor, color)
+                        ? ColorUtil.castAlpha(PuffConfigs.chatBackgroundColor)
+                        : ColorUtil.castAlpha(PuffConfigs.chatBackgroundColor, color)
         );
     }
 
@@ -137,7 +144,7 @@ public abstract class ChatHudAnimator extends DrawableHelper{
                     target = "Lnet/minecraft/client/font/TextRenderer;drawWithShadow(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/text/OrderedText;FFI)I"
             )
     )
-    private int renderChat(TextRenderer instance, MatrixStack matrixStack, OrderedText text, float x, float y, int color) {
+    private int ChatHudAnimator$renderChat(TextRenderer instance, MatrixStack matrixStack, OrderedText text, float x, float y, int color) {
         RenderSystem.enableBlend();
 
         float opacity = 1.0F, xOffset = 0.0F, yOffset = 0.0F;
@@ -170,9 +177,9 @@ public abstract class ChatHudAnimator extends DrawableHelper{
                 x + xOffset, y + yOffset,
                 opacity < 1.0
                         ? ColorUtil.castAlpha(
-                                ChatUtil.chatTextColor, (float) (opacity * MinecraftClient.getInstance().options.getChatOpacity().getValue())
+                                PuffConfigs.chatTextColor, (float) (opacity * MinecraftClient.getInstance().options.getChatOpacity().getValue())
                         ).getRGB()
-                        : ColorUtil.castAlpha(ChatUtil.chatTextColor, color).getRGB(),
+                        : ColorUtil.castAlpha(PuffConfigs.chatTextColor, color).getRGB(),
                 PuffConfigs.enableChatTextShadow
         );
     }
@@ -188,13 +195,13 @@ public abstract class ChatHudAnimator extends DrawableHelper{
                     to = @At("TAIL")
             )
     )
-    private void renderStaticChatBackground(MatrixStack matrixStack, int xBegin, int yBegin, int xEnd, int yEnd, int color) {
+    private void ChatHudAnimator$renderStaticChatBackground(MatrixStack matrixStack, int xBegin, int yBegin, int xEnd, int yEnd, int color) {
         RenderSystem.enableBlend();
 
         if ( PuffConfigs.enableChatAnimation ) {
             RenderSystem.setShaderColor(
                     1.0F, 1.0F, 1.0F,
-                    (float) ChatUtil.chatBackgroundOpacity
+                    (float) (double) getBroadcast(chatBackgroundOpacity)
             );
         }
 
@@ -206,10 +213,10 @@ public abstract class ChatHudAnimator extends DrawableHelper{
                 matrixStack,
                 xBegin, yBegin,
                 xEnd,   yEnd,
-                ColorUtil.castAlpha(ChatUtil.chatBackgroundColor, color),
+                ColorUtil.castAlpha(PuffConfigs.chatBackgroundColor, color),
                 PuffConfigs.enableChatAnimation
-                        ? ColorUtil.castAlpha(ChatUtil.chatBackgroundColor)
-                        : ColorUtil.castAlpha(ChatUtil.chatBackgroundColor, color)
+                        ? ColorUtil.castAlpha(PuffConfigs.chatBackgroundColor)
+                        : ColorUtil.castAlpha(PuffConfigs.chatBackgroundColor, color)
         );
     }
 
@@ -220,7 +227,7 @@ public abstract class ChatHudAnimator extends DrawableHelper{
                     target = "Lnet/minecraft/client/font/TextRenderer;drawWithShadow(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/text/Text;FFI)I"
             )
     )
-    private int renderStaticChat(TextRenderer instance, MatrixStack matrixStack, Text text, float x, float y, int color) {
+    private int ChatHudAnimator$renderStaticChat(TextRenderer instance, MatrixStack matrixStack, Text text, float x, float y, int color) {
         RenderSystem.enableBlend();
 
         if ( PuffConfigs.hotbarPosition.isLeft() ) {
@@ -231,9 +238,9 @@ public abstract class ChatHudAnimator extends DrawableHelper{
                 matrixStack, text,
                 x, y,
                 ColorUtil.castAlpha(
-                        ChatUtil.chatTextColor,
+                        PuffConfigs.chatTextColor,
                         PuffConfigs.enableChatAnimation
-                                ? (float) Math.pow(ChatUtil.chatBackgroundOpacity * MinecraftClient.getInstance().options.getChatOpacity().getValue(), 2.0)
+                                ? (float) Math.pow((double) getBroadcast(chatBackgroundOpacity) * MinecraftClient.getInstance().options.getChatOpacity().getValue(), 2.0)
                                 : (float) (color >> 24 & 255) / 255.0F
                 ).getRGB(),
                 PuffConfigs.enableChatTextShadow

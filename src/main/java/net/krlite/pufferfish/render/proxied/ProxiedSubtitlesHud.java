@@ -1,7 +1,7 @@
 package net.krlite.pufferfish.render.proxied;
 
+import net.krlite.pufferfish.config.PuffConfigs;
 import net.krlite.pufferfish.render.PuffRenderer;
-import net.krlite.pufferfish.util.ChatUtil;
 import net.krlite.pufferfish.util.ColorUtil;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
@@ -24,8 +24,8 @@ public class ProxiedSubtitlesHud extends DrawableHelper {
                 matrixStack,
                 xEnd - width, yEnd - height,
                 xEnd, yEnd,
-                ColorUtil.castAlpha(ChatUtil.chatBackgroundColor),
-                ColorUtil.castAlpha(ChatUtil.chatBackgroundColor, (float) (double) client.options.getTextBackgroundOpacity().getValue())
+                ColorUtil.castAlpha(PuffConfigs.chatBackgroundColor),
+                ColorUtil.castAlpha(PuffConfigs.chatBackgroundColor, (float) (double) client.options.getTextBackgroundOpacity().getValue())
         );
     }
 

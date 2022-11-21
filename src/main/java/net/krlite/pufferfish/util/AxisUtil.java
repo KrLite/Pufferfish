@@ -4,7 +4,6 @@ import com.google.common.collect.ImmutableMap;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.MathHelper;
 
-import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -12,8 +11,6 @@ import java.util.UUID;
 public class AxisUtil {
     private static final float delta = 0.25F;
     public static UUID playerUuid;
-    public static Color pitchColor;
-    public static Color yawColor;
 
     public enum Axis {
         PITCH, YAW

@@ -23,20 +23,16 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import java.awt.*;
 
 @Mixin(InGameHud.class)
-public abstract class HotBarHandler {
+public abstract class HotbarHandler {
     @Shadow private int scaledWidth;
-
     @Shadow private int scaledHeight;
-
     @Shadow protected abstract PlayerEntity getCameraPlayer();
-
     @Shadow protected abstract void renderHotbarItem(int x, int y, float tickDelta, PlayerEntity player, ItemStack itemStack, int seed);
-
     @Shadow private @Nullable Text overlayMessage;
     private static int seed = 1;
 
     @Inject(method = "renderHotbar", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/systems/RenderSystem;setShaderColor(FFFF)V", ordinal = 0))
-    private void update(float tickDelta, MatrixStack matrixStack, CallbackInfo ci) {
+    private void HotbarHandler$render(float tickDelta, MatrixStack matrixStack, CallbackInfo ci) {
         seed = 1;
         if ( PuffConfigs.hotbarPosition.isLeft() ) {
             HotBarUtil.updateHotbarOffset(getCameraPlayer());
@@ -53,7 +49,7 @@ public abstract class HotBarHandler {
                     to = @At(value = "INVOKE", target = "Lnet/minecraft/client/option/GameOptions;getAttackIndicator()Lnet/minecraft/client/option/SimpleOption;")
             )
     )
-    private void pushMatrixStack(float tickDelta, MatrixStack matrixStack, CallbackInfo ci) {
+    private void HotbarHandler$renderHotbarPre(float tickDelta, MatrixStack matrixStack, CallbackInfo ci) {
         matrixStack.push();
 
         if ( PuffConfigs.hotbarPosition.isLeft() ) {
@@ -79,7 +75,7 @@ public abstract class HotBarHandler {
                     to = @At(value = "INVOKE", target = "Lnet/minecraft/client/option/GameOptions;getAttackIndicator()Lnet/minecraft/client/option/SimpleOption;")
             )
     )
-    private void popMatrixStack(float tickDelta, MatrixStack matrixStack, CallbackInfo ci) {
+    private void HotbarHandler$renderHotbarPost(float tickDelta, MatrixStack matrixStack, CallbackInfo ci) {
         matrixStack.pop();
     }
 
@@ -95,7 +91,7 @@ public abstract class HotBarHandler {
                     to = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;isEmpty()Z")
             )
     )
-    private void renderHotbar(InGameHud instance, MatrixStack matrixStack, int x, int y, int u, int v, int width, int height) {
+    private void HotbarHandler$renderHotbar(InGameHud instance, MatrixStack matrixStack, int x, int y, int u, int v, int width, int height) {
         PuffRenderer.COLORED_TEXTURE.renderColoredTexture(
                 HotBarUtil.VANILLA_HOTBAR, Color.WHITE,
                 matrixStack,
@@ -116,7 +112,7 @@ public abstract class HotBarHandler {
                     to = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;isEmpty()Z")
             )
     )
-    private void renderSelectedSlot(InGameHud instance, MatrixStack matrixStack, int x, int y, int u, int v, int width, int height) {
+    private void HotbarHandler$renderSelectedSlot(InGameHud instance, MatrixStack matrixStack, int x, int y, int u, int v, int width, int height) {
         float horizontal = -1 + getCameraPlayer().getInventory().selectedSlot * 20;
 
         PuffRenderer.COLORED_TEXTURE.renderColoredTexture(
@@ -142,7 +138,7 @@ public abstract class HotBarHandler {
                     )
             )
     )
-    private void renderOffHandSlotLeft(InGameHud instance, MatrixStack matrixStack, int x, int y, int u, int v, int width, int height) {
+    private void HotbarHandler$renderOffHandSlotLeft(InGameHud instance, MatrixStack matrixStack, int x, int y, int u, int v, int width, int height) {
         PuffRenderer.COLORED_TEXTURE.renderColoredTexture(
                 HotBarUtil.VANILLA_OFFHAND_SLOT_LEFT, Color.WHITE,
                 matrixStack,
@@ -166,7 +162,7 @@ public abstract class HotBarHandler {
                     )
             )
     )
-    private void renderOffHandSlotRight(InGameHud instance, MatrixStack matrixStack, int x, int y, int u, int v, int width, int height) {
+    private void HotbarHandler$renderOffHandSlotRight(InGameHud instance, MatrixStack matrixStack, int x, int y, int u, int v, int width, int height) {
         PuffRenderer.COLORED_TEXTURE.renderColoredTexture(
                 HotBarUtil.VANILLA_OFFHAND_SLOT_RIGHT, Color.WHITE,
                 matrixStack,
@@ -185,7 +181,7 @@ public abstract class HotBarHandler {
                     from = @At(value = "INVOKE", target = "Lnet/minecraft/client/option/GameOptions;getAttackIndicator()Lnet/minecraft/client/option/SimpleOption;")
             )
     )
-    private void renderAttackIndicator(InGameHud instance, MatrixStack matrixStack, int x, int y, int u, int v, int width, int height) {
+    private void HotbarHandler$renderHotbarAttackIndicator(InGameHud instance, MatrixStack matrixStack, int x, int y, int u, int v, int width, int height) {
         if ( PuffConfigs.hotbarPosition.isLeft() ) {
             x = scaledWidth - 20;
         }
@@ -207,7 +203,7 @@ public abstract class HotBarHandler {
                     from = @At(value = "INVOKE", target = "Lnet/minecraft/util/math/MathHelper;hsvToRgb(FFF)I")
             )
     )
-    private int renderOverlayMessage(TextRenderer textRenderer, MatrixStack matrixStack, Text text, float x, float y, int color) {
+    private int HotbarHandler$renderOverlayMessage(TextRenderer textRenderer, MatrixStack matrixStack, Text text, float x, float y, int color) {
         if ( PuffConfigs.hotbarPosition.isLeft() ) {
             y += 23;
         }
@@ -225,7 +221,7 @@ public abstract class HotBarHandler {
                     ordinal = 0
             )
     )
-    private void cancelRenderHotBarItem(InGameHud instance, int x, int y, float tickDelta, PlayerEntity player, ItemStack itemStack, int seed) {
+    private void HotbarHandler$cancelRenderHotBarItem(InGameHud instance, int x, int y, float tickDelta, PlayerEntity player, ItemStack itemStack, int seed) {
     }
 
     @Inject(
@@ -235,7 +231,7 @@ public abstract class HotBarHandler {
                     target = "Lcom/mojang/blaze3d/systems/RenderSystem;defaultBlendFunc()V"
             )
     )
-    private void renderHotBarItem(float tickDelta, MatrixStack matrixStack, CallbackInfo ci) {
+    private void HotbarHandler$renderHotBarItem(float tickDelta, MatrixStack matrixStack, CallbackInfo ci) {
         for ( int index = 0; index < 9; ++index ) {
             int
                     horizontal = scaledWidth / 2 - 90 + index * 20 + 2,
@@ -265,7 +261,7 @@ public abstract class HotBarHandler {
                     )
             )
     )
-    private void renderOffHandItemLeft(InGameHud instance, int x, int y, float tickDelta, PlayerEntity player, ItemStack itemStack, int seed) {
+    private void HotbarHandler$renderOffHandItemLeft(InGameHud instance, int x, int y, float tickDelta, PlayerEntity player, ItemStack itemStack, int seed) {
         int
                 horizontal = scaledWidth / 2 - 91 - 26,
                 vertical = scaledHeight - 19;
@@ -293,7 +289,7 @@ public abstract class HotBarHandler {
                     )
             )
     )
-    private void renderOffHandItemRight(InGameHud instance, int x, int y, float tickDelta, PlayerEntity player, ItemStack itemStack, int seed) {
+    private void HotbarHandler$renderOffHandItemRight(InGameHud instance, int x, int y, float tickDelta, PlayerEntity player, ItemStack itemStack, int seed) {
         int
                 horizontal = scaledWidth / 2 + 91 + 10,
                 vertical = scaledHeight - 19;

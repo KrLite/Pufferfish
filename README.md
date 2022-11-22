@@ -2,6 +2,8 @@
 
 ### Why Not Puff?
 
+![banner](/artwork/banner.png)
+
 ### `Functions As:`
 
 **Hud Enhances**

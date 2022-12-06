@@ -67,7 +67,7 @@ public class TitleScreenAnimator implements Broadcaster.IBroadcaster, IHashable 
         if ( (boolean) getBroadcastOrDefault(titleTrigger, false) ) {
             double titleFadeMs = 853;
             double time = titleTimer.getElapsed() > titleFadeMs ? titleFadeMs : titleTimer.getElapsed();
-            titlePos = EasingFunctions.Func.outBounce(titleTimer, offset) - offset;
+            titlePos = EasingFunctions.easeOutBounce(time, -offset, offset, titleFadeMs);
         } else {
             titlePos = -offset;
         }

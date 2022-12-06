@@ -14,7 +14,7 @@ import java.util.Map;
 import static net.krlite.pufferfish.util.AxisUtil.*;
 
 public class PuffKeys {
-    public static Map<Axis, Integer> lingerKeyAxis = new HashMap<>();
+    public static Map<Axis, Long> lingerKeyAxis = new HashMap<>();
     public static Map<Axis, Boolean> availableKeyAxis = new HashMap<>();
 
     // Config Key
@@ -53,8 +53,8 @@ public class PuffKeys {
 
     private static void registerKeyMaps() {
         lingerKeyAxis.putAll(ImmutableMap.of(
-                Axis.PITCH, 0,
-                Axis.YAW, 0
+                Axis.PITCH, 0L,
+                Axis.YAW, 0L
         ));
 
         availableKeyAxis.putAll(ImmutableMap.of(

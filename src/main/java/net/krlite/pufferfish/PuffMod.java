@@ -1,7 +1,7 @@
 package net.krlite.pufferfish;
 
 import net.fabricmc.api.ClientModInitializer;
-import net.krlite.pufferfish.config.PuffConfigs;
+import net.krlite.pufferfish.config_deprecated.PuffConfigs;
 import net.krlite.pufferfish.event.InputEventHandler;
 import net.krlite.pufferfish.render.PuffRenderer;
 import net.krlite.pufferfish.render.ScreenshotFlashRenderer;

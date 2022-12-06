@@ -3,7 +3,9 @@ package net.krlite.pufferfish.config.config_screen;
 import me.shedaniel.clothconfig2.api.ConfigBuilder;
 import me.shedaniel.clothconfig2.api.ConfigCategory;
 import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
-import net.krlite.pufferfish.config.PuffConfigs;
+import net.krlite.plumeconfig.option.core.Option;
+import net.krlite.pufferfish.config_deprecated.PuffConfigs;
+import net.krlite.pufferfish.util.ColorUtil;
 import net.krlite.pufferfish.util.IdentifierBuilder;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
@@ -12,16 +14,22 @@ import net.minecraft.client.option.SimpleOption;
 import net.minecraft.util.Arm;
 
 import java.awt.*;
-import java.io.IOException;
 
-import static net.krlite.pufferfish.config.PuffConfigs.*;
-import static net.krlite.pufferfish.config.Defaults.*;
+import static net.krlite.pufferfish.config.Default.*;
+import static net.krlite.pufferfish.config.PuffConfig.*;
 
 public class PuffConfigScreenHandler {
     private static <T> void setVanilla(SimpleOption<T> simpleOption, T value) {
         if ( value != null ) {
             simpleOption.setValue(value);
             MinecraftClient.getInstance().options.write();
+        }
+    }
+    
+    private static <T> void set(Option<T> option, T value) {
+        if ( value != null ) {
+            option.set(value);
+            writeConfig();
         }
     }
 
@@ -42,11 +50,11 @@ public class PuffConfigScreenHandler {
                 entryBuilder
                         .startBooleanToggle(
                                 IdentifierBuilder.translatableText("config", "general", "enable_title_animation"),
-                                enableTitleAnimation
+                                ENABLE_TITLE_ANIMATION.getValue()
                         )
                         .setDefaultValue(DEFAULT_ENABLE_TITLE_ANIMATION)
                         .setTooltip(IdentifierBuilder.translatableText("config", "general", "enable_title_animation", "tooltip"))
-                        .setSaveConsumer(value -> enableTitleAnimation = value)
+                        .setSaveConsumer(value -> set(ENABLE_CHAT_ANIMATION, value))
                         .build()
         );
 
@@ -55,15 +63,15 @@ public class PuffConfigScreenHandler {
                 entryBuilder
                         .startEnumSelector(
                                 IdentifierBuilder.translatableText("config", "general", "hotbar_position"),
-                                HotbarPosition.class, hotbarPosition
+                                HotbarPosition.class, HOTBAR_POSITION.getValue()
                         )
                         .setDefaultValue(DEFAULT_HOTBAR_POSITION)
                         .setTooltip(IdentifierBuilder.translatableText("config", "general", "hotbar_position", "tooltip"))
-                        .setSaveConsumer(value -> hotbarPosition = value)
+                        .setSaveConsumer(value -> set(HOTBAR_POSITION, value))
                         .build()
         );
 
-        // Main Hand Position
+        // Main Hand Position (vanilla)
         general.addEntry(
                 entryBuilder
                         .startEnumSelector(
@@ -84,11 +92,11 @@ public class PuffConfigScreenHandler {
                 entryBuilder
                         .startIntSlider(
                                 IdentifierBuilder.translatableText("config", "crosshair", "size"),
-                                (int) (crosshairSize * 100), 0, 300
+                                (int) (CROSSHAIR_SIZE.getValue() * 100), 0, 300
                         )
                         .setDefaultValue((int) (DEFAULT_CROSSHAIR_SIZE * 100))
                         .setTooltip(IdentifierBuilder.translatableText("config", "crosshair", "size", "tooltip"))
-                        .setSaveConsumer(value -> crosshairSize = value / 100.0)
+                        .setSaveConsumer(value -> set(CROSSHAIR_SIZE, value / 100.0))
                         .build()
         );
 
@@ -97,11 +105,11 @@ public class PuffConfigScreenHandler {
                 entryBuilder
                         .startIntSlider(
                                 IdentifierBuilder.translatableText("config", "crosshair", "puff"),
-                                (int) (crosshairPuff * 100), 0, 100
+                                (int) (CROSSHAIR_EXPAND_INDEX.getValue() * 100), 0, 100
                         )
-                        .setDefaultValue((int) (DEFAULT_CROSSHAIR_PUFF * 100))
+                        .setDefaultValue((int) (DEFAULT_CROSSHAIR_EXPAND_INDEX * 100))
                         .setTooltip(IdentifierBuilder.translatableText("config", "crosshair", "puff", "tooltip"))
-                        .setSaveConsumer(value -> crosshairPuff = value / 100.0)
+                        .setSaveConsumer(value -> set(CROSSHAIR_EXPAND_INDEX, value / 100.0))
                         .build()
         );
 
@@ -110,11 +118,11 @@ public class PuffConfigScreenHandler {
                 entryBuilder
                         .startEnumSelector(
                                 IdentifierBuilder.translatableText("config", "crosshair", "render_style"),
-                                CrosshairRenderStyle.class, corsshairRenderStyle
+                                CrosshairRenderStyle.class, CROSSHAIR_RENDER_STYLE.getValue()
                         )
                         .setDefaultValue(CrosshairRenderStyle.VANILLA)
                         .setTooltip(IdentifierBuilder.translatableText("config", "crosshair", "render_style", "tooltip"))
-                        .setSaveConsumer(value -> corsshairRenderStyle = value)
+                        .setSaveConsumer(value -> set(CROSSHAIR_RENDER_STYLE, value))
                         .build()
         );
 
@@ -123,11 +131,11 @@ public class PuffConfigScreenHandler {
                 entryBuilder
                         .startEnumSelector(
                                 IdentifierBuilder.translatableText("config", "crosshair", "style"),
-                                CrosshairStyle.class, crosshairStyle
+                                CrosshairStyle.class, CROSSHAIR_STYLE.getValue()
                         )
-                        .setDefaultValue(CrosshairStyle.VANILLA)
+                        .setDefaultValue(DEFAULT_CROSSHAIR_STYLE)
                         .setTooltip(IdentifierBuilder.translatableText("config", "crosshair", "style", "tooltip"))
-                        .setSaveConsumer(value -> crosshairStyle = value)
+                        .setSaveConsumer(value -> set(CROSSHAIR_STYLE, value))
                         .build()
         );
 
@@ -139,11 +147,11 @@ public class PuffConfigScreenHandler {
                 entryBuilder
                         .startBooleanToggle(
                                 IdentifierBuilder.translatableText("config", "chat", "enable_animation"),
-                                enableChatAnimation
+                                ENABLE_CHAT_ANIMATION.getValue()
                         )
                         .setDefaultValue(DEFAULT_ENABLE_CHAT_ANIMATION)
                         .setTooltip(IdentifierBuilder.translatableText("config", "chat", "enable_animation", "tooltip"))
-                        .setSaveConsumer(value -> enableChatAnimation = value)
+                        .setSaveConsumer(value -> set(ENABLE_CHAT_ANIMATION, value))
                         .build()
         );
 
@@ -152,11 +160,11 @@ public class PuffConfigScreenHandler {
                 entryBuilder
                         .startBooleanToggle(
                                 IdentifierBuilder.translatableText("config", "chat", "enable_text_shadow"),
-                                enableChatTextShadow
+                                ENABLE_CHAT_TEXT_SHADOW.getValue()
                         )
                         .setDefaultValue(DEFAULT_ENABLE_CHAT_TEXT_SHADOW)
                         .setTooltip(IdentifierBuilder.translatableText("config", "chat", "enable_text_shadow", "tooltip"))
-                        .setSaveConsumer(value -> enableChatTextShadow = value)
+                        .setSaveConsumer(value -> set(ENABLE_CHAT_TEXT_SHADOW, value))
                         .build()
         );
 
@@ -173,7 +181,6 @@ public class PuffConfigScreenHandler {
                         .setSaveConsumer(value -> chatSelfHighlighting = value)
                         .build()
         );
-
          */
 
         // Chat Text Color
@@ -181,11 +188,11 @@ public class PuffConfigScreenHandler {
                 entryBuilder
                         .startColorField(
                                 IdentifierBuilder.translatableText("config", "chat", "text_color"),
-                                chatTextColor.getRGB() & 0x00FFFFFF
+                                ColorUtil.clearAlpha(CHAT_TEXT_COLOR.getValue()).getRGB()
                         )
-                        .setDefaultValue(DEFAULT_CHAT_TEXT_COLOR.getRGB() & 0x00FFFFFF)
+                        .setDefaultValue(ColorUtil.clearAlpha(DEFAULT_CHAT_TEXT_COLOR).getRGB())
                         //.setTooltip(IdentifierBuilder.translatableText("config", "colors", "chat", "text_color"))
-                        .setSaveConsumer(value -> chatTextColor = new Color(value, false))
+                        .setSaveConsumer(value -> set(CHAT_TEXT_COLOR, new Color(value, true)))
                         .build()
         );
 
@@ -194,15 +201,15 @@ public class PuffConfigScreenHandler {
                 entryBuilder
                         .startColorField(
                                 IdentifierBuilder.translatableText("config", "chat", "background_color"),
-                                chatBackgroundColor.getRGB() & 0x00FFFFFF
+                                ColorUtil.clearAlpha(CHAT_BACKGROUND_COLOR.getValue()).getRGB()
                         )
-                        .setDefaultValue(DEFAULT_CHAT_BACKGROUND_COLOR.getRGB() & 0x00FFFFFF)
+                        .setDefaultValue(ColorUtil.clearAlpha(DEFAULT_CHAT_BACKGROUND_COLOR).getRGB())
                         //.setTooltip(IdentifierBuilder.translatableText("config", "colors", "chat", "background_color"))
-                        .setSaveConsumer(value -> chatBackgroundColor = new Color(value, false))
+                        .setSaveConsumer(value -> set(CHAT_BACKGROUND_COLOR, new Color(value, true)))
                         .build()
         );
 
-        // Chat Opacity (Vanilla)
+        // Chat Opacity (vanilla)
         chat.addEntry(
                 entryBuilder
                         .startIntSlider(
@@ -215,7 +222,7 @@ public class PuffConfigScreenHandler {
                         .build()
         );
 
-        // Text Background Opacity (Vanilla)
+        // Text Background Opacity (vanilla)
         chat.addEntry(
                 entryBuilder
                         .startIntSlider(
@@ -228,7 +235,7 @@ public class PuffConfigScreenHandler {
                         .build()
         );
 
-        // Line Spacing (Vanilla)
+        // Line Spacing (vanilla)
         chat.addEntry(
                 entryBuilder
                         .startIntSlider(
@@ -249,13 +256,13 @@ public class PuffConfigScreenHandler {
         // Key Linger Ticks
         keys.addEntry(
                 entryBuilder
-                        .startIntField(
+                        .startLongField(
                                 IdentifierBuilder.translatableText("config", "keys", "linger_ticks"),
-                                keyLingerTicks
+                                KEY_LINGER_TICKS.getValue()
                         )
                         .setDefaultValue(DEFAULT_KEY_LINGER_TICKS)
                         .setTooltip(IdentifierBuilder.translatableText("config", "keys", "linger_ticks", "tooltip"))
-                        .setSaveConsumer(value -> keyLingerTicks = value)
+                        .setSaveConsumer(value -> set(KEY_LINGER_TICKS, value))
                         .build()
         );
 
@@ -269,11 +276,11 @@ public class PuffConfigScreenHandler {
                 entryBuilder
                         .startColorField(
                                 IdentifierBuilder.translatableText("config", "colors", "pitch"),
-                                pitchColor.getRGB() & 0x00FFFFFF
+                                ColorUtil.clearAlpha(PITCH_COLOR.getValue()).getRGB()
                         )
-                        .setDefaultValue(DEFAULT_PITCH_COLOR.getRGB() & 0x00FFFFFF)
-                        //.setTooltip(IdentifierBuilder.translatableText("config", "colors", "pitch", "tooltip"))
-                        .setSaveConsumer(value -> pitchColor = new Color(value, false))
+                        .setDefaultValue(ColorUtil.clearAlpha(DEFAULT_PITCH_COLOR).getRGB())
+                        .setTooltip(IdentifierBuilder.translatableText("config", "colors", "pitch", "tooltip"))
+                        .setSaveConsumer(value -> set(PITCH_COLOR, new Color(value, true)))
                         .build()
         );
 
@@ -282,23 +289,13 @@ public class PuffConfigScreenHandler {
                 entryBuilder
                         .startColorField(
                                 IdentifierBuilder.translatableText("config", "colors", "yaw"),
-                                yawColor.getRGB() & 0x00FFFFFF
+                                ColorUtil.clearAlpha(YAW_COLOR.getValue()).getRGB()
                         )
-                        .setDefaultValue(DEFAULT_YAW_COLOR.getRGB() & 0x00FFFFFF)
-                        //.setTooltip(IdentifierBuilder.translatableText("config", "colors", "yaw", "tooltip"))
-                        .setSaveConsumer(value -> yawColor = new Color(value, false))
+                        .setDefaultValue(ColorUtil.clearAlpha(DEFAULT_YAW_COLOR).getRGB())
+                        .setTooltip(IdentifierBuilder.translatableText("config", "colors", "yaw", "tooltip"))
+                        .setSaveConsumer(value -> set(YAW_COLOR, new Color(value, true)))
                         .build()
         );
-
-
-
-        builder.setSavingRunnable(() -> {
-            try {
-                PuffConfigs.save();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        });
 
         return builder.build();
     }

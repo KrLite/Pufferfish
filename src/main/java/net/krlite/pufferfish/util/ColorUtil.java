@@ -43,6 +43,10 @@ public class ColorUtil {
         }
     }
 
+    public static Color clearAlpha(Color color) {
+        return new Color(color.getRed(), color.getGreen(), color.getBlue());
+    }
+
     public static Color multipleAlpha(Color color, float multiplier) {
         return castAlpha(color, color.getAlpha() / 255.0F * MathHelper.clamp(multiplier, 0, 1));
     }

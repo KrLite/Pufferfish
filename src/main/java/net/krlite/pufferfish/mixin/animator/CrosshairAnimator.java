@@ -2,7 +2,7 @@ package net.krlite.pufferfish.mixin.animator;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.krlite.pufferfish.config.PuffConfigs;
+import net.krlite.pufferfish.config.PuffConfig;
 import net.krlite.pufferfish.math.IdentifierSprite;
 import net.krlite.pufferfish.math.PreciseColor;
 import net.krlite.pufferfish.render.renderer.CrosshairPuffer;
@@ -45,7 +45,7 @@ public abstract class CrosshairAnimator extends DrawableHelper{
     private void setCrosshairStyle(GlStateManager.SrcFactor srcFactor, GlStateManager.DstFactor dstFactor, GlStateManager.SrcFactor srcAlpha, GlStateManager.DstFactor dstAlpha) {
         double multiplier = 1 - 0.53 * (MathHelper.abs(MathHelper.sin((float) ((Util.getMeasuringTimeMs() % 10500L) / 10500.0 * (Math.PI * 2)))));
 
-        switch ( PuffConfigs.corsshairRenderStyle ) {
+        switch ( PuffConfig.CROSSHAIR_RENDER_STYLE.getValue() ) {
             case PUFFERFISH -> {
                 RenderSystem.blendFunc(
                         GlStateManager.SrcFactor.SRC_ALPHA, GlStateManager.DstFactor.DST_COLOR
@@ -94,7 +94,7 @@ public abstract class CrosshairAnimator extends DrawableHelper{
         matrixStack.push();
         CrosshairPuffer.puffCrosshair(matrixStack);
 
-        switch ( PuffConfigs.crosshairStyle ) {
+        switch ( PuffConfig.CROSSHAIR_STYLE.getValue() ) {
             case EMPTY -> {}
 
             case VANILLA -> PuffRenderer.COLORED_TEXTURE.renderColoredTexture(
@@ -106,7 +106,7 @@ public abstract class CrosshairAnimator extends DrawableHelper{
             );
 
             default -> {
-                IdentifierSprite STYLE = CrosshairPuffer.CROSSHAIR.get(PuffConfigs.crosshairStyle.getIndex());
+                IdentifierSprite STYLE = CrosshairPuffer.CROSSHAIR.get(PuffConfig.CROSSHAIR_STYLE.getValue().getIndex());
 
                 PuffRenderer.COLORED_TEXTURE.renderColoredTexture(
                         STYLE,
@@ -136,7 +136,7 @@ public abstract class CrosshairAnimator extends DrawableHelper{
     private void renderAttackIndicator(InGameHud instance, MatrixStack matrixStack, int x, int y, int u, int v, int width, int height) {
         PuffRenderer.COLORED_TEXTURE.renderPositionedColoredTexture(
                 GUI_ICONS_TEXTURE,
-                PuffConfigs.hotbarPosition.isLeft()
+                PuffConfig.HOTBAR_POSITION.getValue().isLeft()
                         ? new PreciseColor(Color.WHITE).castAlpha(opacity).get()
                         : Color.WHITE,
                 matrixStack,

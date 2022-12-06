@@ -1,6 +1,6 @@
 package net.krlite.pufferfish.render.extra;
 
-import net.krlite.pufferfish.config.PuffConfigs;
+import net.krlite.pufferfish.config.PuffConfig;
 import net.krlite.pufferfish.math.PreciseColor;
 import net.krlite.pufferfish.render.renderer.CameraOverlayRenderer;
 import net.krlite.pufferfish.render.renderer.PuffProxiedRenderer;
@@ -22,17 +22,17 @@ public class ExtraBeforeRenderer {
         axisColor.blend(
                 AxisUtil.axisLock.get(AxisUtil.Axis.PITCH)
                         ? AxisUtil.axisLock.get(AxisUtil.Axis.YAW)
-                        ? new PreciseColor(ColorUtil.blendColor(PuffConfigs.pitchColor, PuffConfigs.yawColor))
-                        : new PreciseColor(PuffConfigs.pitchColor)
+                        ? new PreciseColor(ColorUtil.blendColor(PuffConfig.PITCH_COLOR, PuffConfig.YAW_COLOR))
+                        : new PreciseColor(PuffConfig.PITCH_COLOR)
                         : AxisUtil.axisLock.get(AxisUtil.Axis.YAW)
-                        ? new PreciseColor(PuffConfigs.yawColor)
+                        ? new PreciseColor(PuffConfig.YAW_COLOR)
                         : PreciseColor.empty(),
                 0.0147
         );
         CameraOverlayRenderer.renderCameraOverlay(axisColor.independent().multipleAlpha(0.373).get(), matrixStack);
 
         // Render Delayed Subtitles Hud
-        if ( PuffConfigs.enableChatAnimation ) {
+        if ( PuffConfig.ENABLE_CHAT_ANIMATION) {
             PuffProxiedRenderer.SUBTITLES_HUD.render(matrixStack);
         }
     }

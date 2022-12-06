@@ -1,7 +1,7 @@
 package net.krlite.pufferfish.mixin.animator;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.krlite.pufferfish.config.PuffConfigs;
+import net.krlite.pufferfish.config.PuffConfig;
 import net.krlite.pufferfish.core.Broadcaster;
 import net.krlite.pufferfish.core.IHashable;
 import net.krlite.pufferfish.render.PuffRenderer;
@@ -43,7 +43,7 @@ public abstract class ChatHudAnimator extends DrawableHelper implements Broadcas
 
     @Inject(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/ChatHud;getChatScale()D"))
     private void ChatHudAnimator$render(MatrixStack matrixStack, int tickDelta, CallbackInfo ci) {
-        if ( PuffConfigs.enableChatAnimation ) {
+        if ( PuffConfig.ENABLE_CHAT_ANIMATION.getValue() ) {
             broadcast(
                     chatBackgroundOpacity,
                     MathHelper.lerp(
@@ -101,7 +101,7 @@ public abstract class ChatHudAnimator extends DrawableHelper implements Broadcas
         RenderSystem.enableBlend();
         float opacity = 1.0F;
 
-        if ( PuffConfigs.enableChatAnimation ) {
+        if ( PuffConfig.ENABLE_CHAT_ANIMATION.getValue() ) {
             double spacing = 9.0 * (MinecraftClient.getInstance().options.getChatLineSpacing().getValue() + 1.0);
             int message = (-yBegin / (int) spacing - 1), existingTicks = (int) Math.round(messageExistingTicks.get(message));
             opacity = (float) Math.max(
@@ -122,7 +122,7 @@ public abstract class ChatHudAnimator extends DrawableHelper implements Broadcas
             );
         }
 
-        if ( PuffConfigs.hotbarPosition.isLeft() ) {
+        if ( PuffConfig.HOTBAR_POSITION.getValue().isLeft() ) {
             xEnd += 25;
         }
 
@@ -130,10 +130,10 @@ public abstract class ChatHudAnimator extends DrawableHelper implements Broadcas
                 matrixStack,
                 xBegin, yBegin,
                 xEnd * opacity, yEnd,
-                ColorUtil.castAlpha(PuffConfigs.chatBackgroundColor, color),
-                PuffConfigs.enableChatAnimation
-                        ? ColorUtil.castAlpha(PuffConfigs.chatBackgroundColor)
-                        : ColorUtil.castAlpha(PuffConfigs.chatBackgroundColor, color)
+                ColorUtil.castAlpha(PuffConfig.CHAT_BACKGROUND_COLOR.getValue(), color),
+                PuffConfig.ENABLE_CHAT_ANIMATION.getValue()
+                        ? ColorUtil.castAlpha(PuffConfig.CHAT_BACKGROUND_COLOR.getValue())
+                        : ColorUtil.castAlpha(PuffConfig.CHAT_BACKGROUND_COLOR.getValue(), color)
         );
     }
 
@@ -149,7 +149,7 @@ public abstract class ChatHudAnimator extends DrawableHelper implements Broadcas
 
         float opacity = 1.0F, xOffset = 0.0F, yOffset = 0.0F;
 
-        if ( PuffConfigs.enableChatAnimation ) {
+        if ( PuffConfig.ENABLE_CHAT_ANIMATION.getValue() ) {
             double
                     spacing = 9.0 * (MinecraftClient.getInstance().options.getChatLineSpacing().getValue() + 1.0),
                     spacingAlt = -8.0 * (MinecraftClient.getInstance().options.getChatLineSpacing().getValue() + 1.0) + 4.0 * MinecraftClient.getInstance().options.getChatLineSpacing().getValue();
@@ -168,7 +168,7 @@ public abstract class ChatHudAnimator extends DrawableHelper implements Broadcas
             yOffset = offset * 9.0F;
         }
 
-        if ( PuffConfigs.hotbarPosition.isLeft() ) {
+        if ( PuffConfig.HOTBAR_POSITION.getValue().isLeft() ) {
             xOffset += 25;
         }
 
@@ -177,10 +177,10 @@ public abstract class ChatHudAnimator extends DrawableHelper implements Broadcas
                 x + xOffset, y + yOffset,
                 opacity < 1.0
                         ? ColorUtil.castAlpha(
-                                PuffConfigs.chatTextColor, (float) (opacity * MinecraftClient.getInstance().options.getChatOpacity().getValue())
+                                PuffConfig.CHAT_TEXT_COLOR.getValue(), (float) (opacity * MinecraftClient.getInstance().options.getChatOpacity().getValue())
                         ).getRGB()
-                        : ColorUtil.castAlpha(PuffConfigs.chatTextColor, color).getRGB(),
-                PuffConfigs.enableChatTextShadow
+                        : ColorUtil.castAlpha(PuffConfig.CHAT_TEXT_COLOR.getValue(), color).getRGB(),
+                PuffConfig.ENABLE_CHAT_TEXT_SHADOW.getValue()
         );
     }
 
@@ -198,14 +198,14 @@ public abstract class ChatHudAnimator extends DrawableHelper implements Broadcas
     private void ChatHudAnimator$renderStaticChatBackground(MatrixStack matrixStack, int xBegin, int yBegin, int xEnd, int yEnd, int color) {
         RenderSystem.enableBlend();
 
-        if ( PuffConfigs.enableChatAnimation ) {
+        if ( PuffConfig.ENABLE_CHAT_ANIMATION.getValue() ) {
             RenderSystem.setShaderColor(
                     1.0F, 1.0F, 1.0F,
                     (float) (double) getBroadcast(chatBackgroundOpacity)
             );
         }
 
-        if ( PuffConfigs.hotbarPosition.isLeft() ) {
+        if ( PuffConfig.HOTBAR_POSITION.getValue().isLeft() ) {
             xEnd += 25;
         }
 
@@ -213,10 +213,10 @@ public abstract class ChatHudAnimator extends DrawableHelper implements Broadcas
                 matrixStack,
                 xBegin, yBegin,
                 xEnd,   yEnd,
-                ColorUtil.castAlpha(PuffConfigs.chatBackgroundColor, color),
-                PuffConfigs.enableChatAnimation
-                        ? ColorUtil.castAlpha(PuffConfigs.chatBackgroundColor)
-                        : ColorUtil.castAlpha(PuffConfigs.chatBackgroundColor, color)
+                ColorUtil.castAlpha(PuffConfig.CHAT_BACKGROUND_COLOR.getValue(), color),
+                PuffConfig.ENABLE_CHAT_ANIMATION.getValue()
+                        ? ColorUtil.castAlpha(PuffConfig.CHAT_BACKGROUND_COLOR.getValue())
+                        : ColorUtil.castAlpha(PuffConfig.CHAT_BACKGROUND_COLOR.getValue(), color)
         );
     }
 
@@ -230,7 +230,7 @@ public abstract class ChatHudAnimator extends DrawableHelper implements Broadcas
     private int ChatHudAnimator$renderStaticChat(TextRenderer instance, MatrixStack matrixStack, Text text, float x, float y, int color) {
         RenderSystem.enableBlend();
 
-        if ( PuffConfigs.hotbarPosition.isLeft() ) {
+        if ( PuffConfig.HOTBAR_POSITION.getValue().isLeft() ) {
             x += 25;
         }
 
@@ -238,12 +238,12 @@ public abstract class ChatHudAnimator extends DrawableHelper implements Broadcas
                 matrixStack, text,
                 x, y,
                 ColorUtil.castAlpha(
-                        PuffConfigs.chatTextColor,
-                        PuffConfigs.enableChatAnimation
+                        PuffConfig.CHAT_TEXT_COLOR.getValue(),
+                        PuffConfig.ENABLE_CHAT_ANIMATION.getValue()
                                 ? (float) Math.pow((double) getBroadcast(chatBackgroundOpacity) * MinecraftClient.getInstance().options.getChatOpacity().getValue(), 2.0)
                                 : (float) (color >> 24 & 255) / 255.0F
                 ).getRGB(),
-                PuffConfigs.enableChatTextShadow
+                PuffConfig.ENABLE_CHAT_TEXT_SHADOW.getValue()
         );
     }
 }

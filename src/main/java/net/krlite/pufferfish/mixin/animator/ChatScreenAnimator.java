@@ -1,7 +1,7 @@
 package net.krlite.pufferfish.mixin.animator;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.krlite.pufferfish.config.PuffConfigs;
+import net.krlite.pufferfish.config.PuffConfig;
 import net.krlite.pufferfish.core.Broadcaster;
 import net.krlite.pufferfish.core.IHashable;
 import net.krlite.pufferfish.render.PuffRenderer;
@@ -38,7 +38,7 @@ class ChatScreenTrigger implements Broadcaster.IBroadcaster, IHashable {
 public class ChatScreenAnimator extends DrawableHelper {
     @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/ChatScreen;fill(Lnet/minecraft/client/util/math/MatrixStack;IIIII)V", ordinal = 0))
     private void ChatScreenAnimator$render(MatrixStack matrixStack, int xBegin, int yBegin, int xEnd, int yEnd, int color) {
-        if ( !PuffConfigs.enableChatAnimation ) {
+        if ( !PuffConfig.ENABLE_CHAT_ANIMATION) {
             RenderSystem.enableBlend();
             RenderSystem.defaultBlendFunc();
 
@@ -46,7 +46,7 @@ public class ChatScreenAnimator extends DrawableHelper {
                     matrixStack,
                     -2, MinecraftClient.getInstance().getWindow().getScaledHeight() - 16,
                     MinecraftClient.getInstance().getWindow().getScaledWidth() + 2, MinecraftClient.getInstance().getWindow().getScaledHeight() + 2,
-                    ColorUtil.castAlpha(PuffConfigs.chatBackgroundColor, MinecraftClient.getInstance().options.getTextBackgroundOpacity().getValue().floatValue())
+                    ColorUtil.castAlpha(PuffConfig.CHAT_BACKGROUND_COLOR, MinecraftClient.getInstance().options.getTextBackgroundOpacity().getValue().floatValue())
             );
 
             RenderSystem.disableBlend();

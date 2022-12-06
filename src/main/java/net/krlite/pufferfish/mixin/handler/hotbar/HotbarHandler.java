@@ -1,6 +1,6 @@
 package net.krlite.pufferfish.mixin.handler.hotbar;
 
-import net.krlite.pufferfish.config.PuffConfigs;
+import net.krlite.pufferfish.config.PuffConfig;
 import net.krlite.pufferfish.render.PuffRenderer;
 import net.krlite.pufferfish.util.HotBarUtil;
 import net.minecraft.client.font.TextRenderer;
@@ -34,7 +34,7 @@ public abstract class HotbarHandler {
     @Inject(method = "renderHotbar", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/systems/RenderSystem;setShaderColor(FFFF)V", ordinal = 0))
     private void HotbarHandler$render(float tickDelta, MatrixStack matrixStack, CallbackInfo ci) {
         seed = 1;
-        if ( PuffConfigs.hotbarPosition.isLeft() ) {
+        if ( PuffConfig.HOTBAR_POSITION.getValue().isLeft() ) {
             HotBarUtil.updateHotbarOffset(getCameraPlayer());
         }
     }
@@ -52,7 +52,7 @@ public abstract class HotbarHandler {
     private void HotbarHandler$renderHotbarPre(float tickDelta, MatrixStack matrixStack, CallbackInfo ci) {
         matrixStack.push();
 
-        if ( PuffConfigs.hotbarPosition.isLeft() ) {
+        if ( PuffConfig.HOTBAR_POSITION.getValue().isLeft() ) {
             matrixStack.translate(
                     22,
                     scaledHeight / 2.0F + 14 * HotBarUtil.hotbarOffset,
@@ -182,7 +182,7 @@ public abstract class HotbarHandler {
             )
     )
     private void HotbarHandler$renderHotbarAttackIndicator(InGameHud instance, MatrixStack matrixStack, int x, int y, int u, int v, int width, int height) {
-        if ( PuffConfigs.hotbarPosition.isLeft() ) {
+        if ( PuffConfig.HOTBAR_POSITION.getValue().isLeft() ) {
             x = scaledWidth - 20;
         }
 
@@ -204,7 +204,7 @@ public abstract class HotbarHandler {
             )
     )
     private int HotbarHandler$renderOverlayMessage(TextRenderer textRenderer, MatrixStack matrixStack, Text text, float x, float y, int color) {
-        if ( PuffConfigs.hotbarPosition.isLeft() ) {
+        if ( PuffConfig.HOTBAR_POSITION.getValue().isLeft() ) {
             y += 23;
         }
 
@@ -237,7 +237,7 @@ public abstract class HotbarHandler {
                     horizontal = scaledWidth / 2 - 90 + index * 20 + 2,
                     vertical = scaledHeight - 19;
 
-            if ( PuffConfigs.hotbarPosition.isLeft() ) {
+            if ( PuffConfig.HOTBAR_POSITION.getValue().isLeft() ) {
                 vertical = scaledHeight / 2 + 90 - index * 20 - 18 + Math.round(14 * HotBarUtil.hotbarOffset);
                 horizontal = 3;
             }
@@ -266,7 +266,7 @@ public abstract class HotbarHandler {
                 horizontal = scaledWidth / 2 - 91 - 26,
                 vertical = scaledHeight - 19;
 
-        if ( PuffConfigs.hotbarPosition.isLeft() ) {
+        if ( PuffConfig.HOTBAR_POSITION.getValue().isLeft() ) {
             vertical = scaledHeight / 2 + 91 + 10 + Math.round(14 * HotBarUtil.hotbarOffset);
             horizontal = 3;
         }
@@ -294,7 +294,7 @@ public abstract class HotbarHandler {
                 horizontal = scaledWidth / 2 + 91 + 10,
                 vertical = scaledHeight - 19;
 
-        if ( PuffConfigs.hotbarPosition.isLeft() ) {
+        if ( PuffConfig.HOTBAR_POSITION.getValue().isLeft() ) {
             vertical = scaledHeight / 2 - 91 - 26 + Math.round(14 * HotBarUtil.hotbarOffset);
             horizontal = 3;
         }

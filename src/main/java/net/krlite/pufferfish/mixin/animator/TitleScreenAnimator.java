@@ -1,7 +1,7 @@
 package net.krlite.pufferfish.mixin.animator;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.krlite.pufferfish.config.PuffConfigs;
+import net.krlite.pufferfish.config.PuffConfig;
 import net.krlite.pufferfish.core.Broadcaster;
 import net.krlite.pufferfish.core.IHashable;
 import net.krlite.pufferfish.math.Timer;
@@ -23,7 +23,7 @@ class TitleScreenTrigger implements Broadcaster.IBroadcaster, IHashable {
 
     @Inject(method = "setScreen", at = @At("TAIL"))
     private void MinecraftClientTrigger$titleTrigger(Screen screen, CallbackInfo ci) {
-        if (!(screen instanceof TitleScreen) && PuffConfigs.enableTitleAnimation) {
+        if ( !(screen instanceof TitleScreen) && PuffConfig.ENABLE_TITLE_ANIMATION.getValue() ) {
             broadcast(titleTrigger, false);
         }
     }
@@ -48,7 +48,7 @@ public class TitleScreenAnimator implements Broadcaster.IBroadcaster, IHashable 
     private void TitleScreenAnimator$titleTrigger(float red, float green, float blue, float alpha) {
         RenderSystem.setShaderColor(red, green, blue, alpha);
 
-        if ( alpha > 0 && PuffConfigs.enableTitleAnimation && !(boolean) getBroadcastOrDefault(titleTrigger, false) ) {
+        if ( alpha > 0 && PuffConfig.ENABLE_TITLE_ANIMATION.getValue() && !(boolean) getBroadcastOrDefault(titleTrigger, false) ) {
             titleTimer = new Timer();
             broadcast(titleTrigger, true);
         }
@@ -62,8 +62,7 @@ public class TitleScreenAnimator implements Broadcaster.IBroadcaster, IHashable 
             )
     )
     private void TitleScreenAnimator$render(MatrixStack matrixStack, int mouseX, int mouseY, float delta, CallbackInfo ci) {
-        double offset = PuffConfigs.enableTitleAnimation
-                ? MinecraftClient.getInstance().getWindow().getScaledHeight() / 3.5 : 0;
+        double offset = PuffConfig.ENABLE_TITLE_ANIMATION.getValue() ? MinecraftClient.getInstance().getWindow().getScaledHeight() / 3.5 : 0;
 
         if ( (boolean) getBroadcastOrDefault(titleTrigger, false) ) {
             double titleFadeMs = 853;

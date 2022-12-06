@@ -1,6 +1,6 @@
 package net.krlite.pufferfish.render.extra;
 
-import net.krlite.pufferfish.config.PuffConfigs;
+import net.krlite.pufferfish.config.PuffConfig;
 import net.krlite.pufferfish.interaction_map.render.AnchorRenderer;
 import net.krlite.pufferfish.interaction_map.util.AnchorProvider;
 import net.krlite.pufferfish.render.renderer.PuffProxiedRenderer;
@@ -106,7 +106,7 @@ public class ExtraAfterRenderer {
         }
 
         // Render Delayed Chat Screen
-        if ( PuffConfigs.enableChatAnimation ) {
+        if ( PuffConfig.ENABLE_CHAT_ANIMATION) {
             PuffProxiedRenderer.CHAT_SCREEN.render(matrixStack);
         }
 

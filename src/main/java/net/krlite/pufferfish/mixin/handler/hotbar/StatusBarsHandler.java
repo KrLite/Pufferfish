@@ -1,6 +1,6 @@
 package net.krlite.pufferfish.mixin.handler.hotbar;
 
-import net.krlite.pufferfish.config.PuffConfigs;
+import net.krlite.pufferfish.config.PuffConfig;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.hud.InGameHud;
@@ -27,7 +27,7 @@ public abstract class StatusBarsHandler extends DrawableHelper {
             )
     )
     private void renderMountHealth(InGameHud instance, MatrixStack matrixStack, int x, int y, int u, int v, int width, int height) {
-        if ( PuffConfigs.hotbarPosition.isLeft() ) {
+        if ( PuffConfig.HOTBAR_POSITION.getValue().isLeft() ) {
             y += 23;
         }
 
@@ -43,7 +43,7 @@ public abstract class StatusBarsHandler extends DrawableHelper {
             )
     )
     private void renderMountJumpBar(InGameHud instance, MatrixStack matrixStack, int x, int y, int u, int v, int width, int height) {
-        if ( PuffConfigs.hotbarPosition.isLeft() ) {
+        if ( PuffConfig.HOTBAR_POSITION.getValue().isLeft() ) {
             y += 23;
         }
 
@@ -59,7 +59,7 @@ public abstract class StatusBarsHandler extends DrawableHelper {
             )
     )
     private void renderStatusBars(InGameHud instance, MatrixStack matrixStack, int x, int y, int u, int v, int width, int height) {
-        if ( PuffConfigs.hotbarPosition.isLeft() ) {
+        if ( PuffConfig.HOTBAR_POSITION.getValue().isLeft() ) {
             y += 23;
         }
 
@@ -75,7 +75,7 @@ public abstract class StatusBarsHandler extends DrawableHelper {
             )
     )
     private void renderHealthBar(InGameHud instance, MatrixStack matrixStack, PlayerEntity player, int x, int y, int lines, int regeneratingHeartIndex, float maxHealth, int lastHealth, int health, int absorption, boolean blinking) {
-        if ( PuffConfigs.hotbarPosition.isLeft() ) {
+        if ( PuffConfig.HOTBAR_POSITION.getValue().isLeft() ) {
             y += 23;
         }
 
@@ -91,7 +91,7 @@ public abstract class StatusBarsHandler extends DrawableHelper {
             )
     )
     private int renderHeldItemTooltip(TextRenderer textRenderer, MatrixStack matrixStack, Text text, float x, float y, int color) {
-        if ( PuffConfigs.hotbarPosition.isLeft() ) {
+        if ( PuffConfig.HOTBAR_POSITION.getValue().isLeft() ) {
             y += 23;
         }
 
@@ -106,7 +106,7 @@ public abstract class StatusBarsHandler extends DrawableHelper {
             )
     )
     private void fillHeldItemTooltip(MatrixStack matrixStack, int xBegin, int yBegin, int xEnd, int yEnd, int color) {
-        if ( PuffConfigs.hotbarPosition.isLeft() ) {
+        if ( PuffConfig.HOTBAR_POSITION.getValue().isLeft() ) {
             yBegin += 23;
             yEnd += 23;
         }

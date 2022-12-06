@@ -1,7 +1,7 @@
 package net.krlite.pufferfish.render.proxied;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import net.krlite.pufferfish.config.PuffConfigs;
+import net.krlite.pufferfish.config.PuffConfig;
 import net.krlite.pufferfish.core.Broadcaster;
 import net.krlite.pufferfish.core.IHashable;
 import net.krlite.pufferfish.render.PuffRenderer;
@@ -24,8 +24,8 @@ public class ProxiedChatScreen extends DrawableHelper implements Broadcaster.IBr
                 matrixStack,
                 -2, client.getWindow().getScaledHeight() + yOffset,
                 client.getWindow().getScaledWidth() + 2, client.getWindow().getScaledHeight() + 2,
-                ColorUtil.castAlpha(PuffConfigs.chatBackgroundColor),
-                ColorUtil.castAlpha(PuffConfigs.chatBackgroundColor, client.options.getTextBackgroundOpacity().getValue().floatValue())
+                ColorUtil.castAlpha(PuffConfig.CHAT_BACKGROUND_COLOR),
+                ColorUtil.castAlpha(PuffConfig.CHAT_BACKGROUND_COLOR, client.options.getTextBackgroundOpacity().getValue().floatValue())
         );
     }
 }

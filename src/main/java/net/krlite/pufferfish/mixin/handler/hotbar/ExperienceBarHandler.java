@@ -1,7 +1,6 @@
 package net.krlite.pufferfish.mixin.handler.hotbar;
 
-import net.krlite.pufferfish.config.Defaults;
-import net.krlite.pufferfish.config.PuffConfigs;
+import net.krlite.pufferfish.config.PuffConfig;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.hud.InGameHud;
@@ -23,7 +22,7 @@ public abstract class ExperienceBarHandler extends DrawableHelper {
             )
     )
     private void renderExperienceBar(InGameHud instance, MatrixStack matrixStack, int x, int y, int u, int v, int width, int height) {
-        if ( PuffConfigs.hotbarPosition.isLeft() ) {
+        if ( PuffConfig.HOTBAR_POSITION.getValue().isLeft() ) {
             y += 23;
         }
 
@@ -38,7 +37,7 @@ public abstract class ExperienceBarHandler extends DrawableHelper {
             )
     )
     private int renderExperienceLevel(TextRenderer instance, MatrixStack matrixStack, String text, float x, float y, int color) {
-        if ( PuffConfigs.hotbarPosition.isLeft() ) {
+        if ( PuffConfig.HOTBAR_POSITION.getValue().isLeft() ) {
             y += 23;
         }
 

@@ -1,6 +1,6 @@
 package net.krlite.pufferfish.mixin.handler.hotbar;
 
-import net.krlite.pufferfish.config.PuffConfigs;
+import net.krlite.pufferfish.config.PuffConfig;
 import net.krlite.pufferfish.render.PuffRenderer;
 import net.krlite.pufferfish.util.HotBarUtil;
 import net.minecraft.client.MinecraftClient;
@@ -44,7 +44,7 @@ public abstract class SpectatorHudHandler {
                 scaledWidth = this.client.getWindow().getScaledWidth(),
                 scaledHeight = this.client.getWindow().getScaledHeight();
 
-        if ( PuffConfigs.hotbarPosition.isLeft() ) {
+        if ( PuffConfig.HOTBAR_POSITION.getValue().isLeft() ) {
             matrixStack.translate(
                     22.0F * getSpectatorMenuHeight(),
                     scaledHeight / 2.0F,
@@ -112,7 +112,7 @@ public abstract class SpectatorHudHandler {
             )
     )
     private int renderSpectatorCommandText(TextRenderer textRenderer, MatrixStack matrixStack, Text text, float x, float y, int color) {
-        if ( PuffConfigs.hotbarPosition.isLeft() ) {
+        if ( PuffConfig.HOTBAR_POSITION.getValue().isLeft() ) {
             matrixStack.push();
             matrixStack.translate(x, y, 0);
             matrixStack.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(90));
@@ -139,7 +139,7 @@ public abstract class SpectatorHudHandler {
     public void pushIconMatrixStack(MatrixStack matrixStack, int slot, int x, float y, float height, SpectatorMenuCommand command, CallbackInfo ci) {
         matrixStack.push();
 
-        if ( PuffConfigs.hotbarPosition.isLeft() ) {
+        if ( PuffConfig.HOTBAR_POSITION.getValue().isLeft() ) {
             matrixStack.multiply(Vec3f.POSITIVE_Z.getDegreesQuaternion(90));
         }
     }
@@ -169,7 +169,7 @@ public abstract class SpectatorHudHandler {
                 scaledWidth = this.client.getWindow().getScaledWidth(),
                 scaledHeight = this.client.getWindow().getScaledHeight();
 
-        if ( PuffConfigs.hotbarPosition.isLeft() ) {
+        if ( PuffConfig.HOTBAR_POSITION.getValue().isLeft() ) {
             matrixStack.translate(
                     44 * getSpectatorMenuHeight() - scaledHeight - 22 + getSpectatorMenuHeightAntiAliased(22),
                     Math.floor((scaledWidth + scaledHeight) / 2.0) - 16,
@@ -201,7 +201,7 @@ public abstract class SpectatorHudHandler {
             )
     )
     private int renderText(TextRenderer textRenderer, MatrixStack matrixStack, Text text, float x, float y, int color) {
-        if ( PuffConfigs.hotbarPosition.isLeft() ) {
+        if ( PuffConfig.HOTBAR_POSITION.getValue().isLeft() ) {
             y += 23;
         }
 

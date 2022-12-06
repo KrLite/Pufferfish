@@ -13,6 +13,17 @@ group = project.maven_group
 repositories {
 	maven { url "https://maven.shedaniel.me/" }
 	maven { url "https://maven.terraformersmc.com/releases/" }
+	exclusiveContent {
+		forRepository {
+			maven {
+				name = "Modrinth"
+				url = "https://api.modrinth.com/maven"
+			}
+		}
+		filter {
+			includeGroup "maven.modrinth"
+		}
+	}
 }
 
 dependencies {
@@ -26,6 +37,9 @@ dependencies {
 		exclude(group: "net.fabricmc.fabric-api")
 	}
 	modApi "com.terraformersmc:modmenu:4.1.0"
+
+	modApi include("maven.modrinth:plumeconfig:RVlCoWTu")
+	modApi include("maven.modrinth:equator:nFvoDWks")
 }
 
 processResources {

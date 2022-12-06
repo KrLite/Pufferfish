@@ -2,8 +2,8 @@ package net.krlite.pufferfish.event;
 
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.krlite.pufferfish.PuffKeys;
+import net.krlite.pufferfish.config.PuffConfig;
 import net.krlite.pufferfish.config.config_screen.PuffConfigScreenHandler;
-import net.krlite.pufferfish.config.PuffConfigs;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.GameOptions;
 import net.minecraft.entity.player.PlayerEntity;
@@ -22,14 +22,14 @@ public class InputEventHandler {
                     options.attackKey.isPressed()
                             ? !options.useKey.isPressed()
                                 // Attacking
-                                ? PuffConfigs.crosshairSize * (1 + PuffConfigs.crosshairPuff)
+                                ? PuffConfig.CROSSHAIR_SIZE.getValue() * (1 + PuffConfig.CROSSHAIR_EXPAND_INDEX.getValue())
                                 // Both
-                                : PuffConfigs.crosshairSize
+                                : PuffConfig.CROSSHAIR_SIZE.getValue()
                             : options.useKey.isPressed()
                                 // Using
-                                ? PuffConfigs.crosshairSize * MathHelper.clamp(1.0 - PuffConfigs.crosshairPuff * 0.6, 0.3, 1.0)
+                                ? PuffConfig.CROSSHAIR_SIZE.getValue() * MathHelper.clamp(1.0 - PuffConfig.CROSSHAIR_EXPAND_INDEX.getValue() * 0.6, 0.3, 1.0)
                                 // None
-                                : PuffConfigs.crosshairSize;
+                                : PuffConfig.CROSSHAIR_SIZE.getValue();
 
             if ( CONFIG.wasPressed() ) {
                 MinecraftClient.getInstance().setScreen(
@@ -54,10 +54,10 @@ public class InputEventHandler {
 
                 else {
                     if ( LOCK_PITCH.wasPressed() && availableKeyAxis.get(Axis.PITCH) ) {
-                        lingerKeyAxis.replace(Axis.YAW, 0);
+                        lingerKeyAxis.replace(Axis.YAW, 0L);
 
                         if ( lingerKeyAxis.get(Axis.PITCH) == 0 ) {  // Trigger When Pitch Locked
-                            lingerKeyAxis.replace(Axis.PITCH, PuffConfigs.keyLingerTicks);
+                            lingerKeyAxis.replace(Axis.PITCH, PuffConfig.KEY_LINGER_TICKS.getValue());
 
                             lockPitch(player);
 
@@ -65,7 +65,7 @@ public class InputEventHandler {
                         }
 
                         else {    // Trigger When Pitch Applied
-                            lingerKeyAxis.replace(Axis.PITCH, 0);
+                            lingerKeyAxis.replace(Axis.PITCH, 0L);
 
                             applyPitch(player);
 
@@ -74,10 +74,10 @@ public class InputEventHandler {
                     }
 
                     if ( LOCK_YAW.wasPressed() && availableKeyAxis.get(Axis.YAW) ) {
-                        lingerKeyAxis.replace(Axis.PITCH, 0);
+                        lingerKeyAxis.replace(Axis.PITCH, 0L);
 
                         if ( lingerKeyAxis.get(Axis.YAW) == 0 ) {   // Trigger When Yaw Locked
-                            lingerKeyAxis.replace(Axis.YAW, PuffConfigs.keyLingerTicks);
+                            lingerKeyAxis.replace(Axis.YAW, PuffConfig.KEY_LINGER_TICKS.getValue());
 
                             lockYaw(player);
 
@@ -85,7 +85,7 @@ public class InputEventHandler {
                         }
 
                         else {    // Trigger When Yaw Applied
-                            lingerKeyAxis.replace(Axis.YAW, 0);
+                            lingerKeyAxis.replace(Axis.YAW, 0L);
 
                             applyYaw(player);
 

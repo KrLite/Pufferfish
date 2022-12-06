@@ -1,10 +1,11 @@
 package net.krlite.pufferfish.interaction_map.render;
 
-import net.krlite.pufferfish.math.HorizontalSprite;
-import net.krlite.pufferfish.math.IdentifierSprite;
-import net.krlite.pufferfish.render.PuffRenderer;
+import net.krlite.equator.core.MatrixWrapper;
+import net.krlite.equator.core.sprite.HorizontalSprite;
+import net.krlite.equator.core.sprite.IdentifierSprite;
+import net.krlite.equator.render.Equator;
+import net.krlite.pufferfish.PuffMod;
 import net.krlite.pufferfish.util.ColorUtil;
-import net.krlite.pufferfish.util.IdentifierBuilder;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
@@ -13,7 +14,7 @@ import java.awt.*;
 
 public class AnchorRenderer {
     private static Identifier identifierBuilder(String textureName) {
-        return IdentifierBuilder.texture("interaction_map", textureName);
+        return PuffMod.identifierBuilder.texture("interaction_map", textureName);
     }
 
     // Identifiers
@@ -50,20 +51,20 @@ public class AnchorRenderer {
     }
 
     public static void renderSilkyWay(MatrixStack matrixStack, Color color, float center, float upperEdge, float width, float height) {
-        PuffRenderer.COLORED.fillGradiantHorizontal(
-                matrixStack,
-                center - width / 2, upperEdge,
-                center, upperEdge + height,
-                ColorUtil.castAlpha(color),
-                color
+        Equator.Colors.gradientHorizontal(
+                new MatrixWrapper(
+                        matrixStack,
+                        center - width / 2, upperEdge,
+                        center, upperEdge + height
+                ), ColorUtil.castAlpha(color), color
         );
 
-        PuffRenderer.COLORED.fillGradiantHorizontal(
-                matrixStack,
-                center, upperEdge,
-                center + width / 2, upperEdge + height,
-                color,
-                ColorUtil.castAlpha(color)
+        Equator.Colors.gradientHorizontal(
+                new MatrixWrapper(
+                        matrixStack,
+                        center, upperEdge,
+                        center + width / 2, upperEdge + height
+                ), color, ColorUtil.castAlpha(color)
         );
     }
 
@@ -90,21 +91,22 @@ public class AnchorRenderer {
     }
 
     private static void renderWidget(IdentifierSprite identifierSprite, Color color, float center, float upperEdge, float width, float height) {
-        PuffRenderer.COLORED_TEXTURE.renderColoredTexture(
-                identifierSprite, color,
-                new MatrixStack(),
+        new Equator(identifierSprite).render(
+                new MatrixStack(), color,
                 center - width / 2, upperEdge,
                 center + width / 2, upperEdge + height
         );
     }
 
     private static void renderWidget(Identifier identifier, Color color, float center, float upperEdge, float width, float height, float uBegin, float vBegin, float uEnd, float vEnd) {
-        PuffRenderer.COLORED_TEXTURE.renderColoredTexture(
-                identifier, color,
-                new MatrixStack(),
+        new Equator(
+                new IdentifierSprite(
+                        identifier, uBegin, vBegin, uEnd, vEnd
+                )
+        ).render(
+                new MatrixStack(), color,
                 center - width / 2, upperEdge,
-                center + width / 2, upperEdge + height,
-                uBegin, vBegin, uEnd, vEnd
+                center + width / 2, upperEdge + height
         );
     }
 }

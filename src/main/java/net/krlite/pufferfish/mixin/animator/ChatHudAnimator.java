@@ -1,6 +1,8 @@
 package net.krlite.pufferfish.mixin.animator;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import net.krlite.equator.core.MatrixWrapper;
+import net.krlite.equator.render.Equator;
 import net.krlite.pufferfish.config.PuffConfig;
 import net.krlite.pufferfish.core.Broadcaster;
 import net.krlite.pufferfish.core.IHashable;
@@ -126,10 +128,12 @@ public abstract class ChatHudAnimator extends DrawableHelper implements Broadcas
             xEnd += 25;
         }
 
-        PuffRenderer.COLORED.fillGradiantHorizontal(
-                matrixStack,
-                xBegin, yBegin,
-                xEnd * opacity, yEnd,
+        Equator.Colors.gradientHorizontal(
+                new MatrixWrapper(
+                        matrixStack,
+                        xBegin, yBegin,
+                        xEnd * opacity, yEnd
+                ),
                 ColorUtil.castAlpha(PuffConfig.CHAT_BACKGROUND_COLOR.getValue(), color),
                 PuffConfig.ENABLE_CHAT_ANIMATION.getValue()
                         ? ColorUtil.castAlpha(PuffConfig.CHAT_BACKGROUND_COLOR.getValue())
@@ -209,10 +213,12 @@ public abstract class ChatHudAnimator extends DrawableHelper implements Broadcas
             xEnd += 25;
         }
 
-        PuffRenderer.COLORED.fillGradiantHorizontal(
-                matrixStack,
-                xBegin, yBegin,
-                xEnd,   yEnd,
+        Equator.Colors.gradientHorizontal(
+                new MatrixWrapper(
+                        matrixStack,
+                        xBegin, yBegin,
+                        xEnd,   yEnd
+                ),
                 ColorUtil.castAlpha(PuffConfig.CHAT_BACKGROUND_COLOR.getValue(), color),
                 PuffConfig.ENABLE_CHAT_ANIMATION.getValue()
                         ? ColorUtil.castAlpha(PuffConfig.CHAT_BACKGROUND_COLOR.getValue())

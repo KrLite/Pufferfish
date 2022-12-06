@@ -1,6 +1,6 @@
 package net.krlite.pufferfish.util;
 
-import net.krlite.pufferfish.math.IdentifierSprite;
+import net.krlite.equator.core.sprite.IdentifierSprite;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.GameOptions;
 import net.minecraft.entity.player.PlayerEntity;

@@ -1,6 +1,8 @@
 package net.krlite.pufferfish.mixin.animator;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import net.krlite.equator.core.MatrixWrapper;
+import net.krlite.equator.render.Equator;
 import net.krlite.pufferfish.config.PuffConfig;
 import net.krlite.pufferfish.core.Broadcaster;
 import net.krlite.pufferfish.core.IHashable;
@@ -38,15 +40,19 @@ class ChatScreenTrigger implements Broadcaster.IBroadcaster, IHashable {
 public class ChatScreenAnimator extends DrawableHelper {
     @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/ChatScreen;fill(Lnet/minecraft/client/util/math/MatrixStack;IIIII)V", ordinal = 0))
     private void ChatScreenAnimator$render(MatrixStack matrixStack, int xBegin, int yBegin, int xEnd, int yEnd, int color) {
-        if ( !PuffConfig.ENABLE_CHAT_ANIMATION) {
+        if ( !PuffConfig.ENABLE_CHAT_ANIMATION.getValue() ) {
             RenderSystem.enableBlend();
             RenderSystem.defaultBlendFunc();
 
-            PuffRenderer.COLORED.fillColored(
-                    matrixStack,
-                    -2, MinecraftClient.getInstance().getWindow().getScaledHeight() - 16,
-                    MinecraftClient.getInstance().getWindow().getScaledWidth() + 2, MinecraftClient.getInstance().getWindow().getScaledHeight() + 2,
-                    ColorUtil.castAlpha(PuffConfig.CHAT_BACKGROUND_COLOR, MinecraftClient.getInstance().options.getTextBackgroundOpacity().getValue().floatValue())
+            Equator.Colors.fill(
+                    new MatrixWrapper(
+                            matrixStack,
+                            -2, MinecraftClient.getInstance().getWindow().getScaledHeight() - 16,
+                            MinecraftClient.getInstance().getWindow().getScaledWidth() + 2, MinecraftClient.getInstance().getWindow().getScaledHeight() + 2
+                    ), ColorUtil.castAlpha(
+                            PuffConfig.CHAT_BACKGROUND_COLOR.getValue(),
+                            MinecraftClient.getInstance().options.getTextBackgroundOpacity().getValue().floatValue()
+                    )
             );
 
             RenderSystem.disableBlend();

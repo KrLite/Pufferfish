@@ -2,7 +2,6 @@ package net.krlite.pufferfish;
 
 import com.google.common.collect.ImmutableMap;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
-import net.krlite.pufferfish.util.IdentifierBuilder;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
@@ -19,36 +18,36 @@ public class PuffKeys {
 
     // Config Key
     public static final KeyBinding CONFIG = KeyBindingHelper.registerKeyBinding(new KeyBinding(
-            IdentifierBuilder.translationKey("key", "general", "config"),
+            PuffMod.identifierBuilder.translationKey("key", "general", "config"),
             InputUtil.Type.KEYSYM,
             GLFW.GLFW_KEY_K,
-            IdentifierBuilder.translationKey("key", "category", "general")
+            PuffMod.identifierBuilder.translationKey("key", "category", "general")
     ));
 
     // Pitch Lock
     public static final KeyBinding LOCK_PITCH = KeyBindingHelper.registerKeyBinding(new KeyBinding(
-            IdentifierBuilder.translationKey("key", "coordinate", "lock_pitch"),
+            PuffMod.identifierBuilder.translationKey("key", "coordinate", "lock_pitch"),
             InputUtil.Type.KEYSYM,
             GLFW.GLFW_KEY_Z,
-            IdentifierBuilder.translationKey("key", "category", "coordinate")
+            PuffMod.identifierBuilder.translationKey("key", "category", "coordinate")
     ));
 
     // Yaw Lock
     public static final KeyBinding LOCK_YAW = KeyBindingHelper.registerKeyBinding(new KeyBinding(
-            IdentifierBuilder.translationKey("key", "coordinate", "lock_yaw"),
+            PuffMod.identifierBuilder.translationKey("key", "coordinate", "lock_yaw"),
             InputUtil.Type.KEYSYM,
             GLFW.GLFW_KEY_V,
-            IdentifierBuilder.translationKey("key", "category", "coordinate")
+            PuffMod.identifierBuilder.translationKey("key", "category", "coordinate")
     ));
 
     // Prefix Key
     public static final KeyBinding FLIP_PREFIX = KeyBindingHelper.registerKeyBinding(new KeyBinding(
-            IdentifierBuilder.translationKey("key", "coordinate", "flip_prefix"),
+            PuffMod.identifierBuilder.translationKey("key", "coordinate", "flip_prefix"),
             InputUtil.Type.KEYSYM,
             MinecraftClient.IS_SYSTEM_MAC
                     ? GLFW.GLFW_KEY_LEFT_SUPER
                     : GLFW.GLFW_KEY_LEFT_ALT,
-            IdentifierBuilder.translationKey("key", "category", "coordinate")
+            PuffMod.identifierBuilder.translationKey("key", "category", "coordinate")
     ));
 
     private static void registerKeyMaps() {

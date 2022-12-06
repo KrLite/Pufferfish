@@ -1,5 +1,7 @@
 package net.krlite.pufferfish.render.extra;
 
+import net.krlite.equator.core.MatrixWrapper;
+import net.krlite.equator.render.Equator;
 import net.krlite.pufferfish.config.PuffConfig;
 import net.krlite.pufferfish.interaction_map.render.AnchorRenderer;
 import net.krlite.pufferfish.interaction_map.util.AnchorProvider;
@@ -106,7 +108,7 @@ public class ExtraAfterRenderer {
         }
 
         // Render Delayed Chat Screen
-        if ( PuffConfig.ENABLE_CHAT_ANIMATION) {
+        if ( PuffConfig.ENABLE_CHAT_ANIMATION.getValue() ) {
             PuffProxiedRenderer.CHAT_SCREEN.render(matrixStack);
         }
 
@@ -117,10 +119,12 @@ public class ExtraAfterRenderer {
         ScreenUtil.update(0.13);
 
         if ( ScreenUtil.opacity > 0.03 ) {
-            PuffRenderer.COLORED.fillGradiantVertical(
-                    matrixStack,
-                    0, 0,
-                    width, height,
+            Equator.Colors.gradientVertical(
+                    new MatrixWrapper(
+                            matrixStack,
+                            0, 0,
+                            width, height
+                    ),
                     ColorUtil.multipleAlpha(ScreenUtil.backgroundColorUpper, (float) ScreenUtil.opacity),
                     ColorUtil.multipleAlpha(ScreenUtil.backgroundColorLower, (float) ScreenUtil.opacity)
             );

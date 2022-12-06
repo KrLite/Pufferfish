@@ -1,11 +1,11 @@
 package net.krlite.pufferfish.mixin.animator;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import net.krlite.equator.core.Timer;
+import net.krlite.equator.math.EasingFunctions;
 import net.krlite.pufferfish.config.PuffConfig;
 import net.krlite.pufferfish.core.Broadcaster;
 import net.krlite.pufferfish.core.IHashable;
-import net.krlite.pufferfish.math.Timer;
-import net.krlite.pufferfish.math.solver.EasingFunctions;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.TitleScreen;
@@ -66,8 +66,8 @@ public class TitleScreenAnimator implements Broadcaster.IBroadcaster, IHashable 
 
         if ( (boolean) getBroadcastOrDefault(titleTrigger, false) ) {
             double titleFadeMs = 853;
-            double time = titleTimer.queue() > titleFadeMs ? titleFadeMs : titleTimer.queue();
-            titlePos = EasingFunctions.easeOutBounce(time, -offset, offset, titleFadeMs);
+            double time = titleTimer.getElapsed() > titleFadeMs ? titleFadeMs : titleTimer.getElapsed();
+            titlePos = EasingFunctions.Func.outBounce(titleTimer, offset) - offset;
         } else {
             titlePos = -offset;
         }

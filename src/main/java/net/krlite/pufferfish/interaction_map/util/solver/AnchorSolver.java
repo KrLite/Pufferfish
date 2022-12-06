@@ -1,7 +1,7 @@
 package net.krlite.pufferfish.interaction_map.util.solver;
 
-import net.krlite.pufferfish.math.DimensionalVec3d;
-import net.krlite.pufferfish.math.solver.CoordinateSolver;
+import net.krlite.equator.core.DimensionalVec3d;
+import net.krlite.equator.math.CoordinateSolver;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.option.GameOptions;
 import net.minecraft.entity.player.PlayerEntity;
@@ -9,8 +9,8 @@ import net.minecraft.entity.player.PlayerEntity;
 import java.util.Optional;
 
 public class AnchorSolver {
-    public static Optional<Double> positionInSight(PlayerEntity player, DimensionalVec3d dst, float wideness, boolean dimensional) {
-        return CoordinateSolver.angleInFrontOfCamera(dst, player, !dimensional)
+    public static Optional<Double> positionInSight(PlayerEntity player, DimensionalVec3d destination, float wideness, boolean dimensional) {
+        return CoordinateSolver.angleInFrontOfCamera(player, destination, !dimensional)
                 .map(
                         angle -> horizontalProjection(
                                 angle,

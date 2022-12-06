@@ -1,7 +1,7 @@
 package net.krlite.pufferfish.render.renderer;
 
-import net.krlite.pufferfish.render.PuffRenderer;
-import net.krlite.pufferfish.util.IdentifierBuilder;
+import net.krlite.equator.render.Equator;
+import net.krlite.pufferfish.PuffMod;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 
@@ -9,7 +9,7 @@ import java.awt.*;
 
 public class CameraOverlayRenderer {
     private static Identifier identifierBuilder(String textureName) {
-        return IdentifierBuilder.texture("overlay", textureName);
+        return PuffMod.identifierBuilder.texture("overlay", textureName);
     }
 
     // Texture
@@ -21,6 +21,8 @@ public class CameraOverlayRenderer {
     }
 
     public static void renderCameraOverlay(Identifier identifier, Color color, MatrixStack matrixStack) {
-        if ( color.getAlpha() / 255.0F > 0 ) PuffRenderer.COLORED_TEXTURE.renderColoredOverlay(identifier, color, matrixStack);
+        if ( color.getAlpha() / 255.0F > 0 ) {
+            new Equator(identifier).renderOverlay(matrixStack, color);
+        }
     }
 }

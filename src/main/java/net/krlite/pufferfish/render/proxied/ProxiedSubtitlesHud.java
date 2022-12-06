@@ -1,5 +1,7 @@
 package net.krlite.pufferfish.render.proxied;
 
+import net.krlite.equator.core.MatrixWrapper;
+import net.krlite.equator.render.Equator;
 import net.krlite.pufferfish.config.PuffConfig;
 import net.krlite.pufferfish.render.PuffRenderer;
 import net.krlite.pufferfish.util.ColorUtil;
@@ -20,12 +22,14 @@ public class ProxiedSubtitlesHud extends DrawableHelper {
                 xEnd = client.getWindow().getScaledWidth() + 2,
                 yEnd = client.getWindow().getScaledHeight() - 34 + client.textRenderer.fontHeight / 2.0F;
 
-        PuffRenderer.COLORED.fillGradiantHorizontal(
-                matrixStack,
-                xEnd - width, yEnd - height,
-                xEnd, yEnd,
-                ColorUtil.castAlpha(PuffConfig.CHAT_BACKGROUND_COLOR),
-                ColorUtil.castAlpha(PuffConfig.CHAT_BACKGROUND_COLOR, (float) (double) client.options.getTextBackgroundOpacity().getValue())
+        Equator.Colors.gradientHorizontal(
+                new MatrixWrapper(
+                        matrixStack,
+                        xEnd - width, yEnd - height,
+                        xEnd, yEnd
+                ),
+                ColorUtil.castAlpha(PuffConfig.CHAT_BACKGROUND_COLOR.getValue()),
+                ColorUtil.castAlpha(PuffConfig.CHAT_BACKGROUND_COLOR.getValue(), (float) (double) client.options.getTextBackgroundOpacity().getValue())
         );
     }
 

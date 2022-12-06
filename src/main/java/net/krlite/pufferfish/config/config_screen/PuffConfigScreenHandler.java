@@ -4,9 +4,8 @@ import me.shedaniel.clothconfig2.api.ConfigBuilder;
 import me.shedaniel.clothconfig2.api.ConfigCategory;
 import me.shedaniel.clothconfig2.api.ConfigEntryBuilder;
 import net.krlite.plumeconfig.option.core.Option;
-import net.krlite.pufferfish.config_deprecated.PuffConfigs;
+import net.krlite.pufferfish.PuffMod;
 import net.krlite.pufferfish.util.ColorUtil;
-import net.krlite.pufferfish.util.IdentifierBuilder;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.option.GameOptions;
@@ -39,21 +38,21 @@ public class PuffConfigScreenHandler {
         ConfigBuilder builder = ConfigBuilder
                 .create()
                 .setParentScreen(parent)
-                .setTitle(IdentifierBuilder.translatableText("mod", "name"));
+                .setTitle(PuffMod.identifierBuilder.translatableText("mod", "name"));
         ConfigEntryBuilder entryBuilder = builder.entryBuilder();
 
         // Category General
-        ConfigCategory general = builder.getOrCreateCategory(IdentifierBuilder.translatableText("config", "category", "general"));
+        ConfigCategory general = builder.getOrCreateCategory(PuffMod.identifierBuilder.translatableText("config", "category", "general"));
 
         // Enable Title Animation
         general.addEntry(
                 entryBuilder
                         .startBooleanToggle(
-                                IdentifierBuilder.translatableText("config", "general", "enable_title_animation"),
+                                PuffMod.identifierBuilder.translatableText("config", "general", "enable_title_animation"),
                                 ENABLE_TITLE_ANIMATION.getValue()
                         )
                         .setDefaultValue(DEFAULT_ENABLE_TITLE_ANIMATION)
-                        .setTooltip(IdentifierBuilder.translatableText("config", "general", "enable_title_animation", "tooltip"))
+                        .setTooltip(PuffMod.identifierBuilder.translatableText("config", "general", "enable_title_animation", "tooltip"))
                         .setSaveConsumer(value -> set(ENABLE_CHAT_ANIMATION, value))
                         .build()
         );
@@ -62,11 +61,11 @@ public class PuffConfigScreenHandler {
         general.addEntry(
                 entryBuilder
                         .startEnumSelector(
-                                IdentifierBuilder.translatableText("config", "general", "hotbar_position"),
+                                PuffMod.identifierBuilder.translatableText("config", "general", "hotbar_position"),
                                 HotbarPosition.class, HOTBAR_POSITION.getValue()
                         )
                         .setDefaultValue(DEFAULT_HOTBAR_POSITION)
-                        .setTooltip(IdentifierBuilder.translatableText("config", "general", "hotbar_position", "tooltip"))
+                        .setTooltip(PuffMod.identifierBuilder.translatableText("config", "general", "hotbar_position", "tooltip"))
                         .setSaveConsumer(value -> set(HOTBAR_POSITION, value))
                         .build()
         );
@@ -75,27 +74,27 @@ public class PuffConfigScreenHandler {
         general.addEntry(
                 entryBuilder
                         .startEnumSelector(
-                                IdentifierBuilder.translatableText("config", "vanilla", "main_hand"),
+                                PuffMod.identifierBuilder.translatableText("config", "vanilla", "main_hand"),
                                 Arm.class, options.getMainArm().getValue()
                         )
                         .setDefaultValue(Arm.RIGHT)
-                        .setTooltip(IdentifierBuilder.translatableText("config", "vanilla", "main_hand", "tooltip"))
+                        .setTooltip(PuffMod.identifierBuilder.translatableText("config", "vanilla", "main_hand", "tooltip"))
                         .setSaveConsumer(value -> setVanilla(options.getMainArm(), value))
                         .build()
         );
 
         // Category Crosshair
-        ConfigCategory crosshair = builder.getOrCreateCategory(IdentifierBuilder.translatableText("config", "category", "crosshair"));
+        ConfigCategory crosshair = builder.getOrCreateCategory(PuffMod.identifierBuilder.translatableText("config", "category", "crosshair"));
 
         // Crosshair Size
         crosshair.addEntry(
                 entryBuilder
                         .startIntSlider(
-                                IdentifierBuilder.translatableText("config", "crosshair", "size"),
+                                PuffMod.identifierBuilder.translatableText("config", "crosshair", "size"),
                                 (int) (CROSSHAIR_SIZE.getValue() * 100), 0, 300
                         )
                         .setDefaultValue((int) (DEFAULT_CROSSHAIR_SIZE * 100))
-                        .setTooltip(IdentifierBuilder.translatableText("config", "crosshair", "size", "tooltip"))
+                        .setTooltip(PuffMod.identifierBuilder.translatableText("config", "crosshair", "size", "tooltip"))
                         .setSaveConsumer(value -> set(CROSSHAIR_SIZE, value / 100.0))
                         .build()
         );
@@ -104,11 +103,11 @@ public class PuffConfigScreenHandler {
         crosshair.addEntry(
                 entryBuilder
                         .startIntSlider(
-                                IdentifierBuilder.translatableText("config", "crosshair", "puff"),
+                                PuffMod.identifierBuilder.translatableText("config", "crosshair", "puff"),
                                 (int) (CROSSHAIR_EXPAND_INDEX.getValue() * 100), 0, 100
                         )
                         .setDefaultValue((int) (DEFAULT_CROSSHAIR_EXPAND_INDEX * 100))
-                        .setTooltip(IdentifierBuilder.translatableText("config", "crosshair", "puff", "tooltip"))
+                        .setTooltip(PuffMod.identifierBuilder.translatableText("config", "crosshair", "puff", "tooltip"))
                         .setSaveConsumer(value -> set(CROSSHAIR_EXPAND_INDEX, value / 100.0))
                         .build()
         );
@@ -117,11 +116,11 @@ public class PuffConfigScreenHandler {
         crosshair.addEntry(
                 entryBuilder
                         .startEnumSelector(
-                                IdentifierBuilder.translatableText("config", "crosshair", "render_style"),
+                                PuffMod.identifierBuilder.translatableText("config", "crosshair", "render_style"),
                                 CrosshairRenderStyle.class, CROSSHAIR_RENDER_STYLE.getValue()
                         )
                         .setDefaultValue(CrosshairRenderStyle.VANILLA)
-                        .setTooltip(IdentifierBuilder.translatableText("config", "crosshair", "render_style", "tooltip"))
+                        .setTooltip(PuffMod.identifierBuilder.translatableText("config", "crosshair", "render_style", "tooltip"))
                         .setSaveConsumer(value -> set(CROSSHAIR_RENDER_STYLE, value))
                         .build()
         );
@@ -130,27 +129,27 @@ public class PuffConfigScreenHandler {
         crosshair.addEntry(
                 entryBuilder
                         .startEnumSelector(
-                                IdentifierBuilder.translatableText("config", "crosshair", "style"),
+                                PuffMod.identifierBuilder.translatableText("config", "crosshair", "style"),
                                 CrosshairStyle.class, CROSSHAIR_STYLE.getValue()
                         )
                         .setDefaultValue(DEFAULT_CROSSHAIR_STYLE)
-                        .setTooltip(IdentifierBuilder.translatableText("config", "crosshair", "style", "tooltip"))
+                        .setTooltip(PuffMod.identifierBuilder.translatableText("config", "crosshair", "style", "tooltip"))
                         .setSaveConsumer(value -> set(CROSSHAIR_STYLE, value))
                         .build()
         );
 
         // Category Chat
-        ConfigCategory chat = builder.getOrCreateCategory(IdentifierBuilder.translatableText("config", "category", "chat"));
+        ConfigCategory chat = builder.getOrCreateCategory(PuffMod.identifierBuilder.translatableText("config", "category", "chat"));
 
         // Enable Chat Animation
         chat.addEntry(
                 entryBuilder
                         .startBooleanToggle(
-                                IdentifierBuilder.translatableText("config", "chat", "enable_animation"),
+                                PuffMod.identifierBuilder.translatableText("config", "chat", "enable_animation"),
                                 ENABLE_CHAT_ANIMATION.getValue()
                         )
                         .setDefaultValue(DEFAULT_ENABLE_CHAT_ANIMATION)
-                        .setTooltip(IdentifierBuilder.translatableText("config", "chat", "enable_animation", "tooltip"))
+                        .setTooltip(PuffMod.identifierBuilder.translatableText("config", "chat", "enable_animation", "tooltip"))
                         .setSaveConsumer(value -> set(ENABLE_CHAT_ANIMATION, value))
                         .build()
         );
@@ -159,11 +158,11 @@ public class PuffConfigScreenHandler {
         chat.addEntry(
                 entryBuilder
                         .startBooleanToggle(
-                                IdentifierBuilder.translatableText("config", "chat", "enable_text_shadow"),
+                                PuffMod.identifierBuilder.translatableText("config", "chat", "enable_text_shadow"),
                                 ENABLE_CHAT_TEXT_SHADOW.getValue()
                         )
                         .setDefaultValue(DEFAULT_ENABLE_CHAT_TEXT_SHADOW)
-                        .setTooltip(IdentifierBuilder.translatableText("config", "chat", "enable_text_shadow", "tooltip"))
+                        .setTooltip(PuffMod.identifierBuilder.translatableText("config", "chat", "enable_text_shadow", "tooltip"))
                         .setSaveConsumer(value -> set(ENABLE_CHAT_TEXT_SHADOW, value))
                         .build()
         );
@@ -173,11 +172,11 @@ public class PuffConfigScreenHandler {
         chat.addEntry(
                 entryBuilder
                         .startBooleanToggle(
-                                IdentifierBuilder.translatableText("config", "chat", "self_highlighting"),
+                                PuffMod.identifierBuilder.translatableText("config", "chat", "self_highlighting"),
                                 chatSelfHighlighting
                         )
                         .setDefaultValue(DEFAULT_CHAT_SELF_HIGHLIGHTING)
-                        .setTooltip(IdentifierBuilder.translatableText("config", "chat", "self_highlighting", "tooltip"))
+                        .setTooltip(PuffMod.identifierBuilder.translatableText("config", "chat", "self_highlighting", "tooltip"))
                         .setSaveConsumer(value -> chatSelfHighlighting = value)
                         .build()
         );
@@ -187,11 +186,11 @@ public class PuffConfigScreenHandler {
         chat.addEntry(
                 entryBuilder
                         .startColorField(
-                                IdentifierBuilder.translatableText("config", "chat", "text_color"),
+                                PuffMod.identifierBuilder.translatableText("config", "chat", "text_color"),
                                 ColorUtil.clearAlpha(CHAT_TEXT_COLOR.getValue()).getRGB()
                         )
                         .setDefaultValue(ColorUtil.clearAlpha(DEFAULT_CHAT_TEXT_COLOR).getRGB())
-                        //.setTooltip(IdentifierBuilder.translatableText("config", "colors", "chat", "text_color"))
+                        //.setTooltip(PuffMod.identifierBuilder.translatableText("config", "colors", "chat", "text_color"))
                         .setSaveConsumer(value -> set(CHAT_TEXT_COLOR, new Color(value, true)))
                         .build()
         );
@@ -200,11 +199,11 @@ public class PuffConfigScreenHandler {
         chat.addEntry(
                 entryBuilder
                         .startColorField(
-                                IdentifierBuilder.translatableText("config", "chat", "background_color"),
+                                PuffMod.identifierBuilder.translatableText("config", "chat", "background_color"),
                                 ColorUtil.clearAlpha(CHAT_BACKGROUND_COLOR.getValue()).getRGB()
                         )
                         .setDefaultValue(ColorUtil.clearAlpha(DEFAULT_CHAT_BACKGROUND_COLOR).getRGB())
-                        //.setTooltip(IdentifierBuilder.translatableText("config", "colors", "chat", "background_color"))
+                        //.setTooltip(PuffMod.identifierBuilder.translatableText("config", "colors", "chat", "background_color"))
                         .setSaveConsumer(value -> set(CHAT_BACKGROUND_COLOR, new Color(value, true)))
                         .build()
         );
@@ -213,11 +212,11 @@ public class PuffConfigScreenHandler {
         chat.addEntry(
                 entryBuilder
                         .startIntSlider(
-                                IdentifierBuilder.translatableText("config", "vanilla", "chat_opacity"),
+                                PuffMod.identifierBuilder.translatableText("config", "vanilla", "chat_opacity"),
                                 (int) (options.getChatOpacity().getValue() * 100.0), 0, 100
                         )
                         .setDefaultValue(100)
-                        .setTooltip(IdentifierBuilder.translatableText("config", "vanilla", "chat_opacity", "tooltip"))
+                        .setTooltip(PuffMod.identifierBuilder.translatableText("config", "vanilla", "chat_opacity", "tooltip"))
                         .setSaveConsumer(value -> setVanilla(options.getChatOpacity(), value / 100.0))
                         .build()
         );
@@ -226,11 +225,11 @@ public class PuffConfigScreenHandler {
         chat.addEntry(
                 entryBuilder
                         .startIntSlider(
-                                IdentifierBuilder.translatableText("config", "vanilla", "text_background_opacity"),
+                                PuffMod.identifierBuilder.translatableText("config", "vanilla", "text_background_opacity"),
                                 (int) (options.getTextBackgroundOpacity().getValue() * 100.0), 0, 100
                         )
                         .setDefaultValue(50)
-                        .setTooltip(IdentifierBuilder.translatableText("config", "vanilla", "text_background_opacity", "tooltip"))
+                        .setTooltip(PuffMod.identifierBuilder.translatableText("config", "vanilla", "text_background_opacity", "tooltip"))
                         .setSaveConsumer(value -> setVanilla(options.getTextBackgroundOpacity(), value / 100.0))
                         .build()
         );
@@ -239,11 +238,11 @@ public class PuffConfigScreenHandler {
         chat.addEntry(
                 entryBuilder
                         .startIntSlider(
-                                IdentifierBuilder.translatableText("config", "vanilla", "chat_line_spacing"),
+                                PuffMod.identifierBuilder.translatableText("config", "vanilla", "chat_line_spacing"),
                                 (int) (options.getChatLineSpacing().getValue() * 100.0), 0, 100
                         )
                         .setDefaultValue(0)
-                        .setTooltip(IdentifierBuilder.translatableText("config", "vanilla", "chat_line_spacing", "tooltip"))
+                        .setTooltip(PuffMod.identifierBuilder.translatableText("config", "vanilla", "chat_line_spacing", "tooltip"))
                         .setSaveConsumer(value -> setVanilla(options.getChatLineSpacing(), value / 100.0))
                         .build()
         );
@@ -251,17 +250,17 @@ public class PuffConfigScreenHandler {
 
 
         // Category Keys
-        ConfigCategory keys = builder.getOrCreateCategory(IdentifierBuilder.translatableText("config", "category", "keys"));
+        ConfigCategory keys = builder.getOrCreateCategory(PuffMod.identifierBuilder.translatableText("config", "category", "keys"));
 
         // Key Linger Ticks
         keys.addEntry(
                 entryBuilder
                         .startLongField(
-                                IdentifierBuilder.translatableText("config", "keys", "linger_ticks"),
+                                PuffMod.identifierBuilder.translatableText("config", "keys", "linger_ticks"),
                                 KEY_LINGER_TICKS.getValue()
                         )
                         .setDefaultValue(DEFAULT_KEY_LINGER_TICKS)
-                        .setTooltip(IdentifierBuilder.translatableText("config", "keys", "linger_ticks", "tooltip"))
+                        .setTooltip(PuffMod.identifierBuilder.translatableText("config", "keys", "linger_ticks", "tooltip"))
                         .setSaveConsumer(value -> set(KEY_LINGER_TICKS, value))
                         .build()
         );
@@ -269,17 +268,17 @@ public class PuffConfigScreenHandler {
 
 
         // Category Colors
-        ConfigCategory colors = builder.getOrCreateCategory(IdentifierBuilder.translatableText("config", "category", "colors"));
+        ConfigCategory colors = builder.getOrCreateCategory(PuffMod.identifierBuilder.translatableText("config", "category", "colors"));
 
         // Pitch
         colors.addEntry(
                 entryBuilder
                         .startColorField(
-                                IdentifierBuilder.translatableText("config", "colors", "pitch"),
+                                PuffMod.identifierBuilder.translatableText("config", "colors", "pitch"),
                                 ColorUtil.clearAlpha(PITCH_COLOR.getValue()).getRGB()
                         )
                         .setDefaultValue(ColorUtil.clearAlpha(DEFAULT_PITCH_COLOR).getRGB())
-                        .setTooltip(IdentifierBuilder.translatableText("config", "colors", "pitch", "tooltip"))
+                        .setTooltip(PuffMod.identifierBuilder.translatableText("config", "colors", "pitch", "tooltip"))
                         .setSaveConsumer(value -> set(PITCH_COLOR, new Color(value, true)))
                         .build()
         );
@@ -288,11 +287,11 @@ public class PuffConfigScreenHandler {
         colors.addEntry(
                 entryBuilder
                         .startColorField(
-                                IdentifierBuilder.translatableText("config", "colors", "yaw"),
+                                PuffMod.identifierBuilder.translatableText("config", "colors", "yaw"),
                                 ColorUtil.clearAlpha(YAW_COLOR.getValue()).getRGB()
                         )
                         .setDefaultValue(ColorUtil.clearAlpha(DEFAULT_YAW_COLOR).getRGB())
-                        .setTooltip(IdentifierBuilder.translatableText("config", "colors", "yaw", "tooltip"))
+                        .setTooltip(PuffMod.identifierBuilder.translatableText("config", "colors", "yaw", "tooltip"))
                         .setSaveConsumer(value -> set(YAW_COLOR, new Color(value, true)))
                         .build()
         );

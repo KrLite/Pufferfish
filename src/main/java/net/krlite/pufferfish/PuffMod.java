@@ -1,7 +1,7 @@
 package net.krlite.pufferfish;
 
 import net.fabricmc.api.ClientModInitializer;
-import net.krlite.pufferfish.config_deprecated.PuffConfigs;
+import net.krlite.equator.util.IdentifierBuilder;
 import net.krlite.pufferfish.event.InputEventHandler;
 import net.krlite.pufferfish.render.PuffRenderer;
 import net.krlite.pufferfish.render.ScreenshotFlashRenderer;
@@ -13,10 +13,10 @@ import org.slf4j.LoggerFactory;
 public class PuffMod implements ClientModInitializer {
 	public static final String MOD_ID = "puff";
 	public static final Logger LOGGER = LoggerFactory.getLogger("Pufferfish");
+	public static final IdentifierBuilder identifierBuilder = new IdentifierBuilder(MOD_ID);
 
 	@Override
 	public void onInitializeClient() {
-		PuffConfigs.init();
 		AxisUtil.init();
 		InputEventHandler.init();
 		ScreenshotFlashRenderer.init();
@@ -24,9 +24,5 @@ public class PuffMod implements ClientModInitializer {
 		// Renderer
 		PuffRenderer.init();
 		PuffProxiedRenderer.init();
-
-		// TODO: Clean Utils, Textures and Mixins
-		// TODO: Deprecate @Redirections
-		// TODO: Restructure Renderers
 	}
 }

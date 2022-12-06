@@ -1,6 +1,9 @@
 package net.krlite.pufferfish.util;
 
-import net.krlite.pufferfish.math.IdentifierSprite;
+import net.krlite.equator.core.MatrixWrapper;
+import net.krlite.equator.core.sprite.IdentifierSprite;
+import net.krlite.equator.render.Equator;
+import net.krlite.pufferfish.PuffMod;
 import net.krlite.pufferfish.render.PuffRenderer;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
@@ -16,25 +19,28 @@ public class ScreenUtil extends DrawableHelper {
     public static double opacity = 0, loadingOpacity = 0;
 
     // Textures
-    public static final IdentifierSprite  AMBIENT = IdentifierSprite.of(IdentifierBuilder.texture("overlay", "ambient"));
+    public static final IdentifierSprite AMBIENT = IdentifierSprite.of(PuffMod.identifierBuilder.texture("overlay", "ambient"));
 
     public static void renderBackground() {
-        PuffRenderer.COLORED.fillColoredOverlay(
-                new MatrixStack(),
-                Color.BLACK
+        Equator.Colors.fill(
+                new MatrixWrapper(
+                        new MatrixStack(),
+                        0, 0,
+                        MinecraftClient.getInstance().getWindow().getScaledWidth(),
+                        MinecraftClient.getInstance().getWindow().getScaledHeight()
+                ), Color.BLACK
         );
 
-        PuffRenderer.COLORED_TEXTURE.renderScaledColoredOverlay(
-                AMBIENT.getIdentifier(),
-                ColorUtil.castAlpha(Color.WHITE, (float) loadingOpacity * 0.45F),
-                new MatrixStack(), 256
+        new Equator(AMBIENT).renderScaledOverlay(
+                new MatrixStack(), ColorUtil.castAlpha(Color.WHITE, (float) loadingOpacity * 0.45F), 1
         );
 
-        PuffRenderer.COLORED.fillColored(
-                new MatrixStack(),
-                0, MinecraftClient.getInstance().getWindow().getScaledHeight() - 32.0F,
-                MinecraftClient.getInstance().getWindow().getScaledWidth(), MinecraftClient.getInstance().getWindow().getScaledHeight() - 31.3F,
-                ColorUtil.castAlpha(new Color(80, 82, 93, 255), (float) loadingOpacity)
+        Equator.Colors.fill(
+                new MatrixWrapper(
+                        new MatrixStack(),
+                        0, MinecraftClient.getInstance().getWindow().getScaledHeight() - 32.0F,
+                        MinecraftClient.getInstance().getWindow().getScaledWidth(), MinecraftClient.getInstance().getWindow().getScaledHeight() - 31.3F
+                ), ColorUtil.castAlpha(new Color(80, 82, 93, 255), (float) loadingOpacity)
         );
     }
 

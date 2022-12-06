@@ -1,8 +1,8 @@
 package net.krlite.pufferfish.interaction_map.util;
 
+import net.krlite.equator.core.DimensionalVec3d;
+import net.krlite.equator.math.AngleSolver;
 import net.krlite.pufferfish.interaction_map.util.solver.AnchorSolver;
-import net.krlite.pufferfish.math.DimensionalVec3d;
-import net.krlite.pufferfish.math.solver.AngleSolver;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.player.PlayerEntity;
 

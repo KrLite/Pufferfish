@@ -2,11 +2,11 @@ package net.krlite.pufferfish.mixin.animator;
 
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
+import net.krlite.equator.core.PreciseColor;
+import net.krlite.equator.core.sprite.IdentifierSprite;
+import net.krlite.equator.render.Equator;
 import net.krlite.pufferfish.config.PuffConfig;
-import net.krlite.pufferfish.math.IdentifierSprite;
-import net.krlite.pufferfish.math.PreciseColor;
 import net.krlite.pufferfish.render.renderer.CrosshairPuffer;
-import net.krlite.pufferfish.render.PuffRenderer;
 import net.krlite.pufferfish.util.AxisUtil;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
@@ -97,10 +97,9 @@ public abstract class CrosshairAnimator extends DrawableHelper{
         switch ( PuffConfig.CROSSHAIR_STYLE.getValue() ) {
             case EMPTY -> {}
 
-            case VANILLA -> PuffRenderer.COLORED_TEXTURE.renderColoredTexture(
-                    CrosshairPuffer.VANILLA_CROSSHAIR,
-                    new PreciseColor(Color.WHITE).multipleAlpha(opacity).get(),
+            case VANILLA -> new Equator(CrosshairPuffer.VANILLA_CROSSHAIR).render(
                     matrixStack,
+                    new PreciseColor(Color.WHITE).multipleAlpha(opacity).get(),
                     (scaledWidth - 15) / 2.0F, (scaledHeight - 15) / 2.0F,
                     (scaledWidth + 15) / 2.0F, (scaledHeight + 15) / 2.0F
             );
@@ -108,10 +107,9 @@ public abstract class CrosshairAnimator extends DrawableHelper{
             default -> {
                 IdentifierSprite STYLE = CrosshairPuffer.CROSSHAIR.get(PuffConfig.CROSSHAIR_STYLE.getValue().getIndex());
 
-                PuffRenderer.COLORED_TEXTURE.renderColoredTexture(
-                        STYLE,
-                        new PreciseColor(Color.WHITE).multipleAlpha(opacity).get(),
+                new Equator(STYLE).render(
                         matrixStack,
+                        new PreciseColor(Color.WHITE).multipleAlpha(opacity).get(),
                         (scaledWidth - 15) / 2.0F, (scaledHeight - 15) / 2.0F,
                         (scaledWidth + 15) / 2.0F, (scaledHeight + 15) / 2.0F
                 );
@@ -134,13 +132,17 @@ public abstract class CrosshairAnimator extends DrawableHelper{
             )
     )
     private void renderAttackIndicator(InGameHud instance, MatrixStack matrixStack, int x, int y, int u, int v, int width, int height) {
-        PuffRenderer.COLORED_TEXTURE.renderPositionedColoredTexture(
-                GUI_ICONS_TEXTURE,
+        new Equator(
+                new IdentifierSprite(
+                        GUI_ICONS_TEXTURE,
+                        u, v, width, height
+                )
+        ).render(
+                matrixStack,
                 PuffConfig.HOTBAR_POSITION.getValue().isLeft()
                         ? new PreciseColor(Color.WHITE).castAlpha(opacity).get()
                         : Color.WHITE,
-                matrixStack,
-                x, y, u, v, width, height
+                x, y, width, height
         );
     }
 

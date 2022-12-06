@@ -1,6 +1,8 @@
 package net.krlite.pufferfish.mixin.handler.hotbar;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import net.krlite.equator.core.MatrixWrapper;
+import net.krlite.equator.render.Equator;
 import net.krlite.pufferfish.config.PuffConfig;
 import net.krlite.pufferfish.render.renderer.PuffProxiedRenderer;
 import net.krlite.pufferfish.render.PuffRenderer;
@@ -38,11 +40,15 @@ public class SubtitlesHudHandler {
             RenderSystem.enableBlend();
             RenderSystem.defaultBlendFunc();
 
-            PuffRenderer.COLORED.fillColored(
-                    matrixStack,
-                    xBegin, yBegin,
-                    xEnd,   yEnd,
-                    ColorUtil.castAlpha(PuffConfig.CHAT_BACKGROUND_COLOR.getValue(), MinecraftClient.getInstance().options.getTextBackgroundOpacity().getValue().floatValue())
+            Equator.Colors.fill(
+                    new MatrixWrapper(
+                            matrixStack,
+                            xBegin, yBegin,
+                            xEnd,   yEnd
+                    ), ColorUtil.castAlpha(
+                            PuffConfig.CHAT_BACKGROUND_COLOR.getValue(),
+                            MinecraftClient.getInstance().options.getTextBackgroundOpacity().getValue().floatValue()
+                    )
             );
 
             RenderSystem.disableBlend();

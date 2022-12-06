@@ -23,6 +23,9 @@
     ],
     "modmenu": [
       "net.krlite.pufferfish.config.config_screen.PuffModMenuIntegration"
+    ],
+    "plumeconfig": [
+      "net.krlite.pufferfish.config.PuffConfig"
     ]
   },
   "mixins": [
